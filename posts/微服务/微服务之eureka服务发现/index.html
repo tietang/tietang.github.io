@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>微服务之Eureka服务发现 - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="当调用API或者发起网络通信的时候，无论如何我们都要知道被调用方的IP和服务端口，大部分情况是通过域名和服务端口，事实上基于DNS的服务发现，因为DNS缓存、无法自治和其他不利因素的存在，有很多局限。传统的DNS方式，都是通过nginx或者其他代理软件来实现，物理机器的ip和port都是固定的，那么nginx中配置的服务ip和port也是固定的，服务列表的更新只能通过手动来做，但如果后端服务很多时，手动更新容易出错，效率也很低，这在后端服务发生故障时，不可用时间就可能会加长。在微服务中，尤其是使用了Docker等虚拟化技术的微服务，其IP和port都是动态分配的，服务实例数也是动态变化的，那么就需要精细而准确的服务发现机制。当微服务app启动后，告诉其他服务自己的ip和端口，这里的其他服务就是Eureka Server和Eureka Client，这样其他服务就知道这个服务有多少实例在线，都在"/><meta name="keywords"
+          content="微服务, Spring Cloud, Spring Boot, Eureka, 服务发现"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.57.2 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Beureka%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="微服务之Eureka服务发现" />
+<meta property="og:description" content="当调用API或者发起网络通信的时候，无论如何我们都要知道被调用方的IP和服务端口，大部分情况是通过域名和服务端口，事实上基于DNS的服务发现，因为DNS缓存、无法自治和其他不利因素的存在，有很多局限。传统的DNS方式，都是通过nginx或者其他代理软件来实现，物理机器的ip和port都是固定的，那么nginx中配置的服务ip和port也是固定的，服务列表的更新只能通过手动来做，但如果后端服务很多时，手动更新容易出错，效率也很低，这在后端服务发生故障时，不可用时间就可能会加长。在微服务中，尤其是使用了Docker等虚拟化技术的微服务，其IP和port都是动态分配的，服务实例数也是动态变化的，那么就需要精细而准确的服务发现机制。当微服务app启动后，告诉其他服务自己的ip和端口，这里的其他服务就是Eureka Server和Eureka Client，这样其他服务就知道这个服务有多少实例在线，都在" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Beureka%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/" />
+<meta property="article:published_time" content="2016-09-08T19:22:47+00:00" />
+<meta property="article:modified_time" content="2016-09-08T19:22:47+00:00" />
+<meta itemprop="name" content="微服务之Eureka服务发现">
+<meta itemprop="description" content="当调用API或者发起网络通信的时候，无论如何我们都要知道被调用方的IP和服务端口，大部分情况是通过域名和服务端口，事实上基于DNS的服务发现，因为DNS缓存、无法自治和其他不利因素的存在，有很多局限。传统的DNS方式，都是通过nginx或者其他代理软件来实现，物理机器的ip和port都是固定的，那么nginx中配置的服务ip和port也是固定的，服务列表的更新只能通过手动来做，但如果后端服务很多时，手动更新容易出错，效率也很低，这在后端服务发生故障时，不可用时间就可能会加长。在微服务中，尤其是使用了Docker等虚拟化技术的微服务，其IP和port都是动态分配的，服务实例数也是动态变化的，那么就需要精细而准确的服务发现机制。当微服务app启动后，告诉其他服务自己的ip和端口，这里的其他服务就是Eureka Server和Eureka Client，这样其他服务就知道这个服务有多少实例在线，都在">
+
+
+<meta itemprop="datePublished" content="2016-09-08T19:22:47&#43;00:00" />
+<meta itemprop="dateModified" content="2016-09-08T19:22:47&#43;00:00" />
+<meta itemprop="wordCount" content="1360">
+
+
+
+<meta itemprop="keywords" content="spring-cloud,微服务,Spring Boot,Eureka,服务发现," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="微服务之Eureka服务发现"/>
+<meta name="twitter:description" content="当调用API或者发起网络通信的时候，无论如何我们都要知道被调用方的IP和服务端口，大部分情况是通过域名和服务端口，事实上基于DNS的服务发现，因为DNS缓存、无法自治和其他不利因素的存在，有很多局限。传统的DNS方式，都是通过nginx或者其他代理软件来实现，物理机器的ip和port都是固定的，那么nginx中配置的服务ip和port也是固定的，服务列表的更新只能通过手动来做，但如果后端服务很多时，手动更新容易出错，效率也很低，这在后端服务发生故障时，不可用时间就可能会加长。在微服务中，尤其是使用了Docker等虚拟化技术的微服务，其IP和port都是动态分配的，服务实例数也是动态变化的，那么就需要精细而准确的服务发现机制。当微服务app启动后，告诉其他服务自己的ip和端口，这里的其他服务就是Eureka Server和Eureka Client，这样其他服务就知道这个服务有多少实例在线，都在"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title">微服务之Eureka服务发现</h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 2016-09-08 </span>
+
+                <div class="post-category">
+                    <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"> 微服务 </a>
+                        
+                    <a href="/tags/spring-cloud/">
+                                <span class="badge">spring-cloud </span>
+                            </a>
+                        <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">
+                                <span class="badge">微服务 </span>
+                            </a>
+                        <a href="/tags/spring-boot/">
+                                <span class="badge">Spring Boot </span>
+                            </a>
+                        <a href="/tags/eureka/">
+                                <span class="badge">Eureka </span>
+                            </a>
+                        <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/">
+                                <span class="badge">服务发现 </span>
+                            </a>
+                        
+                </div>
+                    <span class="more-meta"> 1360 words </span>
+                    <span class="more-meta"> 3 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+            <div>
+                <img src="http://tietang.wang/images/m1.jpg">
+            </div>
+        
+        
+        <div class="post-content">
+            <p><img src="http://upload-images.jianshu.io/upload_images/2519252-3691e262041c9cdd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/600" alt="" /></p>
+
+<p>当调用API或者发起网络通信的时候，无论如何我们都要知道被调用方的IP和服务端口，大部分情况是通过域名和服务端口，事实上基于DNS的服务发现，因为DNS缓存、无法自治和其他不利因素的存在，有很多局限。传统的DNS方式，都是通过nginx或者其他代理软件来实现，物理机器的ip和port都是固定的，那么nginx中配置的服务ip和port也是固定的，服务列表的更新只能通过手动来做，但如果后端服务很多时，手动更新容易出错，效率也很低，这在后端服务发生故障时，不可用时间就可能会加长。在微服务中，尤其是使用了Docker等虚拟化技术的微服务，其IP和port都是动态分配的，服务实例数也是动态变化的，那么就需要精细而准确的服务发现机制。当微服务app启动后，告诉其他服务自己的ip和端口，这里的其他服务就是Eureka Server和Eureka Client，这样其他服务就知道这个服务有多少实例在线，都在哪些地方，方便去负载均衡和调用。</p>
+
+<p>Eureka属于客户端发现模式，客户端负责决定相应服务实例的网络位置，并且对请求实现负载均衡。客户端从一个服务注册服务中查询所有可用服务实例的库，并缓存到本地。服务调用时，客户端使用负载均衡算法从多个后端服务实例中选择出一个，然后发出请求。Eureka分为Eureka Server和Eureka client， Eureka Server是一个服务注册中心，为服务实例注册管理和查询可用实例提供了REST API，并可以用其定位、负载均衡、故障恢复后端服务的中间层服务。在服务启动后，Eureka Client向服务注册中心注册服务同时会拉去注册中心注册表副本；在服务停止的时候，Eureka Client向服务注册中心注销服务；服务注册后，Eureka Client会定时的发送心跳来刷新服务的最新状态。</p>
+
+<p>客户端发现模式的优点是服务调用、负载均衡不需要和Eureka Server通信，直接使用本地注册表副本，因此Eureka Server不可用时是不会影响正常的服务调用，性能也不会因为网络延迟和服务端延迟受到影响。但其缺点也很明显，但某个服务不可用时，各个Eureka Client不能及时的知道，需要1~3个心跳周期才能感知，但是，由于基于Netflix的服务调用端都会使用Hystrix来容错和降级，当服务调用不可用时Hystrix也能及时感知到，通过熔断机制来降级服务调用，因此弥补了基于客户端服务发现的时效性的缺点。</p>
+
+<p>Eureka Server采用的是对等通信(P2P),无中心化的架构，无master/slave区分，每一个server都是对等的，既是Server又是Client,所以其集群方式可以自由发挥，可以各点互连，也可以接力互连。Eureka Server通过运行多个实例以及彼此之间互相注册来提高可用性，每个节点需要添加一个或多个有效的serviceUrl指向另一个节点。利用Eureka Server这种架构特性， 我在Eureka Server Cluster的部署时采用了三角形通信模型，三角形是一个很好的均衡模型，既是各点互连，又是接力互连，三角形本身就是一个稳定性几何形状，有着稳固、坚定搜索、耐压的特点，家具、建筑、交通等各种行业都有应用。如下图所示，Eureka Cluster的每个实例都和另外2个实例通信交互。
+<img src="/imgs/eureka_cluster.png" alt="" /></p>
+
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2016-09-08
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            <div class="post-tags">
+                    <a href="/tags/spring-cloud/">spring-cloud</a>
+                    <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+                    <a href="/tags/spring-boot/">Spring Boot</a>
+                    <a href="/tags/eureka/">Eureka</a>
+                    <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/">服务发现</a>
+                    </div>
+            <nav class="post-nav">
+                <a class="prev" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bapi%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default">微服务之API网关设计</span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bspring-cloud%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%96%E9%83%A8%E5%8C%96%E5%92%8C%E4%B8%AD%E5%BF%83%E5%8C%96%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/">
+                        <span class="next-text nav-default">微服务之spring-cloud分布式外部化和中心化配置管理</span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    <h4>相关文章：</h4>
+    <ul>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8B%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98/">微服务下分布式事务问题</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bapi%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/">微服务之API网关设计</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bspring-cloud%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%96%E9%83%A8%E5%8C%96%E5%92%8C%E4%B8%AD%E5%BF%83%E5%8C%96%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/">微服务之spring-cloud分布式外部化和中心化配置管理</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E6%96%BDspring-cloud%E4%B8%AD%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/">微服务实施spring-cloud中踩过的坑</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%AE%9E%E8%B7%B5/">微服务拆分实践</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/feign%E4%BD%BF%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Feign正确的使用方法和性能优化注意事项</a></li>
+        
+            <li><a href="/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/">软件开发中的单一职责</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E5%BE%AE/">微服务之微</a></li>
+        
+    </ul>
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2016-09-08 19:22:47 \x2b0000 UTC',
+        title: '微服务之Eureka服务发现',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2020
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

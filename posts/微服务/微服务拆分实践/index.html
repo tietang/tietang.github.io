@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>微服务拆分实践 - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="说到微服务就不得不说拆分了，服务拆分要有一些指导依据。 拆分依据 微服务的理论知识有大量的分享，这里是我对微服务理论基础认识的一些观点： 小，且专注于做一件事情，即满足单一职责原则。 关于单一职责可以阅读我的另一篇文章《软件开发中的单一职责》 运行在独立的进程中。 轻量级的通信机制，RPC或者HTTP或者MQ。 松耦合，独立部署。 康威定律：设计系统的组织，其产生的设计等同于组织之内、组织之间的沟通结构。 服务拆分依据结合上面的理论基础充分考虑了以下因素： 业务和领域模型 技术、业务量等其他因素 团队 业务应该说是最实在的，也是最好理解而且最容易把握的。虽然领域的有界上下文从理论上能指导拆分，但是万万需要拆分的不是一个全新的系统，而是一个在线上稳定运行了很长时间的，很多人一砖一瓦堆砌起来的，并且仍然在持续添砖加瓦，不管是桥梁，还是高楼，我们的目的是让系统运行的更健壮，而不是拆成七零八碎，所对于这样的老系统，用领域拆"/><meta name="keywords"
+          content="微服务, Spring Cloud, Spring Boot"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.57.2 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%AE%9E%E8%B7%B5/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="微服务拆分实践" />
+<meta property="og:description" content="说到微服务就不得不说拆分了，服务拆分要有一些指导依据。 拆分依据 微服务的理论知识有大量的分享，这里是我对微服务理论基础认识的一些观点： 小，且专注于做一件事情，即满足单一职责原则。 关于单一职责可以阅读我的另一篇文章《软件开发中的单一职责》 运行在独立的进程中。 轻量级的通信机制，RPC或者HTTP或者MQ。 松耦合，独立部署。 康威定律：设计系统的组织，其产生的设计等同于组织之内、组织之间的沟通结构。 服务拆分依据结合上面的理论基础充分考虑了以下因素： 业务和领域模型 技术、业务量等其他因素 团队 业务应该说是最实在的，也是最好理解而且最容易把握的。虽然领域的有界上下文从理论上能指导拆分，但是万万需要拆分的不是一个全新的系统，而是一个在线上稳定运行了很长时间的，很多人一砖一瓦堆砌起来的，并且仍然在持续添砖加瓦，不管是桥梁，还是高楼，我们的目的是让系统运行的更健壮，而不是拆成七零八碎，所对于这样的老系统，用领域拆" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%AE%9E%E8%B7%B5/" />
+<meta property="article:published_time" content="2016-09-08T19:22:47+00:00" />
+<meta property="article:modified_time" content="2016-09-08T19:22:47+00:00" />
+<meta itemprop="name" content="微服务拆分实践">
+<meta itemprop="description" content="说到微服务就不得不说拆分了，服务拆分要有一些指导依据。 拆分依据 微服务的理论知识有大量的分享，这里是我对微服务理论基础认识的一些观点： 小，且专注于做一件事情，即满足单一职责原则。 关于单一职责可以阅读我的另一篇文章《软件开发中的单一职责》 运行在独立的进程中。 轻量级的通信机制，RPC或者HTTP或者MQ。 松耦合，独立部署。 康威定律：设计系统的组织，其产生的设计等同于组织之内、组织之间的沟通结构。 服务拆分依据结合上面的理论基础充分考虑了以下因素： 业务和领域模型 技术、业务量等其他因素 团队 业务应该说是最实在的，也是最好理解而且最容易把握的。虽然领域的有界上下文从理论上能指导拆分，但是万万需要拆分的不是一个全新的系统，而是一个在线上稳定运行了很长时间的，很多人一砖一瓦堆砌起来的，并且仍然在持续添砖加瓦，不管是桥梁，还是高楼，我们的目的是让系统运行的更健壮，而不是拆成七零八碎，所对于这样的老系统，用领域拆">
+
+
+<meta itemprop="datePublished" content="2016-09-08T19:22:47&#43;00:00" />
+<meta itemprop="dateModified" content="2016-09-08T19:22:47&#43;00:00" />
+<meta itemprop="wordCount" content="2151">
+
+
+
+<meta itemprop="keywords" content="spring-cloud,微服务,Spring Boot," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="微服务拆分实践"/>
+<meta name="twitter:description" content="说到微服务就不得不说拆分了，服务拆分要有一些指导依据。 拆分依据 微服务的理论知识有大量的分享，这里是我对微服务理论基础认识的一些观点： 小，且专注于做一件事情，即满足单一职责原则。 关于单一职责可以阅读我的另一篇文章《软件开发中的单一职责》 运行在独立的进程中。 轻量级的通信机制，RPC或者HTTP或者MQ。 松耦合，独立部署。 康威定律：设计系统的组织，其产生的设计等同于组织之内、组织之间的沟通结构。 服务拆分依据结合上面的理论基础充分考虑了以下因素： 业务和领域模型 技术、业务量等其他因素 团队 业务应该说是最实在的，也是最好理解而且最容易把握的。虽然领域的有界上下文从理论上能指导拆分，但是万万需要拆分的不是一个全新的系统，而是一个在线上稳定运行了很长时间的，很多人一砖一瓦堆砌起来的，并且仍然在持续添砖加瓦，不管是桥梁，还是高楼，我们的目的是让系统运行的更健壮，而不是拆成七零八碎，所对于这样的老系统，用领域拆"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title">微服务拆分实践</h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 2016-09-08 </span>
+
+                <div class="post-category">
+                    <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"> 微服务 </a>
+                        
+                    <a href="/tags/spring-cloud/">
+                                <span class="badge">spring-cloud </span>
+                            </a>
+                        <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">
+                                <span class="badge">微服务 </span>
+                            </a>
+                        <a href="/tags/spring-boot/">
+                                <span class="badge">Spring Boot </span>
+                            </a>
+                        
+                </div>
+                    <span class="more-meta"> 2151 words </span>
+                    <span class="more-meta"> 5 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#拆分依据">拆分依据</a></li>
+<li><a href="#拆分粒度">拆分粒度</a></li>
+<li><a href="#拆分过程实践">拆分过程实践</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+            <div>
+                <img src="http://tietang.wang/images/m1.jpg">
+            </div>
+        
+        
+        <div class="post-content">
+            
+
+<p><img src="http://upload-images.jianshu.io/upload_images/2519252-54c30064a539893e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/600" alt="IMG_20161026_144514.jpg" /></p>
+
+<p>说到微服务就不得不说拆分了，服务拆分要有一些指导依据。</p>
+
+<h3 id="拆分依据">拆分依据</h3>
+
+<p>微服务的理论知识有大量的分享，这里是我对微服务理论基础认识的一些观点：</p>
+
+<ul>
+<li>小，且专注于做一件事情，即满足<a href="http://www.infoq.com/cn/articles/single-responsibility-in-software-development">单一职责原则</a>。 关于单一职责可以阅读我的另一篇文章<a href="http://www.infoq.com/cn/articles/single-responsibility-in-software-development">《软件开发中的单一职责》</a></li>
+<li>运行在独立的进程中。</li>
+<li>轻量级的通信机制，RPC或者HTTP或者MQ。</li>
+<li>松耦合，独立部署。</li>
+<li>康威定律：设计系统的组织，其产生的设计等同于组织之内、组织之间的沟通结构。</li>
+</ul>
+
+<p><strong>服务拆分依据结合上面的理论基础充分考虑了以下因素：</strong></p>
+
+<ul>
+<li>业务和领域模型</li>
+<li>技术、业务量等其他因素</li>
+<li>团队</li>
+</ul>
+
+<p>业务应该说是最实在的，也是最好理解而且最容易把握的。虽然领域的有界上下文从理论上能指导拆分，但是万万需要拆分的不是一个全新的系统，而是一个在线上稳定运行了很长时间的，很多人一砖一瓦堆砌起来的，并且仍然在持续添砖加瓦，不管是桥梁，还是高楼，我们的目的是让系统运行的更健壮，而不是拆成七零八碎，所对于这样的老系统，用领域拆分需要结合团队现状，理论结合实际，事半功倍。</p>
+
+<p>运行时隔离也是很重要的拆分依据，会根据一些具有特定功能的API单独拆分出来作为一个微服务，和其他微服务隔离，避免相互影响，避免一个老鼠害了一锅汤。比如一些文件上传一类的API，特征是响应时间长，对IO依赖比较多，其线程池需要特殊配置；比如多线程利用CPU来换取响应时间的等等。</p>
+
+<p>对于康威定理，究竟是团队影响拆分，还是拆分影响团队，那就需要均衡利弊了。如果是因为拆分微服务，而拆分了团队，那势必会影响到团队的稳定性和团队成员的归属感，尤其是一个组建很久的老团队。反之，团队负责多种业务，也没有明显的职责区分，就要考虑是否拆分团队，明确拆分后的团队职责。</p>
+
+<p>对于正在运行的系统，如何拆分和拆分为多大的粒度，事实上是不能有太过理论化理想化，更需要深入项目本身和该项目团队，了解业务，人和代码。不能是拆迁队，也不是修缮，应该是拆成各种形状的合理大小的积木。</p>
+
+<p>孰重孰轻很难说明白，团队不一样项目不一样，实践就不一样，找到适合自己团队的方法。</p>
+
+<h3 id="拆分粒度">拆分粒度</h3>
+
+<p>拆分粒度不应该过分追求细粒度，要考虑适中不能过大或过小。按照单一职责原则和康威定律，在业务域、团队还有技术上平衡粒度。拆分后的代码应该是易控制，易维护的，业务职责也是明确单一的。</p>
+
+<h3 id="拆分过程实践">拆分过程实践</h3>
+
+<p>在拆分过程不得不考虑的是业务在跑，砖在砌，不能停，而且拆分工作也必须得进行，过程上不能一部到位，必须一步一步走，也由于此拆分后落地上线也要稳妥。所以，过程上，我也采用了比较稳妥的战术，<strong>先拆分为maven module，然后在拆分为微服务可部署构件</strong>。这样的好处是，拆分过程不影响业务迭代，而且可以随意组合成单体应用和微服务app，并且还可以事先测试和验证拆分，最大限度的降低微服务化实施的风险。</p>
+
+<p><strong>下面是拆分代码过程实践经验：</strong></p>
+
+<p>1). <strong>设计module骨架</strong></p>
+
+<p>module骨架的设计是基础，影响最终拆分结果，拆分成功的向导。按照技术，业务，部署打包，测试这几个维度来规划设计，下面是一个参考。</p>
+
+<p><strong>最终骨架模型：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">root web app
+	webapp  //war module，打包为单体war，整体部署
+	micro-services //微服务pom module
+		user-service
+		customer-service
+		order-service
+		other-service
+		api-gateway
+	biz //业务相关的module
+		entitys 			//所有实体类
+		biz-base			//一些无法拆分的代码上有依赖的服务
+		biz-user			//用户业务
+		biz-customer		//客户业务
+		biz-order			//订单业务
+		...					
+	commons
+		async-framework  //一部框架
+		utils				//工具类</pre></td></tr></table>
+</div>
+</div>
+<p>2). <strong>拆分技术commons</strong></p>
+
+<p>作为第一步，先对整个工程按业务和功能进行了maven多module的拆分。拆分过程没有技巧可言，一步一步走，一步一个脚印。首先是分离出技术上的commons，感觉这应该是最好拆分的了，把相关的类重构到一个包里，在分离出一个module即可。实际过程并非如此，因为是老项目，这类commons也并没有想象的容易，经过很多人的添砖加瓦，并没有完全按照<a href="http://www.infoq.com/cn/articles/single-responsibility-in-software-development">单一职责原则</a>来砌，根本就是把业务特征的代码也放到了技术类代码中，不过review代码后感觉还好，微遵循的毕竟是少数，那就先重构代码，把业务特性的砖从类里移出去。</p>
+
+<p>3). <strong>拆分entity</strong></p>
+
+<p>很多在业务代码上都会共享entity类，通常没法也没法把entity类分门别类，最简单就是把所有的entity类放到一个module，谁需要谁依赖的原则。entity类也没有太多jar依赖和业务依赖，也不会形成污染源。</p>
+
+<p>4). <strong>公共业务</strong></p>
+
+<p>同commons和entity方法，不在复述，也被各个业务依赖，这种业务大部分是过渡性的，在未来迭代演进时可以通过其他方式抽象集成。</p>
+
+<p>5). <strong>拆分业务代码</strong></p>
+
+<p>拆分业务是最痛苦的事情了，这个要看原来的代码整洁度和互相依赖程度，一般采取2中方法：</p>
+
+<ul>
+<li>新建业务module，加入基础module的pom依赖，再从源module复制和该业务module相关的代码（包括单元测试代码）过来，解决编译错误和单元测试错误，完成本业务拆分。</li>
+<li>从源module复制一个新业务module，保持代码一致，先删除和本义务无关的代码（包括单元测试代码），再删除无关的pom依赖，解决编译错误和单元测试错误，完成本业务拆分。</li>
+</ul>
+
+<p>选择哪种方法，可以根据代码整洁度和互相依赖程度，如果代码很整洁且相互依赖较弱，可以采取前者，否则就采取后者。</p>
+
+<p>6). <strong>拆分微服务</strong></p>
+
+<p>有了以上的拆分基础，可以在合适的业务迭代将各个微服务module迁移到不同的代码仓库，完成进一步隔离管理。</p>
+
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2016-09-08
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            <div class="post-tags">
+                    <a href="/tags/spring-cloud/">spring-cloud</a>
+                    <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+                    <a href="/tags/spring-boot/">Spring Boot</a>
+                    </div>
+            <nav class="post-nav">
+                <a class="prev" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E6%96%BDspring-cloud%E4%B8%AD%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default">微服务实施spring-cloud中踩过的坑</span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/feign%E4%BD%BF%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+                        <span class="next-text nav-default">Feign正确的使用方法和性能优化注意事项</span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    <h4>相关文章：</h4>
+    <ul>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8B%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98/">微服务下分布式事务问题</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bapi%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/">微服务之API网关设计</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Beureka%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/">微服务之Eureka服务发现</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bspring-cloud%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%96%E9%83%A8%E5%8C%96%E5%92%8C%E4%B8%AD%E5%BF%83%E5%8C%96%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/">微服务之spring-cloud分布式外部化和中心化配置管理</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E6%96%BDspring-cloud%E4%B8%AD%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/">微服务实施spring-cloud中踩过的坑</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/feign%E4%BD%BF%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Feign正确的使用方法和性能优化注意事项</a></li>
+        
+            <li><a href="/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/">软件开发中的单一职责</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E5%BE%AE/">微服务之微</a></li>
+        
+    </ul>
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2016-09-08 19:22:47 \x2b0000 UTC',
+        title: '微服务拆分实践',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2020
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

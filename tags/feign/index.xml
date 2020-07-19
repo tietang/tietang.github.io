@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Feign on 多少光年</title>
+    <link>http://tietang.wang/tags/feign/</link>
+    <description>Recent content in Feign on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 06 Sep 2016 19:22:47 +0000</lastBuildDate>
+    
+	<atom:link href="http://tietang.wang/tags/feign/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Feign正确的使用方法和性能优化注意事项</title>
+      <link>http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/feign%E4%BD%BF%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</link>
+      <pubDate>Tue, 06 Sep 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/feign%E4%BD%BF%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</guid>
+      <description>Feign正确的使用方法和性能优化注意事项 1. feign自定义Configuration和root 容器有效隔离。 用@Configuration注解 不能在主@ComponentScan (or @SpringBootApplication)范围内，从其包名上分离 注意避免包扫描重叠，最好的方法是明确的指定包名 2. Spring Cloud Netflix 提供了默认的Bean类型: Decoder feignDecoder: ResponseEntityDecoder (which wraps a SpringDecoder) Encoder feignEncoder: SpringEncoder Logger feignLogger: Slf4jLogger Contract feignContract: SpringMvcContract Feign.Builder feignBuilder: HystrixFeign.Builder 3. Spring Cloud Netflix没有提供默认值，但仍然可以在feign上下文配置中创建： Logger.Level Retryer ErrorDecoder Request.Options Collection 4. 自定义feign的消息编码解码器： 不要在如下代码中getObject方法内new 对象，外部会频繁调用getObject方法。 1 2 3 4 5 6 ObjectFactory&amp;lt;HttpMessageConverters&amp;gt; messageConvertersObjectFactory = new ObjectFactory&amp;lt;HttpMessageConverters&amp;gt;() { @Override public HttpMessageConverters getObject() throws BeansException { return httpMessageConverters; } }; 5. 注意测试环境和生产环境，注意正确使用feign日志级别。 6. apacheHttpclient或者其他client的正确配置： apacheHttpclient自定义配置放在sp</description>
+    </item>
+    
+  </channel>
+</rss>

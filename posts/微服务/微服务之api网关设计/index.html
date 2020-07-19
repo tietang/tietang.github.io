@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>微服务之API网关设计 - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="微服务除了互相之间调用，还需要将API提供给外部应用访问，像浏览器，移动app，第三合作方等等，这就需要前段路由来管理后端微服务提供的服务。提供类似功能的应用有着多样化的名称，比如前置服务器/前置机、路由服务器、(反向)代理服务器，API网关服务器也是其中的一个叫法，只是场景和侧重点不一样。 API网关，顾名思义，就是外部到内部的一道门，其主要功能： 服务路由：将前段应用的调用请求路由定位并负载均衡到具体的后端微服务实例，对于前端应用看起来就是1个应用提供的服务，微服务对于前段应用来说就是黑盒，前段应用也不需要关心内部如何分布，由哪个微服务提供。主要有静态路由和动态路由。 静态路由：有时候需要通过域名或者其他固定方式提供和配置路由表 动态路由：通过服务发现服务，动态调整后端微服务的运行实例和路由表，为路由和负载均衡提供动态变化的服务注册信息。 安全：统一集中的身份认证，安全控制。比如登录，签名，黑名"/><meta name="keywords"
+          content="微服务, Spring Cloud, Spring Boot, API Gateway, 网关"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.57.2 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bapi%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="微服务之API网关设计" />
+<meta property="og:description" content="微服务除了互相之间调用，还需要将API提供给外部应用访问，像浏览器，移动app，第三合作方等等，这就需要前段路由来管理后端微服务提供的服务。提供类似功能的应用有着多样化的名称，比如前置服务器/前置机、路由服务器、(反向)代理服务器，API网关服务器也是其中的一个叫法，只是场景和侧重点不一样。 API网关，顾名思义，就是外部到内部的一道门，其主要功能： 服务路由：将前段应用的调用请求路由定位并负载均衡到具体的后端微服务实例，对于前端应用看起来就是1个应用提供的服务，微服务对于前段应用来说就是黑盒，前段应用也不需要关心内部如何分布，由哪个微服务提供。主要有静态路由和动态路由。 静态路由：有时候需要通过域名或者其他固定方式提供和配置路由表 动态路由：通过服务发现服务，动态调整后端微服务的运行实例和路由表，为路由和负载均衡提供动态变化的服务注册信息。 安全：统一集中的身份认证，安全控制。比如登录，签名，黑名" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bapi%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/" />
+<meta property="article:published_time" content="2016-09-08T19:22:47+00:00" />
+<meta property="article:modified_time" content="2016-09-08T19:22:47+00:00" />
+<meta itemprop="name" content="微服务之API网关设计">
+<meta itemprop="description" content="微服务除了互相之间调用，还需要将API提供给外部应用访问，像浏览器，移动app，第三合作方等等，这就需要前段路由来管理后端微服务提供的服务。提供类似功能的应用有着多样化的名称，比如前置服务器/前置机、路由服务器、(反向)代理服务器，API网关服务器也是其中的一个叫法，只是场景和侧重点不一样。 API网关，顾名思义，就是外部到内部的一道门，其主要功能： 服务路由：将前段应用的调用请求路由定位并负载均衡到具体的后端微服务实例，对于前端应用看起来就是1个应用提供的服务，微服务对于前段应用来说就是黑盒，前段应用也不需要关心内部如何分布，由哪个微服务提供。主要有静态路由和动态路由。 静态路由：有时候需要通过域名或者其他固定方式提供和配置路由表 动态路由：通过服务发现服务，动态调整后端微服务的运行实例和路由表，为路由和负载均衡提供动态变化的服务注册信息。 安全：统一集中的身份认证，安全控制。比如登录，签名，黑名">
+
+
+<meta itemprop="datePublished" content="2016-09-08T19:22:47&#43;00:00" />
+<meta itemprop="dateModified" content="2016-09-08T19:22:47&#43;00:00" />
+<meta itemprop="wordCount" content="1668">
+
+
+
+<meta itemprop="keywords" content="spring-cloud,微服务,Spring Boot,API Gateway,网关," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="微服务之API网关设计"/>
+<meta name="twitter:description" content="微服务除了互相之间调用，还需要将API提供给外部应用访问，像浏览器，移动app，第三合作方等等，这就需要前段路由来管理后端微服务提供的服务。提供类似功能的应用有着多样化的名称，比如前置服务器/前置机、路由服务器、(反向)代理服务器，API网关服务器也是其中的一个叫法，只是场景和侧重点不一样。 API网关，顾名思义，就是外部到内部的一道门，其主要功能： 服务路由：将前段应用的调用请求路由定位并负载均衡到具体的后端微服务实例，对于前端应用看起来就是1个应用提供的服务，微服务对于前段应用来说就是黑盒，前段应用也不需要关心内部如何分布，由哪个微服务提供。主要有静态路由和动态路由。 静态路由：有时候需要通过域名或者其他固定方式提供和配置路由表 动态路由：通过服务发现服务，动态调整后端微服务的运行实例和路由表，为路由和负载均衡提供动态变化的服务注册信息。 安全：统一集中的身份认证，安全控制。比如登录，签名，黑名"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title">微服务之API网关设计</h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 2016-09-08 </span>
+
+                <div class="post-category">
+                    <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"> 微服务 </a>
+                        
+                    <a href="/tags/spring-cloud/">
+                                <span class="badge">spring-cloud </span>
+                            </a>
+                        <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">
+                                <span class="badge">微服务 </span>
+                            </a>
+                        <a href="/tags/spring-boot/">
+                                <span class="badge">Spring Boot </span>
+                            </a>
+                        <a href="/tags/api-gateway/">
+                                <span class="badge">API Gateway </span>
+                            </a>
+                        <a href="/tags/%E7%BD%91%E5%85%B3/">
+                                <span class="badge">网关 </span>
+                            </a>
+                        
+                </div>
+                    <span class="more-meta"> 1668 words </span>
+                    <span class="more-meta"> 4 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+            <div>
+                <img src="http://tietang.wang/images/m1.jpg">
+            </div>
+        
+        
+        <div class="post-content">
+            <p><img src="http://upload-images.jianshu.io/upload_images/2519252-3f8e955deefa1708.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/600" alt="P60528-094513-01.jpeg" /></p>
+
+<p>微服务除了互相之间调用，还需要将API提供给外部应用访问，像浏览器，移动app，第三合作方等等，这就需要前段路由来管理后端微服务提供的服务。提供类似功能的应用有着多样化的名称，比如前置服务器/前置机、路由服务器、(反向)代理服务器，API网关服务器也是其中的一个叫法，只是场景和侧重点不一样。</p>
+
+<p>API网关，顾名思义，就是外部到内部的一道门，其主要功能：</p>
+
+<ul>
+<li>服务路由：将前段应用的调用请求路由定位并负载均衡到具体的后端微服务实例，对于前端应用看起来就是1个应用提供的服务，微服务对于前段应用来说就是黑盒，前段应用也不需要关心内部如何分布，由哪个微服务提供。主要有静态路由和动态路由。
+
+<ul>
+<li>静态路由：有时候需要通过域名或者其他固定方式提供和配置路由表</li>
+<li>动态路由：通过服务发现服务，动态调整后端微服务的运行实例和路由表，为路由和负载均衡提供动态变化的服务注册信息。</li>
+</ul></li>
+<li>安全：统一集中的身份认证，安全控制。比如登录，签名，黑名单等等，还可以挖掘和开发更高级的安全策略。</li>
+<li>弹性：限流和容错，也是另一个层面的安全防护，防止突发的流量或者高峰流量冲击后端微服务而导致其服务不可用，另一方面可以在高峰期通过容错和降级保证核心服务的运行。</li>
+<li>监控：实时观察后端微服务的TPS、响应时间，失败数量等准确的信息。</li>
+<li>日志：记录所有请求的访问日志数据，可以为日志分析和查询提供统一支持。</li>
+<li>其他，当然还有很多需要统一集中管理的都可以在网关层解决。</li>
+</ul>
+
+<p>在Spring Cloud Netflix中使用Zuul来作为API Gateway组件，并结合Undertow，可以满足大部分性能和网关功能需求了(更高要求可以参考：<a href="https://github.com/tietang/ngx-lua-zuul)，Zuul">https://github.com/tietang/ngx-lua-zuul)，Zuul</a> + Undertow一般性能延迟，包括JVM和网络延迟在10%~20%，JVM延迟可以控制到10ms以内。另一方面，Zuul有强大的可定制化，通过ZuulFilter可以定制开发更多的网关功能。如下图所示：在Spring Cloud技术上，Zuul集成了Hystrix，Ribbon，Eureka Client等强大的技术栈，提供了开箱即用的Spring Cloud微服务网关功能。Zuul的强大之处是自由定制，这样对于很多老项目微服务化后，就不能按照Spring Cloud默认的动态路由规则运行，因此在其基础上定制了一些路由规则功能，更好的适应老项目微服务化。</p>
+
+<p><img src="/imgs/API-Gateway.png" alt="API gateway" /></p>
+
+<p><strong>定制的路由规则的主要功能:</strong></p>
+
+<ol>
+<li>路由表中包含源路径，微服务名称，目标路径。</li>
+<li>Endpoint粒度配置支持。</li>
+<li>路由支持1对1精确路由。</li>
+<li>源路径可以<code>前缀/**</code>格式来模糊路由。</li>
+<li>目标路径可以使用<code>前缀/**</code>格式来装配目标路径。</li>
+<li>保留默认动态路由规则：<code>服务名称/**</code> &ndash;&gt; 是否截去前缀 &ndash;&gt; 目标路径。</li>
+<li>保留默认动态路由规则是否支持截去前缀的配置参数<code>stripPrefix</code>特性。</li>
+<li>路由规则可以在不重启服务动态更新，这个功能通过外化配置来支持。</li>
+<li>匹配股则采取谁先匹配路由谁，也就是说在路由表中有2个或以上的路由规则可能被匹配到时，匹配最先查询到的规则。</li>
+</ol>
+
+<p><strong>路由规则格式采用properties格式：</strong></p>
+
+<blockquote>
+<p>源路径 = 微服务名称, 目标路径</p>
+</blockquote>
+
+<p>启动时读取配置并解析，放入路由表。请求时通过查询匹配到合适的路由转发。</p>
+
+<p>例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">/api/v1/trade=trade,/v1/trade
+/api/customer/**=customer,/api/v1/**
+/api/user/**=user</pre></td></tr></table>
+</div>
+</div>
+<p>在上面的例子中：</p>
+
+<ul>
+<li>/api/v1/trade会精确的路由到trade微服务的/v1/trade；</li>
+<li>/api/customer/开头的api会路由转发到customer微服务的/api/v1/**，其中后面的**会被前面的**部分替换，比如/api/customer/card-&gt;/api/v1/card的转换。</li>
+<li>/api/user/开头的api会路由转发到user微服务的/api/user/**，endppoint不变。</li>
+</ul>
+
+<p>如果在Eureka Server中已经注册了微服务<code>payment</code>,那么在zuul启动后会自动添加路由规则，如果stripPrefix=false:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">/payment/**=payment,/payment/**</pre></td></tr></table>
+</div>
+</div>
+<p>如果stripPrefix=true:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">/payment/**=payment,/payment/**</pre></td></tr></table>
+</div>
+</div>
+<p>API网关通过部署多个实例来保证可用性，前端通过Nginx来负载均衡。</p>
+
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2016-09-08
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            <div class="post-tags">
+                    <a href="/tags/spring-cloud/">spring-cloud</a>
+                    <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+                    <a href="/tags/spring-boot/">Spring Boot</a>
+                    <a href="/tags/api-gateway/">API Gateway</a>
+                    <a href="/tags/%E7%BD%91%E5%85%B3/">网关</a>
+                    </div>
+            <nav class="post-nav">
+                <a class="prev" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8B%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default">微服务下分布式事务问题</span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Beureka%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/">
+                        <span class="next-text nav-default">微服务之Eureka服务发现</span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    <h4>相关文章：</h4>
+    <ul>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8B%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98/">微服务下分布式事务问题</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Beureka%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/">微服务之Eureka服务发现</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bspring-cloud%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%96%E9%83%A8%E5%8C%96%E5%92%8C%E4%B8%AD%E5%BF%83%E5%8C%96%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/">微服务之spring-cloud分布式外部化和中心化配置管理</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E6%96%BDspring-cloud%E4%B8%AD%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/">微服务实施spring-cloud中踩过的坑</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%AE%9E%E8%B7%B5/">微服务拆分实践</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/feign%E4%BD%BF%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Feign正确的使用方法和性能优化注意事项</a></li>
+        
+            <li><a href="/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/">软件开发中的单一职责</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E5%BE%AE/">微服务之微</a></li>
+        
+    </ul>
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2016-09-08 19:22:47 \x2b0000 UTC',
+        title: '微服务之API网关设计',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2020
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

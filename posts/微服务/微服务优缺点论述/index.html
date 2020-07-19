@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>微服务优缺点论述 - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="随着业务发展，业务功能的堆叠和复杂化，团队壮大，代码量也增加，各种问题开始凸显： 代码结构开始变得混乱，难以管理，提交冲突，改一处引多处。 沟通成本变高。 代码维护难：“修复越多，缺陷越多”。 引入和集成技术变得困难，依赖版本冲突，新特性无法使用。 最后开发效率也开始下降，代码维护的成本提高。 上线后稳定性不高，更大几率的影响可靠性和可用性，所有功能都运行在一个进程中，任何一个功能中出现bug，比如内存泄露，逻辑死循环耗尽CPU等，可以导致整个应用挂掉。 其中几个高并发功能，也不得不部署将所有功能增加部署实例，内存和CPU利用不够充分，灵活性也变差。 其缺点也很明显： 运维工作量增加，应用运维管理复杂。 代码重复率增加，团队自治带来的重复劳动。 分布式系统固有的复杂性和缺点：网络延迟，不可靠，负载均衡，调用，事务等等 微服务架构可以从一定程度上解决或缓解上述问题，但它也不是万能的，但也带来了一系列的非功能性需求，"/><meta name="keywords"
+          content="微服务, Spring Cloud, Spring Boot"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.57.2 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%BC%98%E7%BC%BA%E7%82%B9%E8%AE%BA%E8%BF%B0/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="微服务优缺点论述" />
+<meta property="og:description" content="随着业务发展，业务功能的堆叠和复杂化，团队壮大，代码量也增加，各种问题开始凸显： 代码结构开始变得混乱，难以管理，提交冲突，改一处引多处。 沟通成本变高。 代码维护难：“修复越多，缺陷越多”。 引入和集成技术变得困难，依赖版本冲突，新特性无法使用。 最后开发效率也开始下降，代码维护的成本提高。 上线后稳定性不高，更大几率的影响可靠性和可用性，所有功能都运行在一个进程中，任何一个功能中出现bug，比如内存泄露，逻辑死循环耗尽CPU等，可以导致整个应用挂掉。 其中几个高并发功能，也不得不部署将所有功能增加部署实例，内存和CPU利用不够充分，灵活性也变差。 其缺点也很明显： 运维工作量增加，应用运维管理复杂。 代码重复率增加，团队自治带来的重复劳动。 分布式系统固有的复杂性和缺点：网络延迟，不可靠，负载均衡，调用，事务等等 微服务架构可以从一定程度上解决或缓解上述问题，但它也不是万能的，但也带来了一系列的非功能性需求，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%BC%98%E7%BC%BA%E7%82%B9%E8%AE%BA%E8%BF%B0/" />
+<meta property="article:published_time" content="2016-09-10T19:22:47+00:00" />
+<meta property="article:modified_time" content="2016-09-10T19:22:47+00:00" />
+<meta itemprop="name" content="微服务优缺点论述">
+<meta itemprop="description" content="随着业务发展，业务功能的堆叠和复杂化，团队壮大，代码量也增加，各种问题开始凸显： 代码结构开始变得混乱，难以管理，提交冲突，改一处引多处。 沟通成本变高。 代码维护难：“修复越多，缺陷越多”。 引入和集成技术变得困难，依赖版本冲突，新特性无法使用。 最后开发效率也开始下降，代码维护的成本提高。 上线后稳定性不高，更大几率的影响可靠性和可用性，所有功能都运行在一个进程中，任何一个功能中出现bug，比如内存泄露，逻辑死循环耗尽CPU等，可以导致整个应用挂掉。 其中几个高并发功能，也不得不部署将所有功能增加部署实例，内存和CPU利用不够充分，灵活性也变差。 其缺点也很明显： 运维工作量增加，应用运维管理复杂。 代码重复率增加，团队自治带来的重复劳动。 分布式系统固有的复杂性和缺点：网络延迟，不可靠，负载均衡，调用，事务等等 微服务架构可以从一定程度上解决或缓解上述问题，但它也不是万能的，但也带来了一系列的非功能性需求，">
+
+
+<meta itemprop="datePublished" content="2016-09-10T19:22:47&#43;00:00" />
+<meta itemprop="dateModified" content="2016-09-10T19:22:47&#43;00:00" />
+<meta itemprop="wordCount" content="931">
+
+
+
+<meta itemprop="keywords" content="spring-cloud,微服务,Spring Boot," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="微服务优缺点论述"/>
+<meta name="twitter:description" content="随着业务发展，业务功能的堆叠和复杂化，团队壮大，代码量也增加，各种问题开始凸显： 代码结构开始变得混乱，难以管理，提交冲突，改一处引多处。 沟通成本变高。 代码维护难：“修复越多，缺陷越多”。 引入和集成技术变得困难，依赖版本冲突，新特性无法使用。 最后开发效率也开始下降，代码维护的成本提高。 上线后稳定性不高，更大几率的影响可靠性和可用性，所有功能都运行在一个进程中，任何一个功能中出现bug，比如内存泄露，逻辑死循环耗尽CPU等，可以导致整个应用挂掉。 其中几个高并发功能，也不得不部署将所有功能增加部署实例，内存和CPU利用不够充分，灵活性也变差。 其缺点也很明显： 运维工作量增加，应用运维管理复杂。 代码重复率增加，团队自治带来的重复劳动。 分布式系统固有的复杂性和缺点：网络延迟，不可靠，负载均衡，调用，事务等等 微服务架构可以从一定程度上解决或缓解上述问题，但它也不是万能的，但也带来了一系列的非功能性需求，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title">微服务优缺点论述</h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 2016-09-10 </span>
+
+                <div class="post-category">
+                    <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"> 微服务 </a>
+                        
+                    <a href="/tags/spring-cloud/">
+                                <span class="badge">spring-cloud </span>
+                            </a>
+                        <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">
+                                <span class="badge">微服务 </span>
+                            </a>
+                        <a href="/tags/spring-boot/">
+                                <span class="badge">Spring Boot </span>
+                            </a>
+                        
+                </div>
+                    <span class="more-meta"> 931 words </span>
+                    <span class="more-meta"> 2 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+            <div>
+                <img src="http://tietang.wang/images/m1.jpg">
+            </div>
+        
+        
+        <div class="post-content">
+            <p><img src="http://upload-images.jianshu.io/upload_images/2519252-a51def43c01ae44e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/400" alt="IMG_20161026_142532.jpg" /></p>
+
+<p>随着业务发展，业务功能的堆叠和复杂化，团队壮大，代码量也增加，各种问题开始凸显：</p>
+
+<ul>
+<li>代码结构开始变得混乱，难以管理，提交冲突，改一处引多处。</li>
+<li>沟通成本变高。</li>
+<li>代码维护难：“修复越多，缺陷越多”。</li>
+<li>引入和集成技术变得困难，依赖版本冲突，新特性无法使用。</li>
+</ul>
+
+<p>最后开发效率也开始下降，代码维护的成本提高。</p>
+
+<p>上线后稳定性不高，更大几率的影响可靠性和可用性，所有功能都运行在一个进程中，任何一个功能中出现bug，比如内存泄露，逻辑死循环耗尽CPU等，可以导致整个应用挂掉。
+其中几个高并发功能，也不得不部署将所有功能增加部署实例，内存和CPU利用不够充分，灵活性也变差。</p>
+
+<p>其缺点也很明显：</p>
+
+<ul>
+<li>运维工作量增加，应用运维管理复杂。</li>
+<li>代码重复率增加，团队自治带来的重复劳动。</li>
+<li>分布式系统固有的复杂性和缺点：网络延迟，不可靠，负载均衡，调用，事务等等</li>
+</ul>
+
+<p>微服务架构可以从一定程度上解决或缓解上述问题，但它也不是万能的，但也带来了一系列的非功能性需求，比如说分布式事务、自动化运维，服务发现，服务路由等额外需求，但其带来的好处以及克服其缺点总结如下：</p>
+
+<ul>
+<li>服务发现带来很多自运维特性。</li>
+<li>单一职责原则在各种各种场景的解耦合</li>
+<li>业务开发：只关注小团队所熟悉和负责的业务，做到专而精，并且容易实现持续交付。</li>
+<li>代码管理：无论多git repository还是多maven module都可以做到一般的代码隔离，尤其是积累很多年的代码，拆分后更清晰不混乱，易管理。</li>
+<li>技术实现：处理的业务不同，可能会采取不同的技术栈，如果是单体，依赖有冲突的时候不得不花时间fix冲突或者妥协放弃集成。微服务拆分后，相互独立，集成新技术更容易。</li>
+<li>测试：尤其是对单元测试和自动化测试更有好处，但对于整个集成测试却带来了挑战，通过可视化运维系统和一个完整的测试环境搭建，以及架构上适当调整，成熟化测试环境后，可以弥补这种不便。</li>
+<li>独立部署，快速而出错几率比较低，但运维量比较大，但通过可视化自动运维系统来克服。</li>
+<li>运行时的隔离，这个是显而易见的，就跟汽车道路一样，谁跑谁的道，互补干扰。</li>
+<li>分布式事务也有很多成熟的参考方案来解决：补偿型，可靠事件型，TCC型等。</li>
+<li>服务调用上，可以通过超时、隔离、服务发现负载均衡提高可用性和可靠性。</li>
+<li>网络延迟，可以采用轻量级协议和连接池技术等来弥补。</li>
+</ul>
+
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2016-09-10
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            <div class="post-tags">
+                    <a href="/tags/spring-cloud/">spring-cloud</a>
+                    <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+                    <a href="/tags/spring-boot/">Spring Boot</a>
+                    </div>
+            <nav class="post-nav">
+                <a class="prev" href="/posts/binlog/maxwell-mysql-binlog%E8%AE%A2%E9%98%85%E5%92%8C%E4%B8%80%E4%BA%9B%E5%9D%91/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default">Maxwell MySQL binlog订阅和一些坑</span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8B%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98/">
+                        <span class="next-text nav-default">微服务下分布式事务问题</span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    <h4>相关文章：</h4>
+    <ul>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8B%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98/">微服务下分布式事务问题</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bapi%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/">微服务之API网关设计</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Beureka%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/">微服务之Eureka服务发现</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bspring-cloud%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%96%E9%83%A8%E5%8C%96%E5%92%8C%E4%B8%AD%E5%BF%83%E5%8C%96%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/">微服务之spring-cloud分布式外部化和中心化配置管理</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E6%96%BDspring-cloud%E4%B8%AD%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/">微服务实施spring-cloud中踩过的坑</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%AE%9E%E8%B7%B5/">微服务拆分实践</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/feign%E4%BD%BF%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Feign正确的使用方法和性能优化注意事项</a></li>
+        
+            <li><a href="/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/">软件开发中的单一职责</a></li>
+        
+            <li><a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E5%BE%AE/">微服务之微</a></li>
+        
+    </ul>
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2016-09-10 19:22:47 \x2b0000 UTC',
+        title: '微服务优缺点论述',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2020
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

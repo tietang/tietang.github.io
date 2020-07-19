@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>网关 on 多少光年</title>
+    <link>http://tietang.wang/tags/%E7%BD%91%E5%85%B3/</link>
+    <description>Recent content in 网关 on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 08 Sep 2016 19:22:47 +0000</lastBuildDate>
+    
+	<atom:link href="http://tietang.wang/tags/%E7%BD%91%E5%85%B3/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>微服务之API网关设计</title>
+      <link>http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bapi%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Thu, 08 Sep 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bapi%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/</guid>
+      <description>微服务除了互相之间调用，还需要将API提供给外部应用访问，像浏览器，移动app，第三合作方等等，这就需要前段路由来管理后端微服务提供的服务。提供类似功能的应用有着多样化的名称，比如前置服务器/前置机、路由服务器、(反向)代理服务器，API网关服务器也是其中的一个叫法，只是场景和侧重点不一样。 API网关，顾名思义，就是外部到内部的一道门，其主要功能： 服务路由：将前段应用的调用请求路由定位并负载均衡到具体的后端微服务实例，对于前端应用看起来就是1个应用提供的服务，微服务对于前段应用来说就是黑盒，前段应用也不需要关心内部如何分布，由哪个微服务提供。主要有静态路由和动态路由。 静态路由：有时候需要通过域名或者其他固定方式提供和配置路由表 动态路由：通过服务发现服务，动态调整后端微服务的运行实例和路由表，为路由和负载均衡提供动态变化的服务注册信息。 安全：统一集中的身份认证，安全控制。比如登录，签名，黑名</description>
+    </item>
+    
+  </channel>
+</rss>

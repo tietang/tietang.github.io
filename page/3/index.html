@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="Stay simple. just do it."/><meta name="keywords"
+          content="微服务, hystrix, 铁汤"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.57.2 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/"/>
+    <link href="http://tietang.wang/index.xml" rel="alternate" type="application/rss+xml" title="多少光年"/>
+    <link href="http://tietang.wang/index.xml" rel="feed" type="application/rss+xml" title="多少光年"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="技术博客" />
+<meta property="og:description" content="Stay simple. just do it." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://tietang.wang/" />
+
+<meta property="og:updated_time" content="2016-02-19T09:20:42+00:00" />
+<meta itemprop="name" content="技术博客">
+<meta itemprop="description" content="Stay simple. just do it.">
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="技术博客"/>
+<meta name="twitter:description" content="Stay simple. just do it."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          
+    <section id="posts" class="posts">
+        
+        
+        
+        
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/hystrix/zuu%E5%8F%82%E6%95%B0l%E4%BC%98%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE/">zuul 参数调优</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-11-17 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                    <a href="/categories/hystrix/"> Hystrix </a>
+                    
+
+            </div>
+                <span class="more-meta"> 2467 words </span>
+                <span class="more-meta"> 5 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/hystrix/zuu%E5%8F%82%E6%95%B0l%E4%BC%98%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE/" class="summary-link"> zuul 参数调优 适用版本： spring-boot: 1.4.x.RELEASE spring-cloud：Camden.SR3 Hystrix: 1.5.6 spring-boot-tomcat 优化参数： 主要只有2个，最大和最小worker线程： 1 2 server.tomcat.max-threads=128 # Maximum amount of worker threads. server.tomcat.min-spare-threads=64 # Minimum amount of worker threads. spring-boot-undertow 优化参数： ioThreads 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接,默认取CPU核心数量,最小值为2。 Math.max(Runtime.getRuntime().availableProcessors(), 2); spring-boot 参数：server.undertow.io-threads= worker-threads 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载，默认值为io-threads*8。 spring-boot 参数：server.undertow.worker-threads= buffer buffer-size: 每块buffer的空间大小,越小的空间被利用越充分。 **buffers-per-region: ** 每个区分配的buffer数量 , 所以pool的大小是buffer-size * buffers-per-region。 directBuffers 是否分配的直接内存。 获取JVM最大可用内存maxMemory=...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/hystrix/zuu%E5%8F%82%E6%95%B0l%E4%BC%98%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE/" class="read-more-link">Read More...</a>
+            <a href="/tags/spring-cloud/"><span class="badge">spring cloud </span> </a>
+                <a href="/tags/hystrix/"><span class="badge">Hystrix </span> </a>
+                <a href="/tags/zuul/"><span class="badge">zuul </span> </a>
+                
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/binlog/maxwell-mysql-binlog%E8%AE%A2%E9%98%85%E5%92%8C%E4%B8%80%E4%BA%9B%E5%9D%91/">Maxwell MySQL binlog订阅和一些坑</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-11-09 </span>
+
+            <div class="post-category">
+                <a href="/categories/mysql/"> mysql </a>
+                    
+
+            </div>
+                <span class="more-meta"> 655 words </span>
+                <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/binlog/maxwell-mysql-binlog%E8%AE%A2%E9%98%85%E5%92%8C%E4%B8%80%E4%BA%9B%E5%9D%91/" class="summary-link"> maxwell 相关资源 http://maxwells-daemon.io/ https://github.com/zendesk/maxwell https://github.com/zendesk/open-replicator 配置MySQL master数据源 1 2 3 4 [mysqld] server-id=1 log-bin=master binlog_format=row 注意： 1. MySQL必须开启了binlogs，即log-bin指定了目录 2. binlog_format必须是row master数据源配置REPLICATION权限： Maxwell需要储存他自己的一些状态数据，启动参数schema_database选型来指定，默认是maxwell. 1 2 GRANT ALL on maxwell.* to &#39;maxwell&#39;@&#39;%&#39; identified by &#39;123456&#39;; GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE on *.* to &#39;maxwell&#39;@&#39;%&#39;; 问题列表 当binlog文件不存在时（被删除、移除、过期） 无法启动maxwell 正在运行的maxwell可能会stop 在阿里云RDS下的风险问题 binlog文件清理问题 binlog文件名在切换master主备或者阿里运维维护时会重置 RDS for MySQL 的 Binlog 生成和清理规则： 参考：RDS for MySQL 之 Binlog 日志生成和清理规则 其他问题 阿里RDS的binlog在被复制完成后，会将之前的最后的binlog文件复制到其他地方，如果maxwell挂起时间较...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/binlog/maxwell-mysql-binlog%E8%AE%A2%E9%98%85%E5%92%8C%E4%B8%80%E4%BA%9B%E5%9D%91/" class="read-more-link">Read More...</a>
+            <a href="/tags/maxwell/"><span class="badge">Maxwell </span> </a>
+                <a href="/tags/binlog/"><span class="badge">binlog </span> </a>
+                <a href="/tags/mysql/"><span class="badge">mysql </span> </a>
+                
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%BC%98%E7%BC%BA%E7%82%B9%E8%AE%BA%E8%BF%B0/">微服务优缺点论述</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-09-10 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"> 微服务 </a>
+                    
+
+            </div>
+                <span class="more-meta"> 931 words </span>
+                <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%BC%98%E7%BC%BA%E7%82%B9%E8%AE%BA%E8%BF%B0/" class="summary-link"> 随着业务发展，业务功能的堆叠和复杂化，团队壮大，代码量也增加，各种问题开始凸显： 代码结构开始变得混乱，难以管理，提交冲突，改一处引多处。 沟通成本变高。 代码维护难：“修复越多，缺陷越多”。 引入和集成技术变得困难，依赖版本冲突，新特性无法使用。 最后开发效率也开始下降，代码维护的成本提高。 上线后稳定性不高，更大几率的影响可靠性和可用性，所有功能都运行在一个进程中，任何一个功能中出现bug，比如内存泄露，逻辑死循环耗尽CPU等，可以导致整个应用挂掉。 其中几个高并发功能，也不得不部署将所有功能增加部署实例，内存和CPU利用不够充分，灵活性也变差。 其缺点也很明显： 运维工作量增加，应用运维管理复杂。 代码重复率增加，团队自治带来的重复劳动。 分布式系统固有的复杂性和缺点：网络延迟，不可靠，负载均衡，调用，事务等等 微服务架构可以从一定程度上解决或缓解上述问题，但它也不是万能的，但也带来了一系列的非功能性需求，...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%BC%98%E7%BC%BA%E7%82%B9%E8%AE%BA%E8%BF%B0/" class="read-more-link">Read More...</a>
+            <a href="/tags/spring-cloud/"><span class="badge">spring-cloud </span> </a>
+                <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="badge">微服务 </span> </a>
+                <a href="/tags/spring-boot/"><span class="badge">Spring Boot </span> </a>
+                
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%AE%9E%E8%B7%B5/">微服务拆分实践</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-09-08 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"> 微服务 </a>
+                    
+
+            </div>
+                <span class="more-meta"> 2151 words </span>
+                <span class="more-meta"> 5 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%AE%9E%E8%B7%B5/" class="summary-link"> 说到微服务就不得不说拆分了，服务拆分要有一些指导依据。 拆分依据 微服务的理论知识有大量的分享，这里是我对微服务理论基础认识的一些观点： 小，且专注于做一件事情，即满足单一职责原则。 关于单一职责可以阅读我的另一篇文章《软件开发中的单一职责》 运行在独立的进程中。 轻量级的通信机制，RPC或者HTTP或者MQ。 松耦合，独立部署。 康威定律：设计系统的组织，其产生的设计等同于组织之内、组织之间的沟通结构。 服务拆分依据结合上面的理论基础充分考虑了以下因素： 业务和领域模型 技术、业务量等其他因素 团队 业务应该说是最实在的，也是最好理解而且最容易把握的。虽然领域的有界上下文从理论上能指导拆分，但是万万需要拆分的不是一个全新的系统，而是一个在线上稳定运行了很长时间的，很多人一砖一瓦堆砌起来的，并且仍然在持续添砖加瓦，不管是桥梁，还是高楼，我们的目的是让系统运行的更健壮，而不是拆成七零八碎，所对于这样的老系统，用领域拆...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%AE%9E%E8%B7%B5/" class="read-more-link">Read More...</a>
+            <a href="/tags/spring-cloud/"><span class="badge">spring-cloud </span> </a>
+                <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="badge">微服务 </span> </a>
+                <a href="/tags/spring-boot/"><span class="badge">Spring Boot </span> </a>
+                
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E6%96%BDspring-cloud%E4%B8%AD%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/">微服务实施spring-cloud中踩过的坑</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-09-08 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"> 微服务 </a>
+                    
+
+            </div>
+                <span class="more-meta"> 834 words </span>
+                <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E6%96%BDspring-cloud%E4%B8%AD%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/" class="summary-link"> 注册IP问题 早期的Spring Cloud Eureka在注册获取网卡IP时，不能区分外网网卡和内网网卡，如果安装了虚拟机和docker也不能区分虚拟网卡，每次启动注册的IP都有可能不一样，如果要注册为外网网卡IP，那运行带宽就不够，这个bug应该说是比较严重的问题，因此重写了网卡IP获取的逻辑来解决，同时也反馈给了spring cloud团队，再后期的版本中添加了网卡接口排序和通过名称过滤的功能来得到解决。 HealthCheck的问题 在一些极小概率的情况下，会导致Eureka Server 下线微服务实例，出现“Remote status from Eureka server is down”的问题，即便是重启微服务也无济于事，不过已经有码友在spring cloud 官方github贴出了解决方法的issue。 Zookeeper版本带来的性能问题 现象是一个团队在实施微服务时，发现部署到服务器上的微服务，在没有任何请求时，仍然CPU占用20~30%；匪夷所思的是，同样的微服务...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E6%96%BDspring-cloud%E4%B8%AD%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/" class="read-more-link">Read More...</a>
+            <a href="/tags/spring-cloud/"><span class="badge">spring-cloud </span> </a>
+                <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="badge">微服务 </span> </a>
+                <a href="/tags/spring-boot/"><span class="badge">Spring Boot </span> </a>
+                
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bspring-cloud%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%96%E9%83%A8%E5%8C%96%E5%92%8C%E4%B8%AD%E5%BF%83%E5%8C%96%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/">微服务之spring-cloud分布式外部化和中心化配置管理</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-09-08 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"> 微服务 </a>
+                    
+
+            </div>
+                <span class="more-meta"> 745 words </span>
+                <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bspring-cloud%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%96%E9%83%A8%E5%8C%96%E5%92%8C%E4%B8%AD%E5%BF%83%E5%8C%96%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/" class="summary-link"> 微服务化之后，应用的数量剧增，零时需要调整配置参数时，无论是运维直接在服务器上修改还是工程中修改配置后重新打包部署，对运维来说工作量是巨大的，而且人为的操作会加大出错的几率，那么外化和中心化配置可以更好的解决分布式环境的配置问题。Spring Cloud提供了2种方式的外化配置： Spring Cloud Config 通过本地文件系统，git/svn仓库来管理配置文件，可以满足基本外化需求，但不能精细的管理配置项。 Spring Cloud Zookeeper Config 通过Zookeeper分级命名空间来储存配置项数据，并且支持基础上下文和profile命名空间，另外Zookeeper可以实时监听节点变化和通知机制，应该是首选。 Spring Cloud Zookeeper Config提供的功能： 和Spring Boot无缝集成，能完全无缝替代properties或yml文件的配置。 支持默认上下文命名空间。 支持profile命名空间。 支持应用名称命名空间。 命名空间上支持配置的继承。 支持更改实时通知和endpoin...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bspring-cloud%E5%88%86%E5%B8%83%E5%BC%8F%E5%A4%96%E9%83%A8%E5%8C%96%E5%92%8C%E4%B8%AD%E5%BF%83%E5%8C%96%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/" class="read-more-link">Read More...</a>
+            <a href="/tags/spring-cloud/"><span class="badge">spring-cloud </span> </a>
+                <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="badge">微服务 </span> </a>
+                <a href="/tags/spring-boot/"><span class="badge">Spring Boot </span> </a>
+                <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/"><span class="badge">分布式配置管理 </span> </a>
+                
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Beureka%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/">微服务之Eureka服务发现</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-09-08 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"> 微服务 </a>
+                    
+
+            </div>
+                <span class="more-meta"> 1360 words </span>
+                <span class="more-meta"> 3 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Beureka%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/" class="summary-link"> 当调用API或者发起网络通信的时候，无论如何我们都要知道被调用方的IP和服务端口，大部分情况是通过域名和服务端口，事实上基于DNS的服务发现，因为DNS缓存、无法自治和其他不利因素的存在，有很多局限。传统的DNS方式，都是通过nginx或者其他代理软件来实现，物理机器的ip和port都是固定的，那么nginx中配置的服务ip和port也是固定的，服务列表的更新只能通过手动来做，但如果后端服务很多时，手动更新容易出错，效率也很低，这在后端服务发生故障时，不可用时间就可能会加长。在微服务中，尤其是使用了Docker等虚拟化技术的微服务，其IP和port都是动态分配的，服务实例数也是动态变化的，那么就需要精细而准确的服务发现机制。当微服务app启动后，告诉其他服务自己的ip和端口，这里的其他服务就是Eureka Server和Eureka Client，这样其他服务就知道这个服务有多少实例在线，都在...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Beureka%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/" class="read-more-link">Read More...</a>
+            <a href="/tags/spring-cloud/"><span class="badge">spring-cloud </span> </a>
+                <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="badge">微服务 </span> </a>
+                <a href="/tags/spring-boot/"><span class="badge">Spring Boot </span> </a>
+                <a href="/tags/eureka/"><span class="badge">Eureka </span> </a>
+                <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/"><span class="badge">服务发现 </span> </a>
+                
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bapi%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/">微服务之API网关设计</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-09-08 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"> 微服务 </a>
+                    
+
+            </div>
+                <span class="more-meta"> 1668 words </span>
+                <span class="more-meta"> 4 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bapi%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/" class="summary-link"> 微服务除了互相之间调用，还需要将API提供给外部应用访问，像浏览器，移动app，第三合作方等等，这就需要前段路由来管理后端微服务提供的服务。提供类似功能的应用有着多样化的名称，比如前置服务器/前置机、路由服务器、(反向)代理服务器，API网关服务器也是其中的一个叫法，只是场景和侧重点不一样。 API网关，顾名思义，就是外部到内部的一道门，其主要功能： 服务路由：将前段应用的调用请求路由定位并负载均衡到具体的后端微服务实例，对于前端应用看起来就是1个应用提供的服务，微服务对于前段应用来说就是黑盒，前段应用也不需要关心内部如何分布，由哪个微服务提供。主要有静态路由和动态路由。 静态路由：有时候需要通过域名或者其他固定方式提供和配置路由表 动态路由：通过服务发现服务，动态调整后端微服务的运行实例和路由表，为路由和负载均衡提供动态变化的服务注册信息。 安全：统一集中的身份认证，安全控制。比如登录，签名，黑名...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8Bapi%E7%BD%91%E5%85%B3%E8%AE%BE%E8%AE%A1/" class="read-more-link">Read More...</a>
+            <a href="/tags/spring-cloud/"><span class="badge">spring-cloud </span> </a>
+                <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="badge">微服务 </span> </a>
+                <a href="/tags/spring-boot/"><span class="badge">Spring Boot </span> </a>
+                <a href="/tags/api-gateway/"><span class="badge">API Gateway </span> </a>
+                <a href="/tags/%E7%BD%91%E5%85%B3/"><span class="badge">网关 </span> </a>
+                
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8B%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98/">微服务下分布式事务问题</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-09-08 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"> 微服务 </a>
+                    
+
+            </div>
+                <span class="more-meta"> 795 words </span>
+                <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8B%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98/" class="summary-link"> 用数据一致性来描述更贴切一些，在微服务化后，分布式事务上有很多选择，像多阶段提交、补偿模式、可靠事件、TCC等等，多阶段提交强一致性好但很难提升吞吐，为了吞吐基本上都是选择了最终一致性的分布式事务模型。补偿模式、可靠事件、TCC都属于最终一致性的范畴，都被广泛采用。无论采用哪种模式，都应该在特定业务场景下选择合适的分布式事务模型，并且具体场景具体分析了。这些模型也有很多分享参考，不再废话，下面着重介绍另一种分布式事务模型。 交叉事务模型 最初是2个数据源，我把它叫做双事务，扩展后支持多个数据源叫做交叉事务，这种事务适用于有2个或多个DataSource的场景下来保证数据的事务完整性，吞吐和一致性效果都很不错，这种事务模型利用了JDBC事务，基本思路是先执行DML SQL，出现异常或者需要回滚时依次回滚已经执行事务，最后再执行提交, 并且实现难度也不大，下面是伪代码： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8B%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98/" class="read-more-link">Read More...</a>
+            <a href="/tags/spring-cloud/"><span class="badge">spring-cloud </span> </a>
+                <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="badge">微服务 </span> </a>
+                <a href="/tags/spring-boot/"><span class="badge">Spring Boot </span> </a>
+                <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/"><span class="badge">分布式事务 </span> </a>
+                
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/feign%E4%BD%BF%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Feign正确的使用方法和性能优化注意事项</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-09-06 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"> 微服务 </a>
+                    
+
+            </div>
+                <span class="more-meta"> 1289 words </span>
+                <span class="more-meta"> 3 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/feign%E4%BD%BF%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="summary-link"> Feign正确的使用方法和性能优化注意事项 1. feign自定义Configuration和root 容器有效隔离。 用@Configuration注解 不能在主@ComponentScan (or @SpringBootApplication)范围内，从其包名上分离 注意避免包扫描重叠，最好的方法是明确的指定包名 2. Spring Cloud Netflix 提供了默认的Bean类型: Decoder feignDecoder: ResponseEntityDecoder (which wraps a SpringDecoder) Encoder feignEncoder: SpringEncoder Logger feignLogger: Slf4jLogger Contract feignContract: SpringMvcContract Feign.Builder feignBuilder: HystrixFeign.Builder 3. Spring Cloud Netflix没有提供默认值，但仍然可以在feign上下文配置中创建： Logger.Level Retryer ErrorDecoder Request.Options Collection 4. 自定义feign的消息编码解码器： 不要在如下代码中getObject方法内new 对象，外部会频繁调用getObject方法。 1 2 3 4 5 6 ObjectFactory&lt;HttpMessageConverters&gt; messageConvertersObjectFactory = new ObjectFactory&lt;HttpMessageConverters&gt;() { @Override public HttpMessageConverters getObject() throws BeansException { return httpMessageConverters; } }; 5. 注意测试环境和生产环境，注意正确使用feign日志级别。 6. apacheHttpclient或者其他client的正确配置： apacheHttpclient自定义配置放在sp...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/feign%E4%BD%BF%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="read-more-link">Read More...</a>
+            <a href="/tags/feign/"><span class="badge">Feign </span> </a>
+                <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="badge">微服务 </span> </a>
+                <a href="/tags/spring-cloud/"><span class="badge">Spring Cloud </span> </a>
+                
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/hystrix/resttemplate%E9%81%87%E4%B8%8Ahystrix/">RestTemplate遇上Hystrix</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-09-02 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                    <a href="/categories/hystrix/"> Hystrix </a>
+                    
+
+            </div>
+                <span class="more-meta"> 747 words </span>
+                <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/hystrix/resttemplate%E9%81%87%E4%B8%8Ahystrix/" class="summary-link"> RestTemplate遇上Hystrix RestTemplate集成Hystrix和Robbin 查看RestTemplate源代码，可以看到RestTemplate继承了InterceptingHttpAccessor类，InterceptingHttpAccessor类通过ClientHttpRequestInterceptor接口提供了扩展功能。 实现intercept方法，在该方法中封装HystrixCommand和Ribbon逻辑即可。 下面的代码是集成了HystrixCommand的例子： 1 2 3 4 5 6 7 8 9 10 11 12 13 @Override public ClientHttpResponse intercept( final HttpRequest request, final byte[] body, final ClientHttpRequestExecution execution) throws IOException { final URI originalUri = request.getURI(); String serviceName = mapCommandKey(originalUri); log.info(&#34;{} :{} {} &#34;, serviceName, request.getMethod().name(), originalUri.toString()); return new RestTemplateHystrixCommnad(serviceName, () -&gt; { return execution.execute(request, body); }, hystrixFallback).execute(); } 下面是集成了HystrixCommand和Ribbon的例子 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 @Override public ClientHttpResponse intercept( final HttpRequest request, final byte[] body, final ClientHttpRequestExecution execution) throws IOException { final URI originalUri = request.getURI(); String serviceName = mapCommandKey(originalUri); log.info(&#34;{} :{} {} &#34;, serviceName, request.getMethod().name(), originalUri.toString()); return new RestTemplateHystrixCommnad(serviceName, () -&gt; { return this.loadBalancer.execute(serviceName, instance -&gt; { HttpRequest...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/hystrix/resttemplate%E9%81%87%E4%B8%8Ahystrix/" class="read-more-link">Read More...</a>
+            <a href="/tags/hystrix/"><span class="badge">hystrix </span> </a>
+                <a href="/tags/circuit-breaker/"><span class="badge">Circuit Breaker </span> </a>
+                
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/">软件开发中的单一职责</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-06-28 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                    <a href="/categories/%E6%9D%82%E8%B0%88/"> 杂谈 </a>
+                    
+
+            </div>
+                <span class="more-meta"> 3062 words </span>
+                <span class="more-meta"> 7 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/" class="summary-link"> 软件开发中的单一职责 最近在实践微服务化过程中，对其“单一职责”原则深有体会。 那么只有微服务化才可以单一职责，才可以解耦吗？答案是否定的。 单一职责原则是这样定义的：单一的功能，并且完全封装起来。 我们做后端Java开发的，应该最熟悉的就是标准的3层架构了，尤其是使用Spring.io体系的：Controller，Service，Dao/Repository。为什么要分层？就是为了保证单一职责，数据模型的事情交给Controller，业务逻辑的事情交给Service，和数据打交道的事情就交给Dao/Repository。有时候或者有些人会分层分的更多，4层，5层，我自己也这样干过，说白了也是为了保证单一职责，3层不能满足单一职责了，耦合度高了，就分。 我们都知道一个webapp在经过一定时间的开发后，就惨不忍睹，即便是有标准的分层，页面或模板文件一大堆，最初的很清晰的3层标准架构也变味了，Cont...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/" class="read-more-link">Read More...</a>
+            <a href="/tags/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/"><span class="badge">单一职责 </span> </a>
+                <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/"><span class="badge">软件开发 </span> </a>
+                <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="badge">微服务 </span> </a>
+                
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E6%8A%80%E6%9C%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B9%8B%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2%E7%AE%97%E6%B3%95/">负载均衡之加权轮询算法</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-06-16 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                    <a href="/categories/%E7%AE%97%E6%B3%95/"> 算法 </a>
+                    
+
+            </div>
+                <span class="more-meta"> 537 words </span>
+                <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E6%8A%80%E6%9C%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B9%8B%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2%E7%AE%97%E6%B3%95/" class="summary-link"> 负载均衡之加权轮询算法 算法举例说明 服务实例 权重 127.0.0.1:8001 1 127.0.0.1:8002 2 127.0.0.1:8003 3 共有三个实例，总权重为6，那么实现效果应该为每调用6次： 每个实例应该被调用权重次数 权重数大的优先被调用 根据以上说明，那么进行排列组合： 先按照权重大小排序 把权重数做为调用次数排列 排列的结果是这样的： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8003 3 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8002 2 6 127.0.0.1:8001 1 貌似没问题，但每个实例调用不是交替的，分布不够均匀，改进一下重新排列组合： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8003 3 6 127.0.0.1:8001 1 或者 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8001 1 5 127.0.0.1:8003 3 6 127.0.0.1:8002 2 2个权重变量：weight，current_weight weight 配置的固定不变的权重 current_weight 会动态调整的权重，初始化为0，运行时动态调整。 选取开始时，先重新调整current_weight= current_weight+weight，然后通过current_weight值从大到小排序，选择current_weight值最大...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E6%8A%80%E6%9C%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B9%8B%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2%E7%AE%97%E6%B3%95/" class="read-more-link">Read More...</a>
+            <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"><span class="badge">负载均衡 </span> </a>
+                <a href="/tags/%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2/"><span class="badge">加权轮询 </span> </a>
+                <a href="/tags/%E8%BD%AE%E8%AF%A2/"><span class="badge">轮询 </span> </a>
+                <a href="/tags/%E7%AE%97%E6%B3%95/"><span class="badge">算法 </span> </a>
+                
+        </div>
+    </div>
+
+
+</article>
+
+        
+    </section>
+    
+    <nav class="pagination">
+        
+            <a class="prev" href="/page/2/">
+                <i class="iconfont icon-left"></i>
+                <span class="prev-text">Prev</span>
+            </a>
+        
+        
+            <a class="next" href="/page/4/">
+                <span class="next-text">Next</span>
+                <i class="iconfont icon-right"></i>
+            </a>
+        
+    </nav>
+
+        </div>
+        
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2020
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

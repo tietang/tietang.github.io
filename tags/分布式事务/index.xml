@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>分布式事务 on 多少光年</title>
+    <link>http://tietang.wang/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/</link>
+    <description>Recent content in 分布式事务 on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 08 Sep 2016 19:22:47 +0000</lastBuildDate>
+    
+	<atom:link href="http://tietang.wang/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>微服务下分布式事务问题</title>
+      <link>http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8B%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Thu, 08 Sep 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8B%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98/</guid>
+      <description>用数据一致性来描述更贴切一些，在微服务化后，分布式事务上有很多选择，像多阶段提交、补偿模式、可靠事件、TCC等等，多阶段提交强一致性好但很难提升吞吐，为了吞吐基本上都是选择了最终一致性的分布式事务模型。补偿模式、可靠事件、TCC都属于最终一致性的范畴，都被广泛采用。无论采用哪种模式，都应该在特定业务场景下选择合适的分布式事务模型，并且具体场景具体分析了。这些模型也有很多分享参考，不再废话，下面着重介绍另一种分布式事务模型。 交叉事务模型 最初是2个数据源，我把它叫做双事务，扩展后支持多个数据源叫做交叉事务，这种事务适用于有2个或多个DataSource的场景下来保证数据的事务完整性，吞吐和一致性效果都很不错，这种事务模型利用了JDBC事务，基本思路是先执行DML SQL，出现异常或者需要回滚时依次回滚已经执行事务，最后再执行提交, 并且实现难度也不大，下面是伪代码： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16</description>
+    </item>
+    
+  </channel>
+</rss>
