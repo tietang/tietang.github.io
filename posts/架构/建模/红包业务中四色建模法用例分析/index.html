@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>四色建模法-红包业务运用 - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="红包场景概述 红包业务场景主要用例就2个：发红包和收红包。 红包指的是具备固定数量固定总金额的大红包，每个大红包由固定数量的小红包组成，每个小红包金额一样或者不一样，但所有小红包的金额之和和大红包总金额必须保持一致，红包实际上是一个具备虚拟资金特征的特殊商品。 发红包和收红包实际上是金融商品的交易过程，红包是一种虚拟资金商品，会涉及到用户资金资产，资金资产指的是用户的钱包账户。 发红包过程是，红包发放者从系统虚拟资金中间商那里购买虚拟资金商品也就是红包，并支付红包总金额给系统虚拟资金中间商，然后将购买的红包赠送给目标人群，赠送过程相当于商品发布，目标人群可以是某个人，也可以是某一群人，所以发红包过程涉及到下单，支付、赠送。 收红包过程类似商品的秒杀活动，不一样的是用户不需要支付商品价格，用户点击红包链接，进入抢红包流程，如果抢到红包，直接到系统虚拟资金中间商那里兑换红包面值，系统虚拟资金中间商将面值"/><meta name="keywords"
+          content="微服务, hystrix, 铁汤"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/%E6%9E%B6%E6%9E%84/%E5%BB%BA%E6%A8%A1/%E7%BA%A2%E5%8C%85%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%9B%9B%E8%89%B2%E5%BB%BA%E6%A8%A1%E6%B3%95%E7%94%A8%E4%BE%8B%E5%88%86%E6%9E%90/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="四色建模法-红包业务运用" />
+<meta property="og:description" content="红包场景概述 红包业务场景主要用例就2个：发红包和收红包。 红包指的是具备固定数量固定总金额的大红包，每个大红包由固定数量的小红包组成，每个小红包金额一样或者不一样，但所有小红包的金额之和和大红包总金额必须保持一致，红包实际上是一个具备虚拟资金特征的特殊商品。 发红包和收红包实际上是金融商品的交易过程，红包是一种虚拟资金商品，会涉及到用户资金资产，资金资产指的是用户的钱包账户。 发红包过程是，红包发放者从系统虚拟资金中间商那里购买虚拟资金商品也就是红包，并支付红包总金额给系统虚拟资金中间商，然后将购买的红包赠送给目标人群，赠送过程相当于商品发布，目标人群可以是某个人，也可以是某一群人，所以发红包过程涉及到下单，支付、赠送。 收红包过程类似商品的秒杀活动，不一样的是用户不需要支付商品价格，用户点击红包链接，进入抢红包流程，如果抢到红包，直接到系统虚拟资金中间商那里兑换红包面值，系统虚拟资金中间商将面值" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/%E6%9E%B6%E6%9E%84/%E5%BB%BA%E6%A8%A1/%E7%BA%A2%E5%8C%85%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%9B%9B%E8%89%B2%E5%BB%BA%E6%A8%A1%E6%B3%95%E7%94%A8%E4%BE%8B%E5%88%86%E6%9E%90/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-09-17T20:20:42+00:00" />
+<meta property="article:modified_time" content="2019-09-17T20:20:42+00:00" />
+
+<meta itemprop="name" content="四色建模法-红包业务运用">
+<meta itemprop="description" content="红包场景概述 红包业务场景主要用例就2个：发红包和收红包。 红包指的是具备固定数量固定总金额的大红包，每个大红包由固定数量的小红包组成，每个小红包金额一样或者不一样，但所有小红包的金额之和和大红包总金额必须保持一致，红包实际上是一个具备虚拟资金特征的特殊商品。 发红包和收红包实际上是金融商品的交易过程，红包是一种虚拟资金商品，会涉及到用户资金资产，资金资产指的是用户的钱包账户。 发红包过程是，红包发放者从系统虚拟资金中间商那里购买虚拟资金商品也就是红包，并支付红包总金额给系统虚拟资金中间商，然后将购买的红包赠送给目标人群，赠送过程相当于商品发布，目标人群可以是某个人，也可以是某一群人，所以发红包过程涉及到下单，支付、赠送。 收红包过程类似商品的秒杀活动，不一样的是用户不需要支付商品价格，用户点击红包链接，进入抢红包流程，如果抢到红包，直接到系统虚拟资金中间商那里兑换红包面值，系统虚拟资金中间商将面值"><meta itemprop="datePublished" content="2019-09-17T20:20:42+00:00" />
+<meta itemprop="dateModified" content="2019-09-17T20:20:42+00:00" />
+<meta itemprop="wordCount" content="4098">
+<meta itemprop="keywords" content="四色建模法,建模," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="四色建模法-红包业务运用"/>
+<meta name="twitter:description" content="红包场景概述 红包业务场景主要用例就2个：发红包和收红包。 红包指的是具备固定数量固定总金额的大红包，每个大红包由固定数量的小红包组成，每个小红包金额一样或者不一样，但所有小红包的金额之和和大红包总金额必须保持一致，红包实际上是一个具备虚拟资金特征的特殊商品。 发红包和收红包实际上是金融商品的交易过程，红包是一种虚拟资金商品，会涉及到用户资金资产，资金资产指的是用户的钱包账户。 发红包过程是，红包发放者从系统虚拟资金中间商那里购买虚拟资金商品也就是红包，并支付红包总金额给系统虚拟资金中间商，然后将购买的红包赠送给目标人群，赠送过程相当于商品发布，目标人群可以是某个人，也可以是某一群人，所以发红包过程涉及到下单，支付、赠送。 收红包过程类似商品的秒杀活动，不一样的是用户不需要支付商品价格，用户点击红包链接，进入抢红包流程，如果抢到红包，直接到系统虚拟资金中间商那里兑换红包面值，系统虚拟资金中间商将面值"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title">四色建模法-红包业务运用</h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 2019-09-17 </span>
+
+                <div class="post-category">
+                    <a href="/categories/%E5%BB%BA%E6%A8%A1/"> 建模 </a>
+                        
+                    <a href="/tags/%E5%9B%9B%E8%89%B2%E5%BB%BA%E6%A8%A1%E6%B3%95/">
+                                <span class="badge">四色建模法 </span>
+                            </a>
+                        <a href="/tags/%E5%BB%BA%E6%A8%A1/">
+                                <span class="badge">建模 </span>
+                            </a>
+                        
+                </div>
+                    <span class="more-meta"> 4098 words </span>
+                    <span class="more-meta"> 9 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#红包场景概述">红包场景概述</a></li>
+    <li><a href="#用四色建模法来分析红包场景业务模型">用四色建模法来分析红包场景业务模型</a>
+      <ul>
+        <li><a href="#第一步寻找要追溯的事件桃红色并识别出时标对象桃红色"><strong>第一步：寻找要追溯的事件</strong>(桃红色)，并识别出“时标对象”**（桃红色）</a></li>
+        <li><a href="#好吧我们就来落地模型">好吧，我们就来落地模型：</a></li>
+        <li><a href="#第二步-整理对象建立关系构建核心骨干模型">第二步： 整理对象，建立关系，构建核心骨干模型</a></li>
+        <li><a href="#第三步寻找时标对象周围的人地物5绿色">第三步：寻找时标对象周围的“人、地、物”[5]**（绿色）：</a></li>
+        <li><a href="#第四步抽象角色6黄色"><strong>第四步：抽象“角色”[6]</strong>（黄色）：</a></li>
+        <li><a href="#第五步补充描述信息7蓝色">第五步：补充“描述”信息[7]**(蓝色)：</a></li>
+      </ul>
+    </li>
+    <li><a href="#最后再总结一下四色建模法核心方法">最后再总结一下四色建模法核心方法：</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+            <div>
+                <img src="http://tietang.wang//pics/IMG_20190805_182450_1.jpg">
+            </div>
+        
+        
+        <div class="post-content">
+            <h2 id="红包场景概述">红包场景概述</h2>
+<p>红包业务场景主要用例就2个：发红包和收红包。</p>
+<p>红包指的是具备固定数量固定总金额的大红包，每个大红包由固定数量的小红包组成，每个小红包金额一样或者不一样，但所有小红包的金额之和和大红包总金额必须保持一致，红包实际上是一个具备虚拟资金特征的特殊商品。</p>
+<p>发红包和收红包实际上是金融商品的交易过程，红包是一种虚拟资金商品，会涉及到用户资金资产，资金资产指的是用户的钱包账户。</p>
+<p>发红包过程是，红包发放者从系统虚拟资金中间商那里购买虚拟资金商品也就是红包，并支付红包总金额给系统虚拟资金中间商，然后将购买的红包赠送给目标人群，赠送过程相当于商品发布，目标人群可以是某个人，也可以是某一群人，所以发红包过程涉及到下单，支付、赠送。</p>
+<p>收红包过程类似商品的秒杀活动，不一样的是用户不需要支付商品价格，用户点击红包链接，进入抢红包流程，如果抢到红包，直接到系统虚拟资金中间商那里兑换红包面值，系统虚拟资金中间商将面值金额支付给红包受益人；用户每抢到1个红包，就从系统中扣除红包商品的库存，如果库存没了，表示秒杀活动结束了，就直接结束流程。</p>
+<p>红包资金账户满足用户发红包和收红包过程中用于红包资金的交易和记账、对账的需求。资金交易是资金从一个账户流向另一个账户的过程，所以资金交易的实现必须要有资金账户的支持，资金账户是资金交易的基本单元。</p>
+<p>所以，红包场景可以总结为一个小而美的红包商品交易系统，既有B2B，又有B2C，红包商品发布者和系统虚拟资金中间商之间属于B2B，红包商品发布者和红包收益人之间是B2C。</p>
+<h2 id="用四色建模法来分析红包场景业务模型">用四色建模法来分析红包场景业务模型</h2>
+<p>按照五个步骤来一步一步拆解</p>
+<h3 id="第一步寻找要追溯的事件桃红色并识别出时标对象桃红色"><strong>第一步：寻找要追溯的事件</strong>(桃红色)，并识别出“时标对象”**（桃红色）</h3>
+<p>怎么找呢？以业务事件发生的时间顺序，找出事件和痕迹，其过程呢就是先来讲故事，把故事讲清楚，把故事盘圆了，这里我有2个步骤来讲故事：</p>
+<p>第一步先说清楚，谁，在什么时候，在哪里，对（为）谁，做了什么事情？</p>
+<p>第二步再确认这个时间里做这些事情，在哪里留下了什么证据？</p>
+<p>故事讲清楚了，就来把这些故事落地转换成模型，这里需要一个图形绘制工具，任何可以画图的工具都行，看个人喜好了，哪个用着顺手就用哪个。如果实在不喜欢使用绘图工具，或者还没有顺手的，也可以使用记事本或者mackdown来编写，只要把关键字和流程说明清楚就行，最重要的是1年后自己能看的懂，其他人也能看得懂，哈哈。</p>
+<h3 id="好吧我们就来落地模型">好吧，我们就来落地模型：</h3>
+<p>首先是通过分析需求和业务场景，还原这些业务发生的过程和故事，把业务过程中的关键性事件或者操作，还有这些用户故事留下来的痕迹（比如单据、订单、支付记录等等），然后按照时间顺序把这些事件和痕迹排列起来，形成一个完整的业务场景闭环时间轴。</p>
+<p>然后把业务发生的过程中所有发生的事情，绘制成流程图，添加到时间轴上面，来验证时标对象的识别是否正确，业务流程执行的结果是否正确。</p>
+<p>下面就红包业务来模型分析，先来讲故事，</p>
+<p>过年了，今天是大年30晚，张三想要发红包给自己的外甥和侄子们，为了增加娱乐性，张三准备发送碰运气红包，让侄子们来抢。张三打开红包工具，输入红包金额100元和红包数量3个，点击发送，完成。侄子们看到红包提醒，点击红包连接开始抢红包，侄子张A抢到33元红包，存入张A的电子钱包；侄子张C也抢到45元红包，存入张C的电子钱包；外甥李F也抢到22元红包，存入自己的电子钱包。ok，到目前为止一次正常的红包业务完成。这个故事看起来没什么问题，但对于软件产品经理和架构师来说，故事还没有将清楚，故事只讲了能看到部分，假如张三的侄子和外甥们一起玩耍时，大家想让张C买糖吃，因为张C抢到的红包金额最多，这时候张C不承认，怎么办？那么其他小伙伴就会拿出抢红包的系统记录来对质，张C无话可说乖乖去买糖。这里的系统记录就是我们要找的痕迹，那么架构师就要把看不到的部分也讲清楚，把故事盘圆了，并把故事里所有留下的证据都给分析出来。</p>
+<p>那就重新来讲这个故事，张三点击发送之前的故事不变，发送完成之后，加一些情节，把故事圆起来，来讲一件张三点击发送之后发什么的不可知之地的故事，我把这个不可知之地叫红包系统不可知之地，红包系统接收到张三的发红包的请求，首先保存张三发送的红包记录，再去张三的电子钱包里检查余额是否足够，如果余额足够，就把红包金额在张三电子钱包中给扣除，支付给中间红包商户账户，用来购买红包这种虚拟金融产品-红包，购买完成后，将红包秒杀的连接发给侄子们。侄子们抢红包的过程故事也不变，来看看侄子张A点击红包秒杀连接后，发生在不可知之地红包系统的故事，张A点击红包秒杀连接后，不可知之地红包系统接受抢红包请求，红包系统先去检查红包商品库存，如果还有库存，随机挑一个红包，库存减一，并记录收红包信息，</p>
+<p>并将这个红包交给中间红包商户，在中间红包商户那里兑换红包金额，然后在中间红包商户账户中扣减红包金额，把红包金额支付给张A，在张A的电子钱包中增加红包金额，完成抢购流程并恭喜张A抢到红包；如果红包商品库存不够，告诉张A未抢到红包。</p>
+<p>ok，现在已经把红包业务的正常故事基本讲清楚了，再来讲一下其他可能发生的故事，张三在大年30晚上23.59分发了红包后侄子门有人不知道，没有收红包，到了大年初二，张三收到了红包退款，同样也来说说另一个不可知之地红包后台任务系统里面发生的故事，这个被叫做值守观，值守观里修炼的事情就是发现过期红包并退款给红包发放者。以快和量著称，快指的是能及时发现过期红包并退款，量指的是能同时处理的事情很庞大，好吧YY到之类，言归正传。在值守观里的修炼者仁者在大年初二凌晨0点0分发现张三红包有过期，仁者就把张三过期的红包标记为过期失效，并关闭秒杀活动，然后把过期红包退给红包商户，从红包商户那里兑换红包金额，然后在中间红包商户账户中扣减红包金额，把红包金额退给张三，在张三的电子钱包中增加退回的红包金额，完成后仁者把这件事情记录下来，仁者增加了功力，继续修炼。</p>
+<p>ok，现在把整个故事都基本讲清楚了，那我们就来分析模型，把有用的信息筛选出来，按照时间顺序列出来：</p>
+<h4 id="发红包">发红包</h4>
+<p>红包发放者用户张三，选择碰运气红包，输入红包数量和金额，发送红包，保存发送红包记录，检查电子钱包账户余额，</p>
+<p>余额足够，从电子钱包账户支付红包金额到红包商户，保存支付记录，红包商户发放红包商品，发布红包，创建红包秒杀活动，返回红包秒杀活动链接给张三。</p>
+<p>如果余额不足，则返回余额不足的提示信息给张三，终止流程。</p>
+<p><img src="/pics/fourcm//image-20190919101422991.png" alt="image-20190919101422991"></p>
+<h4 id="收红包">收红包</h4>
+<p>目标用户侄子张A，收到红包链接，点击链接，红包系统检查红包库存，有库存，选择一个红包，保存收红包记录，扣减库存，红包商户账户里扣减红包金额并支付给张A，张A电子钱包增加红包金额，保存收款记录；库存不够，返回未抢到。</p>
+<p><img src="/pics/fourcm//image-20190919101620728.png" alt="image-20190919101620728"></p>
+<h4 id="红包过期">红包过期</h4>
+<p>值守观徒弟仁者发现了张三红包有过期，发起红包退款流程，保存过期红包记录，关闭张三的红包秒杀活动，标记红包过期失效，过期红包退给红包商户，红包商户账户中扣减过期红包金额退款给张三，张三电子钱包中增加退回的红包金额，保存退款记录。</p>
+<p><img src="/pics/fourcm//image-20190919101739889.png" alt="image-20190919101739889"></p>
+<p>有了这些关键信息，把重要的挑拣出来绘制事件时间轴图，注意不是流程图。</p>
+<ul>
+<li><strong>用户1发红包给某个人（或者某群人）</strong>
+<ul>
+<li>用户1发红包要先从的他的钱包账户中扣除红包所用的金额，所以账户<code>红包扣款记录</code>发生在发红包过程中，是一个“时标对象”，同时更新<code>钱包账户</code>余额，产生<code>余额记录</code>。。</li>
+<li>这里的<code>发红包记录</code>也是“时标对象”，也发生在发红包事件中，不发红包就没有发红包记录产生。</li>
+<li>在之前的场景分析中已经说明，不论发送哪种类型的红包，用户在发红包时可以选择1个或者多个红包，在发红包业务的结果是产生多个红包，所以<code>红包</code>也是一个“时标对象”。</li>
+<li>总之，在发红包业务过程中产生的事件，按时间先后顺序是：扣款记录，发红包记录，红包</li>
+</ul>
+</li>
+<li><strong>用户2收用户1发的红包</strong>
+<ul>
+<li>在抢红包业务过程：如果抢不到，对于业务来说，什么事情也没发生一样。如果抢到，实际上是对一批红包中选择一个，并记录抢到红包的记录，产生<code>抢红包记录</code>作为“时标对象”，实际上是抢到红包的记录。</li>
+<li>抢到红包后，除了要产生抢到红包的记录之外，还要把抢到的红包的金额存入到用户2的钱包账户，那么就产生了<code>红包入账记录</code>，同时更新<code>钱包账户</code>余额，产生<code>余额记录</code>。</li>
+</ul>
+</li>
+<li><strong>用户2没收红包（用户1发送的红包有部分没有被抢）超过红包有效时间。</strong>
+<ul>
+<li>当超过24小时红包没有被用户2查收时，系统会将未被收的红包标记为超时<code>无效红包</code>，并将剩余红包的总金额退回给用户1，会生成<code>红包退款记录</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="第二步-整理对象建立关系构建核心骨干模型">第二步： 整理对象，建立关系，构建核心骨干模型</h3>
+<p>将时间轴图中的时标性对象抽离出来，建立模型关系，形成模型骨干：</p>
+<h4 id="抽离出来的对象">抽离出来的对象：</h4>
+<p><img src="/pics/fourcm//image-20190919102122721.png" alt="image-20190919102122721"></p>
+<h4 id="建立关系">建立关系：</h4>
+<p><img src="/pics/fourcm//image-20190919102157839.png" alt="image-20190919102157839"></p>
+<h4 id="添加需要的实体并整理关系">添加需要的实体并整理关系：</h4>
+<p><img src="/pics/fourcm//image-20190919102212642.png" alt="image-20190919102212642"></p>
+<p>将初级模型分别进行整理，把散化的时标性对象进行抽象和合并，形成新的模型图，下图是把账户部分重新整理抽象：</p>
+<p><img src="/pics/fourcm//image-20190919103404588.png" alt="image-20190919103404588"></p>
+<h4 id="把红包部分重新整理抽象">把红包部分重新整理抽象：</h4>
+<p><img src="/pics/fourcm//image-20190919103548838.png" alt="image-20190919103548838"></p>
+<h4 id="将各个部分整理规整和抽象后的模型合并并重新绘制形成最终的模型">将各个部分整理规整和抽象后的模型合并并重新绘制，形成最终的模型：</h4>
+<p><img src="/pics/fourcm//image-20190919102514784.png" alt="image-20190919102514784"></p>
+<h3 id="第三步寻找时标对象周围的人地物5绿色">第三步：寻找时标对象周围的“人、地、物”[5]**（绿色）：</h3>
+<p>补充<code>谁，在什么时候，在哪里，对（为）谁，做了什么事情？</code>中的<code>谁，在什么时候，在哪里，对（为）谁</code>等信息：</p>
+<p><img src="/pics/fourcm//image-20190919102531315.png" alt="image-20190919102531315"></p>
+<h3 id="第四步抽象角色6黄色"><strong>第四步：抽象“角色”[6]</strong>（黄色）：</h3>
+<p>在模型关系图中添加涉及到的角色，使用黄色图例表示。</p>
+<p>（角色存在于实体对象和时标性对象之间，是指实体在业务流程中职责所在。）</p>
+<p><img src="/pics/fourcm//image-20190919103007555.png" alt="image-20190919103007555"></p>
+<h3 id="第五步补充描述信息7蓝色">第五步：补充“描述”信息[7]**(蓝色)：</h3>
+<p>对各种对象的补充性描述，不如对象的属性等等。</p>
+<h2 id="最后再总结一下四色建模法核心方法">最后再总结一下四色建模法核心方法：</h2>
+<p>第一步：从业务事件发生的时间顺序，把每一个关键节点和节点发生的事情，关键节点包括可视的和不可视节点，编织成用户故事，然后把故事里发生的事件和故事里留下的证据挑拣出来，按时间顺序排列开，放在时间轴上下两侧，上面放事件，下面放痕迹，绘制出时间流程顺序图，并反复验证和演绎，确保流程正确。</p>
+<p>第二步：之后把时间轴上面的图标用绿色标识，下面用粉红色标识，再抹去时间轴和流程线条，删掉动词类图标，留下名词类图标，将剩下的初级模型进行整理合并，建立模型关系。</p>
+<p>第三步：增加模型相关的人、事、物等静态性质，配置性质的，或者非事务日志类型的对象。</p>
+<p>第四部：添加角色</p>
+<p>第五步：添加模型对象属性描述。</p>
+
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2019-09-17
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            <div class="post-tags">
+                    <a href="/tags/%E5%9B%9B%E8%89%B2%E5%BB%BA%E6%A8%A1%E6%B3%95/">四色建模法</a>
+                    <a href="/tags/%E5%BB%BA%E6%A8%A1/">建模</a>
+                    </div>
+            <nav class="post-nav">
+                <a class="prev" href="/posts/paas/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%80%9D%E8%80%83/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default">业务中台的思考</span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/%E6%8A%80%E6%9C%AF/js-flowchart-diagrams/">
+                        <span class="next-text nav-default">JS 流程图</span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    <h4>相关文章：</h4>
+    <ul>
+        
+            <li><a href="/posts/%E6%9E%B6%E6%9E%84/%E5%BB%BA%E6%A8%A1/%E5%9B%9B%E8%89%B2%E5%BB%BA%E6%A8%A1%E6%B3%95%E7%9A%84%E5%9B%9B%E4%B8%AA%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BA%94%E4%B8%AA%E6%AD%A5%E9%AA%A4/">四色建模法-四个概念和五个步骤</a></li>
+        
+    </ul>
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2019-09-17 20:20:42 \u002b0000 UTC',
+        title: '四色建模法-红包业务运用',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2023
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

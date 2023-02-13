@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="WebRTC社区头部开源项目介绍 WebRTC 开源协议栈实现 libdatachannel c&#43;&#43;实现的开源WebRTC协议栈，代码质量比较高，已经有多种语言的binding 关注量：700 https://github.com/paullouisageneau/libdatachannel node-webrtc nodejs 针对WebRTC的binding 关注量：2300&#43; https://github.com/node-webrtc/node-webrtc aiortc python 语言的WebRTC协议栈实现， 可以与pyav无缝对接 关注量：2800&#43; https://github.com/aiortc/aiortc webrtc-rs rust语言的WebRTC协议栈实现，发展较快。多个开源赞助，后期发展应该会不错 关注量：1700&#43; https://github.com/webrtc-rs/webrtc gstreamer webrtcbin gsteamer 中WebRTC的实现，可以适配各种硬件编解码和各种音视频输入以及输出协议 https://github.com/GStreamer Amzaon Kinesis Video SDK amazon开源的纯c的WebRTC实现，配合aws的视频分析产品服务。 关注量：700&#43; https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c flutter-webrtc flutter版本的WebRTC binding，随着flutter的快速发展关注比较多 关注量：2900&#43; https://github.com/flutter-webrtc reactnative-webrtc reactnative版本WebRTC binding 关注量：3800&#43; https://github.com/react-native-webrtc pion golang 版本WebRTC协议栈 关注量：8700&#43; https://github.com/pion/webrtc WebRTC-streamer 基于WebRTC的二次"/><meta name="keywords"
+          content="微服务, hystrix, 铁汤"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/live/opensource/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="WebRTC社区头部开源项目介绍 WebRTC 开源协议栈实现 libdatachannel c&#43;&#43;实现的开源WebRTC协议栈，代码质量比较高，已经有多种语言的binding 关注量：700 https://github.com/paullouisageneau/libdatachannel node-webrtc nodejs 针对WebRTC的binding 关注量：2300&#43; https://github.com/node-webrtc/node-webrtc aiortc python 语言的WebRTC协议栈实现， 可以与pyav无缝对接 关注量：2800&#43; https://github.com/aiortc/aiortc webrtc-rs rust语言的WebRTC协议栈实现，发展较快。多个开源赞助，后期发展应该会不错 关注量：1700&#43; https://github.com/webrtc-rs/webrtc gstreamer webrtcbin gsteamer 中WebRTC的实现，可以适配各种硬件编解码和各种音视频输入以及输出协议 https://github.com/GStreamer Amzaon Kinesis Video SDK amazon开源的纯c的WebRTC实现，配合aws的视频分析产品服务。 关注量：700&#43; https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c flutter-webrtc flutter版本的WebRTC binding，随着flutter的快速发展关注比较多 关注量：2900&#43; https://github.com/flutter-webrtc reactnative-webrtc reactnative版本WebRTC binding 关注量：3800&#43; https://github.com/react-native-webrtc pion golang 版本WebRTC协议栈 关注量：8700&#43; https://github.com/pion/webrtc WebRTC-streamer 基于WebRTC的二次" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/live/opensource/" /><meta property="article:section" content="posts" />
+
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="WebRTC社区头部开源项目介绍 WebRTC 开源协议栈实现 libdatachannel c&#43;&#43;实现的开源WebRTC协议栈，代码质量比较高，已经有多种语言的binding 关注量：700 https://github.com/paullouisageneau/libdatachannel node-webrtc nodejs 针对WebRTC的binding 关注量：2300&#43; https://github.com/node-webrtc/node-webrtc aiortc python 语言的WebRTC协议栈实现， 可以与pyav无缝对接 关注量：2800&#43; https://github.com/aiortc/aiortc webrtc-rs rust语言的WebRTC协议栈实现，发展较快。多个开源赞助，后期发展应该会不错 关注量：1700&#43; https://github.com/webrtc-rs/webrtc gstreamer webrtcbin gsteamer 中WebRTC的实现，可以适配各种硬件编解码和各种音视频输入以及输出协议 https://github.com/GStreamer Amzaon Kinesis Video SDK amazon开源的纯c的WebRTC实现，配合aws的视频分析产品服务。 关注量：700&#43; https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c flutter-webrtc flutter版本的WebRTC binding，随着flutter的快速发展关注比较多 关注量：2900&#43; https://github.com/flutter-webrtc reactnative-webrtc reactnative版本WebRTC binding 关注量：3800&#43; https://github.com/react-native-webrtc pion golang 版本WebRTC协议栈 关注量：8700&#43; https://github.com/pion/webrtc WebRTC-streamer 基于WebRTC的二次">
+
+<meta itemprop="wordCount" content="1305">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="WebRTC社区头部开源项目介绍 WebRTC 开源协议栈实现 libdatachannel c&#43;&#43;实现的开源WebRTC协议栈，代码质量比较高，已经有多种语言的binding 关注量：700 https://github.com/paullouisageneau/libdatachannel node-webrtc nodejs 针对WebRTC的binding 关注量：2300&#43; https://github.com/node-webrtc/node-webrtc aiortc python 语言的WebRTC协议栈实现， 可以与pyav无缝对接 关注量：2800&#43; https://github.com/aiortc/aiortc webrtc-rs rust语言的WebRTC协议栈实现，发展较快。多个开源赞助，后期发展应该会不错 关注量：1700&#43; https://github.com/webrtc-rs/webrtc gstreamer webrtcbin gsteamer 中WebRTC的实现，可以适配各种硬件编解码和各种音视频输入以及输出协议 https://github.com/GStreamer Amzaon Kinesis Video SDK amazon开源的纯c的WebRTC实现，配合aws的视频分析产品服务。 关注量：700&#43; https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c flutter-webrtc flutter版本的WebRTC binding，随着flutter的快速发展关注比较多 关注量：2900&#43; https://github.com/flutter-webrtc reactnative-webrtc reactnative版本WebRTC binding 关注量：3800&#43; https://github.com/react-native-webrtc pion golang 版本WebRTC协议栈 关注量：8700&#43; https://github.com/pion/webrtc WebRTC-streamer 基于WebRTC的二次"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title"></h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 0001-01-01 </span>
+
+                <div class="post-category">
+                    
+                    
+                </div>
+                    <span class="more-meta"> 1305 words </span>
+                    <span class="more-meta"> 3 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#webrtc-开源协议栈实现">WebRTC 开源协议栈实现</a>
+      <ul>
+        <li><a href="#libdatachannel">libdatachannel</a></li>
+        <li><a href="#node-webrtc">node-webrtc</a></li>
+        <li><a href="#aiortc">aiortc</a></li>
+        <li><a href="#webrtc-rs">webrtc-rs</a></li>
+        <li><a href="#gstreamer-webrtcbin">gstreamer webrtcbin</a></li>
+        <li><a href="#amzaon-kinesis-video-sdk">Amzaon Kinesis Video SDK</a></li>
+        <li><a href="#flutter-webrtc">flutter-webrtc</a></li>
+        <li><a href="#reactnative-webrtc">reactnative-webrtc</a></li>
+        <li><a href="#pion">pion</a></li>
+        <li><a href="#webrtc-streamer">WebRTC-streamer</a></li>
+      </ul>
+    </li>
+    <li><a href="#开源媒体服务器">开源媒体服务器</a>
+      <ul>
+        <li><a href="#licode">licode</a></li>
+        <li><a href="#janus-gateway">janus-gateway</a></li>
+        <li><a href="#mediasoap">mediasoap</a></li>
+        <li><a href="#medooze-server">medooze-server</a></li>
+        <li><a href="#ion">ion</a></li>
+        <li><a href="#srs">srs</a></li>
+        <li><a href="#zlmediakit">ZLMediaKit</a></li>
+        <li><a href="#owt">owt</a></li>
+        <li><a href="#kurento">Kurento</a></li>
+        <li><a href="#red5">Red5</a></li>
+      </ul>
+    </li>
+    <li><a href="#开源应用">开源应用</a>
+      <ul>
+        <li><a href="#livekit">livekit</a></li>
+        <li><a href="#jitsi">Jitsi</a></li>
+        <li><a href="#cloud-morph">cloud-morph</a></li>
+      </ul>
+    </li>
+    <li><a href="#几个简单结论">几个简单结论：</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+        
+        <div class="post-content">
+            <h1 id="webrtc社区头部开源项目介绍">WebRTC社区头部开源项目介绍</h1>
+<h2 id="webrtc-开源协议栈实现">WebRTC 开源协议栈实现</h2>
+<h3 id="libdatachannel">libdatachannel</h3>
+<p>c++实现的开源WebRTC协议栈，代码质量比较高，已经有多种语言的binding</p>
+<p>关注量：700</p>
+<p><a href="https://github.com/paullouisageneau/libdatachannel">https://github.com/paullouisageneau/libdatachannel</a></p>
+<h3 id="node-webrtc">node-webrtc</h3>
+<p>nodejs 针对WebRTC的binding</p>
+<p>关注量：2300+</p>
+<p><a href="https://github.com/node-webrtc/node-webrtc">https://github.com/node-webrtc/node-webrtc</a></p>
+<h3 id="aiortc">aiortc</h3>
+<p>python 语言的WebRTC协议栈实现， 可以与pyav无缝对接</p>
+<p>关注量：2800+</p>
+<p><a href="https://github.com/aiortc/aiortc">https://github.com/aiortc/aiortc</a></p>
+<h3 id="webrtc-rs">webrtc-rs</h3>
+<p>rust语言的WebRTC协议栈实现，发展较快。多个开源赞助，后期发展应该会不错</p>
+<p>关注量：1700+</p>
+<p><a href="https://github.com/webrtc-rs/webrtc">https://github.com/webrtc-rs/webrtc</a></p>
+<h3 id="gstreamer-webrtcbin">gstreamer webrtcbin</h3>
+<p>gsteamer 中WebRTC的实现，可以适配各种硬件编解码和各种音视频输入以及输出协议</p>
+<p><a href="https://github.com/GStreamer">https://github.com/GStreamer</a></p>
+<h3 id="amzaon-kinesis-video-sdk">Amzaon Kinesis Video SDK</h3>
+<p>amazon开源的纯c的WebRTC实现，配合aws的视频分析产品服务。</p>
+<p>关注量：700+</p>
+<p><a href="https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c">https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c</a></p>
+<h3 id="flutter-webrtc">flutter-webrtc</h3>
+<p>flutter版本的WebRTC binding，随着flutter的快速发展关注比较多</p>
+<p>关注量：2900+</p>
+<p><a href="https://github.com/flutter-webrtc">https://github.com/flutter-webrtc</a></p>
+<h3 id="reactnative-webrtc">reactnative-webrtc</h3>
+<p>reactnative版本WebRTC binding</p>
+<p>关注量：3800+</p>
+<p><a href="https://github.com/react-native-webrtc">https://github.com/react-native-webrtc</a></p>
+<h3 id="pion">pion</h3>
+<p>golang 版本WebRTC协议栈</p>
+<p>关注量：8700+</p>
+<p><a href="https://github.com/pion/webrtc">https://github.com/pion/webrtc</a></p>
+<h3 id="webrtc-streamer">WebRTC-streamer</h3>
+<p>基于WebRTC的二次开发，支持linux，rtsp， screen capture</p>
+<p>关注量：1600+</p>
+<p><a href="https://github.com/mpromonet/webrtc-streamer">https://github.com/mpromonet/webrtc-streamer</a></p>
+<h2 id="开源媒体服务器">开源媒体服务器</h2>
+<h3 id="licode">licode</h3>
+<p>非常老牌的开源SFU实现，包含媒体和信令，主要盈利模式为基于licode做商业化项目交付。</p>
+<p>关注量：2800+</p>
+<p><a href="https://github.com/lynckia/licode">https://github.com/lynckia/licode</a></p>
+<h3 id="janus-gateway">janus-gateway</h3>
+<p>非常老牌的开源服务器，成熟稳定，国外不少大厂基于这个开发。最近被mediasoup 和 pion抢了一些份额</p>
+<p>关注量：6200+</p>
+<p><a href="https://github.com/meetecho/janus-gateway">https://github.com/meetecho/janus-gateway</a></p>
+<h3 id="mediasoap">mediasoap</h3>
+<p>开源媒体服务器，提供node和rust的api， 代码质量较高，最近发展比较快。核心开发者在全职为Around开发能力</p>
+<p>关注量：4200+</p>
+<p>GitHub - versatica/mediasoup: Cutting Edge WebRTC Video Conferencing</p>
+<h3 id="medooze-server">medooze-server</h3>
+<p>开源媒体server， 维护者也是http://millicast.com 的创始人之一</p>
+<p>关注量：1500+</p>
+<p><a href="https://github.com/medooze">https://github.com/medooze</a></p>
+<h3 id="ion">ion</h3>
+<p>基于pion的开源媒体服务器， golang实现，分布式部署，集群等能力，发展较快</p>
+<p>关注量：3400+</p>
+<p><a href="https://github.com/pion/ion">https://github.com/pion/ion</a></p>
+<h3 id="srs">srs</h3>
+<p>全媒体协议流媒体服务器，国内做音视频的都知道</p>
+<p>关注量：17200+</p>
+<p>GitHub - ossrs/srs: SRS is a simple, high efficiency and realtime video server, supports RTMP, WebRTC, HLS, HTTP-FLV and SRT.</p>
+<h3 id="zlmediakit">ZLMediaKit</h3>
+<p>全媒体协议流媒体服务器， 对rtsp，gb28181支持较好</p>
+<p>关注量：5700+</p>
+<p><a href="https://github.com/ZLMediaKit/ZLMediaKit">https://github.com/ZLMediaKit/ZLMediaKit</a></p>
+<h3 id="owt">owt</h3>
+<p>全栈媒体服务，mcu, sip, 录制服务，intel的团队在维护.</p>
+<p>关注量：1000+</p>
+<p><a href="https://github.com/open-webrtc-toolkit">https://github.com/open-webrtc-toolkit</a></p>
+<h3 id="kurento">Kurento</h3>
+<p>基于gstreamer 的媒体服务器，支持mcu，rtmp/rtsp等协议互通。活跃度逐渐降低</p>
+<p>关注量：3000+</p>
+<p><a href="https://github.com/kurento/">https://github.com/kurento/</a></p>
+<h3 id="red5">Red5</h3>
+<p>全媒体协议流媒体服务器，推出了付费增强版本</p>
+<p>关注量：3000+</p>
+<p><a href="https://github.com/Red5">https://github.com/Red5</a></p>
+<h2 id="开源应用">开源应用</h2>
+<h3 id="livekit">livekit</h3>
+<p>基于pion的全栈RTC解决方案，提供各平台的SDK，扩容方案，监控方案。有全职团队在维护，预计会推出商业版本。</p>
+<p>关注量：3000+</p>
+<p><a href="https://github.com/livekit">https://github.com/livekit</a></p>
+<h3 id="jitsi">Jitsi</h3>
+<p>全栈的WebRTC开源解决方案，开源视频会议方案。目前推出Jtisi SaaS服务</p>
+<p>关注量：20000+</p>
+<p><a href="https://github.com/jitsi">https://github.com/jitsi</a></p>
+<h3 id="cloud-morph">cloud-morph</h3>
+<p>基于pion的开源云游戏方案</p>
+<p>关注量：700+</p>
+<p><a href="https://github.com/giongto35/cloud-morph">https://github.com/giongto35/cloud-morph</a></p>
+<h2 id="几个简单结论">几个简单结论：</h2>
+<p>1， WebRTC相关的开源项目非常活跃</p>
+<p>2， 超过1000人star的项目，国人参与主导的有4个 ，将近20%</p>
+<p>3， golang 以非常低的上手成本抢占了一部分市场，比较多的初创公司开始用golang(pion)来搭建媒体服务</p>
+<p>最后 我组建了一个WebRTC技术交流的群，基本涵盖了行业内做RTC相关的公司的研发伙伴，对于想做技术交流的伙伴可以加我微信，备注“名字@公司名字 ” 我拉你进群，仅限技术产品交流。</p>
+<p>wechat: leeoxiang</p>
+<p>twitter: <a href="https://twitter.com/leeoxiang">https://twitter.com/leeoxiang</a></p>
+
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        0001-01-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            
+            <nav class="post-nav">
+                <a class="prev" href="/posts/live/licode/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default"></span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/nginx/ngx_http_js_module%E6%8C%87%E4%BB%A4%E5%8F%82%E8%80%83/">
+                        <span class="next-text nav-default"></span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '0001-01-01 00:00:00 \u002b0000 UTC',
+        title: '',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2023
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

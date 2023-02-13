@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>代码架构 - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="代码架构 在软件开发生命周期中，代码架构很少被提到，但是实际上每一个开发者都在做代码架构。代码架构在软件开发中有着重要的作用，那么我们就来聊聊在软件开发领域中代码架构，从Why、What、How几个方面来讲讲： Why：为什么要做代码架构？ What：代码架构要做些什么事情？ How：怎样来设计代码架构？ Why：为什么要做代码架构？ 软件开发的生命周期，大致都是一样的流程： 需求分析：产出概念模型，需求定义 概要设计：包括系统边界设计、内部架构设计、设计决策 详细设计，包括代码架构，业务逻辑实现 开发代码 单元测试、连通测试 部署上线 系统运维 代码架构属于详细设计部分的内容，代码架构在整个软件开发生命周期中承上启下： 向上要表达设计意图，要把软件产品概念模型、边界交互、数据流设计、数据库设计、系统内部架构设计等表达清楚，来说明业务逻辑和业务领域模型 代码架构本身也是来保证代码有更好的可读性和可维护性、可扩展性，决定了"/><meta name="keywords"
+          content="微服务, hystrix, 铁汤"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/%E6%9E%B6%E6%9E%84/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="代码架构" />
+<meta property="og:description" content="代码架构 在软件开发生命周期中，代码架构很少被提到，但是实际上每一个开发者都在做代码架构。代码架构在软件开发中有着重要的作用，那么我们就来聊聊在软件开发领域中代码架构，从Why、What、How几个方面来讲讲： Why：为什么要做代码架构？ What：代码架构要做些什么事情？ How：怎样来设计代码架构？ Why：为什么要做代码架构？ 软件开发的生命周期，大致都是一样的流程： 需求分析：产出概念模型，需求定义 概要设计：包括系统边界设计、内部架构设计、设计决策 详细设计，包括代码架构，业务逻辑实现 开发代码 单元测试、连通测试 部署上线 系统运维 代码架构属于详细设计部分的内容，代码架构在整个软件开发生命周期中承上启下： 向上要表达设计意图，要把软件产品概念模型、边界交互、数据流设计、数据库设计、系统内部架构设计等表达清楚，来说明业务逻辑和业务领域模型 代码架构本身也是来保证代码有更好的可读性和可维护性、可扩展性，决定了" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/%E6%9E%B6%E6%9E%84/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-11-17T20:20:42+00:00" />
+<meta property="article:modified_time" content="2019-11-17T20:20:42+00:00" />
+
+<meta itemprop="name" content="代码架构">
+<meta itemprop="description" content="代码架构 在软件开发生命周期中，代码架构很少被提到，但是实际上每一个开发者都在做代码架构。代码架构在软件开发中有着重要的作用，那么我们就来聊聊在软件开发领域中代码架构，从Why、What、How几个方面来讲讲： Why：为什么要做代码架构？ What：代码架构要做些什么事情？ How：怎样来设计代码架构？ Why：为什么要做代码架构？ 软件开发的生命周期，大致都是一样的流程： 需求分析：产出概念模型，需求定义 概要设计：包括系统边界设计、内部架构设计、设计决策 详细设计，包括代码架构，业务逻辑实现 开发代码 单元测试、连通测试 部署上线 系统运维 代码架构属于详细设计部分的内容，代码架构在整个软件开发生命周期中承上启下： 向上要表达设计意图，要把软件产品概念模型、边界交互、数据流设计、数据库设计、系统内部架构设计等表达清楚，来说明业务逻辑和业务领域模型 代码架构本身也是来保证代码有更好的可读性和可维护性、可扩展性，决定了"><meta itemprop="datePublished" content="2019-11-17T20:20:42+00:00" />
+<meta itemprop="dateModified" content="2019-11-17T20:20:42+00:00" />
+<meta itemprop="wordCount" content="2718">
+<meta itemprop="keywords" content="代码架构,DDD,分层架构," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="代码架构"/>
+<meta name="twitter:description" content="代码架构 在软件开发生命周期中，代码架构很少被提到，但是实际上每一个开发者都在做代码架构。代码架构在软件开发中有着重要的作用，那么我们就来聊聊在软件开发领域中代码架构，从Why、What、How几个方面来讲讲： Why：为什么要做代码架构？ What：代码架构要做些什么事情？ How：怎样来设计代码架构？ Why：为什么要做代码架构？ 软件开发的生命周期，大致都是一样的流程： 需求分析：产出概念模型，需求定义 概要设计：包括系统边界设计、内部架构设计、设计决策 详细设计，包括代码架构，业务逻辑实现 开发代码 单元测试、连通测试 部署上线 系统运维 代码架构属于详细设计部分的内容，代码架构在整个软件开发生命周期中承上启下： 向上要表达设计意图，要把软件产品概念模型、边界交互、数据流设计、数据库设计、系统内部架构设计等表达清楚，来说明业务逻辑和业务领域模型 代码架构本身也是来保证代码有更好的可读性和可维护性、可扩展性，决定了"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title">代码架构</h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 2019-11-17 </span>
+
+                <div class="post-category">
+                    <a href="/categories/%E6%9E%B6%E6%9E%84/"> 架构 </a>
+                        
+                    <a href="/tags/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/">
+                                <span class="badge">代码架构 </span>
+                            </a>
+                        <a href="/tags/ddd/">
+                                <span class="badge">DDD </span>
+                            </a>
+                        <a href="/tags/%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/">
+                                <span class="badge">分层架构 </span>
+                            </a>
+                        
+                </div>
+                    <span class="more-meta"> 2718 words </span>
+                    <span class="more-meta"> 6 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#代码架构">代码架构</a></li>
+    <li><a href="#why为什么要做代码架构">Why：为什么要做代码架构？</a></li>
+    <li><a href="#what代码架构要做些什么事情">What：代码架构要做些什么事情？</a></li>
+    <li><a href="#how怎样来设计代码架构">How：怎样来设计代码架构？</a>
+      <ul>
+        <li><a href="#代码架构-分层架构">代码架构-分层架构</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+            <div>
+                <img src="http://tietang.wang//pics/IMG_20190805_182450_1.jpg">
+            </div>
+        
+        
+        <div class="post-content">
+            <h2 id="代码架构">代码架构</h2>
+<p>在软件开发生命周期中，代码架构很少被提到，但是实际上每一个开发者都在做代码架构。代码架构在软件开发中有着重要的作用，那么我们就来聊聊在软件开发领域中代码架构，从Why、What、How几个方面来讲讲：</p>
+<p>Why：为什么要做代码架构？</p>
+<p>What：代码架构要做些什么事情？</p>
+<p>How：怎样来设计代码架构？</p>
+<h2 id="why为什么要做代码架构">Why：为什么要做代码架构？</h2>
+<p>软件开发的生命周期，大致都是一样的流程：</p>
+<ul>
+<li>需求分析：产出概念模型，需求定义</li>
+<li>概要设计：包括系统边界设计、内部架构设计、设计决策</li>
+<li><strong>详细设计，包括代码架构，业务逻辑实现</strong></li>
+<li>开发代码</li>
+<li>单元测试、连通测试</li>
+<li>部署上线</li>
+<li>系统运维</li>
+</ul>
+<p>代码架构属于详细设计部分的内容，代码架构在整个软件开发生命周期中承上启下：</p>
+<ul>
+<li>
+<p>向上要表达设计意图，要把软件产品概念模型、边界交互、数据流设计、数据库设计、系统内部架构设计等表达清楚，来说明业务逻辑和业务领域模型</p>
+</li>
+<li>
+<p>代码架构本身也是来保证代码有更好的可读性和可维护性、可扩展性，决定了如何开发，是否可以多人协同开发调试，代码如何维护，如何扩展功能。</p>
+<ul>
+<li>经常听到新人抱怨代码太乱了看不懂逻辑，就是代码架构做的不合理。</li>
+<li><strong>重写代码，推翻原有架构，重新设计等等说法，来说明架构的进化。这实际上就是当初为了完成任务，没有充分思考所带来的后果。没有做好代码架构</strong></li>
+</ul>
+</li>
+<li>
+<p>向下影响测试、部署和运维过程，是由代码架构来决定的，承载了代码运行的硬件部署架构，代码架构决定了。</p>
+<ul>
+<li>代码架构的好坏也会影响单元测试编写和设计、连通测试、集成测试、交付测试的过程和可测试性。</li>
+<li>代码架构决定了硬件部署架构，系统部署上线和运行维护都会受到代码架构的影响。因为代码架构不合理，是无法把一个运行单元分拆出多个来的，那么硬件架构能分拆的就非常的有限，整个系统最终很难长的更大。</li>
+</ul>
+</li>
+</ul>
+<h2 id="what代码架构要做些什么事情">What：代码架构要做些什么事情？</h2>
+<p><strong>软件是真实世界在计算机里面的模拟</strong>。真实世界是由世间万物构成，包括了各种生物和非生物，每种事物有着各自的职责和行为、生命周期，相互碰撞发生事件，保证这个世界的运转。代码架构也是一样的，需要，结合每个部署单元所承担的责任，可以明确的拆分为三层责任：</p>
+<ol>
+<li>
+<p>向上沟通的职责，软件领域也叫做调用或通信，是和其他软件体交互的唯一入口，代码运行的结果就是可以被调用，可以和其他代码通信，这一层主要定义代码的沟通方式和职责，唯一的对外可见的部分，对外是相对的，就如同各种事物以自己独有的方式向外传递信息，并接受外部的信息和外部交互。人类和动物通过自己的声音、视觉、听觉、触觉、外形来其他事物通信交互，植物通过根、茎、叶、花、果实、光合作用、外观来和其他事物通信交互。</p>
+<ul>
+<li>进程之间的沟通，交互通信，作为可运行部署单元来说，可能就是定义对外RESTful或者RPC接口
+<ul>
+<li>比如HTTP API接口、dubbo远程服务调用方法</li>
+</ul>
+</li>
+<li>代码之间的沟通，交互通信，作为内部某个模块来说，可能就是定义interface和接口公有方法，。
+<ul>
+<li>比如java\go等语言中的interface，java中的public方法、golang中首字母大写的函数和结构体方法</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>核心职责：这部分代码主要来表达业务逻辑，这部分叫做 Domain Logic，或者叫 Domain Model。这部分实际是来源于生活的，必须保持和现实生活中的切分一致，并非人为的抽象而成。</p>
+</li>
+<li>
+<p>向下沟通的职责，完成核心能力所需要的基础实施，对用户提供访问并保存业务逻辑运行结果的代码。计算机的状态保存有一个缺陷，本机保留业务运行结果有很大的问题，一般都在外存储设备上保存，也便于扩展。</p>
+<ul>
+<li>依赖数据库，文件等存储</li>
+<li>依赖分布式缓存</li>
+<li>依赖分布式消息队列服务</li>
+</ul>
+</li>
+</ol>
+<h2 id="how怎样来设计代码架构">How：怎样来设计代码架构？</h2>
+<h3 id="代码架构-分层架构">代码架构-分层架构</h3>
+<h4 id="user-interface用户接口层">User Interface：用户接口层</h4>
+<p>用于人机交互，这里的人是泛指，是个角色并非特定指人。用户接口层负责用户显示信息和解释用户指令，有些系统用于接受用户请求和解析用户输入的配置文件等，并将信息传递给Application层的接口，有些系统则指用户界面。</p>
+<p>这一层通常被用在网络交互，实现进程之间，人与进程之间的沟通，代码层面来说，这一层的基础框架已经很成熟了，比如http协议的tomcat、undertow、jetty等等http server，golang 标准库中本身就内置了http server的功能，还有一些RPC框架，像thrift，grpc，dubbo等等。</p>
+<p>那么在代码架构中，我们无需关心网络交互本身，只需要定义框架和应用层的适配，这一层也要定义的非常轻的一层，这样也方便我们针对不同的场景，提供不同的网络交互方式。</p>
+<h4 id="application应用层">Application：应用层</h4>
+<p>相对于领域层来说很薄的一层，应用层用来表达user case和user story的主要手段，主要用于协调领域模型与其他应用组件的工作（但并不处理领域业务逻辑），定义软件要完成的所有任务。对外为展现层提供各种应用功能（包括查询或命令），对内调用领域层（领域对象或领域服务）完成各种业务逻辑，应用层不包含业务逻辑，但包含流程控制逻辑。比如在红包业务中发红包就属于应用层职责，发红包时先要检查账户余额、要转账扣款，创建红包等业务逻辑则属于领域层职责。</p>
+<p>通常事务，日志和安全等逻辑也被放在应用层。应用层通常就是我们所说的service，</p>
+<h4 id="domain领域层">Domain：领域层</h4>
+<p>领域层主要负责表达业务概念，业务状态信息和业务规则。</p>
+<p>Domain层是整个系统的核心层，几乎全部的业务逻辑会在该层实现。</p>
+<p>领域模型层主要包含以下的内容：</p>
+<ul>
+<li>实体(Entities):具有唯一标识的对象</li>
+<li>值对象(Value Objects): 无需唯一标识</li>
+<li>领域服务(Domain Services): 一些行为无法归类到实体对象或值对象上，本质是一些操作，而非事物</li>
+<li>聚合/聚合根(Aggregates &amp; Aggregate Roots): 聚合是指一组具有内聚关系的相关对象的集合，每个聚合都有一个<code>root</code>和<code>boundary</code></li>
+<li>工厂(Factories): 创建复杂对象，隐藏创建细节</li>
+<li>仓储(Repository): 提供查找和持久化对象的方法</li>
+</ul>
+<h4 id="infrastructure层">Infrastructure层</h4>
+<p>基础设施层为上面其他各层提供通用的技术能力：为应用层传递消息，为领域层提供持久化机制，为用户界面层绘制屏幕组件</p>
+<p>编程框架，持久化机制，消息机制，第三方库的封装，通用算法等等。</p>
+<p>基础设施层以不同的方式支持所有三个层，促进层之间的通信。
+基础设施包括独立于我们的应用程序存在的一切：外部库，数据库引擎，应用程序服务器，消息后端等。</p>
+<p>作为基础设施层，<code>Infrastructure</code>为<code>Interfaces</code>、<code>Application</code>和<code>Domain</code>三层提供支撑。所有与具体平台、框架相关的实现会在<code>Infrastructure</code>中提供，避免三层特别是<code>Domain</code>层掺杂进这些实现，从而“污染”领域模型。<code>Infrastructure</code>中最常见的一类设施是对象持久化的具体实现。</p>
+
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2019-11-17
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            <div class="post-tags">
+                    <a href="/tags/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/">代码架构</a>
+                    <a href="/tags/ddd/">DDD</a>
+                    <a href="/tags/%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/">分层架构</a>
+                    </div>
+            <nav class="post-nav">
+                <a class="prev" href="/posts/nginx/njs-5%E5%88%86%E9%92%9F%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default">njs 5分钟快速入门</span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E5%A4%AE%E8%A7%86%E6%9B%9D%E5%85%89-%E8%B6%855%E6%88%90%E6%96%87%E5%85%B7%E6%A3%80%E5%87%BA%E8%87%B4%E7%99%8C%E7%89%A9-%E8%BF%996%E7%A7%8D%E6%AF%92%E6%96%87%E5%85%B7%E5%8D%83%E4%B8%87%E5%88%AB%E8%AE%A9%E5%AD%A9%E5%AD%90%E7%94%A8/">
+                        <span class="next-text nav-default">央视曝光！超5成文具检出致癌物！这6种毒文具，千万别让孩子用！神兽终于要归笼了！</span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    <h4>相关文章：</h4>
+    <ul>
+        
+            <li><a href="/posts/%E6%8A%80%E6%9C%AF/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BB%B7%E5%80%BC/">领域模型的价值</a></li>
+        
+    </ul>
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2019-11-17 20:20:42 \u002b0000 UTC',
+        title: '代码架构',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2023
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

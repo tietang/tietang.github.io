@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>wrk on 多少光年</title>
+    <link>http://tietang.wang/tags/wrk/</link>
+    <description>Recent content in wrk on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 04 Mar 2016 09:06:33 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/wrk/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>wrk基准测试工具安装使用</title>
+      <link>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/wrk%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Fri, 04 Mar 2016 09:06:33 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/wrk%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/</guid>
+      <description>git https://github.com/wg/wrk git clone https://github.com/wg/wrk.git 安装 在makefile中33行 LDIR = deps/luajit/src LIBS := -lluajit $(LIBS) CFLAGS += -I$(LDIR) LDFLAGS += -L$(LDIR) 下面添加： LDFLAGS += -L/usr/local/opt/openssl/lib CFLAGS += -I/usr/local/opt/openssl/include make 基本使用 Basic Usage wrk -t12 -c400 -d30s http://127.0.0.1:8080/index.html This runs a benchmark for 30 seconds, using 12 threads, and keeping 400 HTTP connections open. Output: 1 2 3 4 5 6 7 8 Running 30s test @ http://127.0.0.1:8080/index.html 12 threads and 400 connections Thread Stats Avg Stdev Max +/- Stdev Latency 635.91us 0.89ms 12.92ms 93.69% Req/Sec 56.20k 8.07k 62.00k 86.54% 22464657 requests in 30.00s, 17.76GB read Requests/sec: 748868.53 Transfer/sec: 606.33MB 参数说明 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 $ wrk Usage: wrk &amp;lt;options&amp;gt; &amp;lt;url&amp;gt; Options: -c, --connections &amp;lt;N&amp;gt; Connections to keep open -d, --duration &amp;lt;T&amp;gt; Duration of test -t, --threads &amp;lt;N&amp;gt; Number of threads to use -s, --script &amp;lt;S&amp;gt; Load Lua script file -H, --header &amp;lt;H&amp;gt; Add header to request --latency Print latency statistics --timeout &amp;lt;T&amp;gt; Socket/request timeout -v, --version Print version details Numeric arguments may include a SI unit (1k, 1M, 1G) Time arguments may include a time unit (2s, 2m, 2h)</description>
+    </item>
+    
+  </channel>
+</rss>

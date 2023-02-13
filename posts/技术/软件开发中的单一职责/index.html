@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>软件开发中的单一职责 - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="软件开发中的单一职责 最近在实践微服务化过程中，对其“单一职责”原则深有体会。 那么只有微服务化才可以单一职责，才可以解耦吗？答案是否定的。 单一职责原则是这样定义的：单一的功能，并且完全封装起来。 我们做后端Java开发的，应该最熟悉的就是标准的3层架构了，尤其是使用Spring.io体系的：Controller，Service，Dao/Repository。为什么要分层？就是为了保证单一职责，数据模型的事情交给Controller，业务逻辑的事情交给Service，和数据打交道的事情就交给Dao/Repository。有时候或者有些人会分层分的更多，4层，5层，我自己也这样干过，说白了也是为了保证单一职责，3层不能满足单一职责了，耦合度高了，就分。 我们都知道一个webapp在经过一定时间的开发后，就惨不忍睹，即便是有标准的分层，页面或模板文件一大堆，最初的很清晰的3层标准架构也变味了，Cont"/><meta name="keywords"
+          content="单一职责"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="软件开发中的单一职责" />
+<meta property="og:description" content="软件开发中的单一职责 最近在实践微服务化过程中，对其“单一职责”原则深有体会。 那么只有微服务化才可以单一职责，才可以解耦吗？答案是否定的。 单一职责原则是这样定义的：单一的功能，并且完全封装起来。 我们做后端Java开发的，应该最熟悉的就是标准的3层架构了，尤其是使用Spring.io体系的：Controller，Service，Dao/Repository。为什么要分层？就是为了保证单一职责，数据模型的事情交给Controller，业务逻辑的事情交给Service，和数据打交道的事情就交给Dao/Repository。有时候或者有些人会分层分的更多，4层，5层，我自己也这样干过，说白了也是为了保证单一职责，3层不能满足单一职责了，耦合度高了，就分。 我们都知道一个webapp在经过一定时间的开发后，就惨不忍睹，即便是有标准的分层，页面或模板文件一大堆，最初的很清晰的3层标准架构也变味了，Cont" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2016-06-28T09:06:33+00:00" />
+<meta property="article:modified_time" content="2016-06-28T09:06:33+00:00" />
+
+<meta itemprop="name" content="软件开发中的单一职责">
+<meta itemprop="description" content="软件开发中的单一职责 最近在实践微服务化过程中，对其“单一职责”原则深有体会。 那么只有微服务化才可以单一职责，才可以解耦吗？答案是否定的。 单一职责原则是这样定义的：单一的功能，并且完全封装起来。 我们做后端Java开发的，应该最熟悉的就是标准的3层架构了，尤其是使用Spring.io体系的：Controller，Service，Dao/Repository。为什么要分层？就是为了保证单一职责，数据模型的事情交给Controller，业务逻辑的事情交给Service，和数据打交道的事情就交给Dao/Repository。有时候或者有些人会分层分的更多，4层，5层，我自己也这样干过，说白了也是为了保证单一职责，3层不能满足单一职责了，耦合度高了，就分。 我们都知道一个webapp在经过一定时间的开发后，就惨不忍睹，即便是有标准的分层，页面或模板文件一大堆，最初的很清晰的3层标准架构也变味了，Cont"><meta itemprop="datePublished" content="2016-06-28T09:06:33+00:00" />
+<meta itemprop="dateModified" content="2016-06-28T09:06:33+00:00" />
+<meta itemprop="wordCount" content="3063">
+<meta itemprop="keywords" content="单一职责,软件开发,微服务," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="软件开发中的单一职责"/>
+<meta name="twitter:description" content="软件开发中的单一职责 最近在实践微服务化过程中，对其“单一职责”原则深有体会。 那么只有微服务化才可以单一职责，才可以解耦吗？答案是否定的。 单一职责原则是这样定义的：单一的功能，并且完全封装起来。 我们做后端Java开发的，应该最熟悉的就是标准的3层架构了，尤其是使用Spring.io体系的：Controller，Service，Dao/Repository。为什么要分层？就是为了保证单一职责，数据模型的事情交给Controller，业务逻辑的事情交给Service，和数据打交道的事情就交给Dao/Repository。有时候或者有些人会分层分的更多，4层，5层，我自己也这样干过，说白了也是为了保证单一职责，3层不能满足单一职责了，耦合度高了，就分。 我们都知道一个webapp在经过一定时间的开发后，就惨不忍睹，即便是有标准的分层，页面或模板文件一大堆，最初的很清晰的3层标准架构也变味了，Cont"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title">软件开发中的单一职责</h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 2016-06-28 </span>
+
+                <div class="post-category">
+                    <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                        <a href="/categories/%E6%9D%82%E8%B0%88/"> 杂谈 </a>
+                        
+                    <a href="/tags/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/">
+                                <span class="badge">单一职责 </span>
+                            </a>
+                        <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/">
+                                <span class="badge">软件开发 </span>
+                            </a>
+                        <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">
+                                <span class="badge">微服务 </span>
+                            </a>
+                        
+                </div>
+                    <span class="more-meta"> 3063 words </span>
+                    <span class="more-meta"> 7 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#这些问题最后就造成">这些问题最后就造成：</a></li>
+        <li><a href="#下面就从软件开发设计架构以及重构演进进化从小到大几个方面来说说单一职责">下面就从软件开发、设计、架构，以及重构/演进/进化，从小到大几个方面来说说<strong>单一职责</strong>：</a></li>
+      </ul>
+    </li>
+    <li><a href="#类方法函数">类方法/函数</a></li>
+    <li><a href="#类函数文件">类/函数文件</a></li>
+    <li><a href="#包结构文件夹">包结构/文件夹</a></li>
+    <li><a href="#多工程module">多工程/module</a></li>
+    <li><a href="#微服务可部署单元">微服务/可部署单元</a></li>
+    <li><a href="#团队">团队</a>
+      <ul>
+        <li><a href="#参考">参考：</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+            <div>
+                <img src="http://tietang.wang//imgs/my-pic-P60607-090345.jpg?imageView2/1/w/800/h/600/q/75%7cwatermark/2/text/Qnkg6ZOB5rGk/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/100/gravity/SouthEast/dx/30/dy/30">
+            </div>
+        
+        
+        <div class="post-content">
+            <h1 id="软件开发中的单一职责">软件开发中的单一职责</h1>
+<p>最近在实践微服务化过程中，对其“单一职责”原则深有体会。
+那么只有微服务化才可以单一职责，才可以解耦吗？答案是否定的。</p>
+<p>单一职责原则是这样定义的：单一的功能，并且完全封装起来。</p>
+<p>我们做后端Java开发的，应该最熟悉的就是标准的3层架构了，尤其是使用Spring.io体系的：Controller，Service，Dao/Repository。为什么要分层？就是为了保证单一职责，数据模型的事情交给Controller，业务逻辑的事情交给Service，和数据打交道的事情就交给Dao/Repository。有时候或者有些人会分层分的更多，4层，5层，我自己也这样干过，说白了也是为了保证单一职责，3层不能满足单一职责了，耦合度高了，就分。</p>
+<p>我们都知道一个webapp在经过一定时间的开发后，就惨不忍睹，即便是有标准的分层，页面或模板文件一大堆，最初的很清晰的3层标准架构也变味了，Controller，Service，Dao/Repository各层之间、Service之间、Dao/Repository之间互相调用，一团乱麻。这个时候没改一行代码都有可能一个老鼠害了一锅汤，bug就如同蚂蚁洞。</p>
+<h3 id="这些问题最后就造成">这些问题最后就造成：</h3>
+<ul>
+<li>可扩展性灵活性差，出现性能问题</li>
+<li>业务变更和开发困难，维护成本很高，交付时间长</li>
+<li>回归测试量很大</li>
+<li>&hellip;</li>
+</ul>
+<p>为了解决这些问题，就需要时时刻刻清楚的记住“<strong>单一职责</strong>”，<strong>单一职责</strong>可以用到软件开发的任何地方。</p>
+<p>应该说职责分离来解耦是最常用最有效的架构方法，这能够很大限度的简化一切。</p>
+<h3 id="下面就从软件开发设计架构以及重构演进进化从小到大几个方面来说说单一职责">下面就从软件开发、设计、架构，以及重构/演进/进化，从小到大几个方面来说说<strong>单一职责</strong>：</h3>
+<h2 id="类方法函数">类方法/函数</h2>
+<p>这应该是最小的能体现<strong>单一职责</strong>的程序单元了。最熟悉的最典型的莫过于Helper/Utils类方法了，但这种类方法的特征很明显，也很容易遵循单一职责，99%以上的开发人员都可以做到。但不仅仅这样的类方法要遵循单一职责原则，每一个类方法都应该遵循<strong>单一职责</strong>原则，尤其是一些处理业务逻辑的类方法更要遵循<strong>单一职责</strong>原则，处理业务的类方法通常要配合类的单一职责原则进行，下节中讨论。</p>
+<p>因此，这也是为什么很多TL要求类方法代码行数保持在20行左右，其实就是为了保证单一职责，20行左右是一个<strong>经验粗略数字</strong>，当然，10行或者30行来完成类方法也是可以的。大部分单一职责的类方法用20行左右的代码就够了，如果超过20行就要考虑是否保证了单一职责了。那我们在<strong>迭代重构</strong>的过程中就要考虑拆分这样的类方法来保证单一职责。</p>
+<p>类方法的单一职责是最单纯的，很具体的，不惨杂任何额外信息，只关心输入、输出、和职责；一定要明确地定义类方法的职责，保证在迭代中不被错误的扩张，调用方错误的使用。</p>
+<h2 id="类函数文件">类/函数文件</h2>
+<p>要用面向对象的设计方法，<strong>单一职责原则</strong>来定义类。开发人员一定要很好地理解“单一职责原则”，具有面向对象的抽象思维能力。</p>
+<p>当在迭代中一个类过于庞大或者快速膨胀，说明已经有坏味道了，这时候就需要考虑用单一职责原则或者面向对象的分析方法来重构和重新定义类了，通常就是要抽象和拆分类，否则将来会变成一个方法容器。</p>
+<p>把类比作一个人，她的职责就是完成自己职责范围内的事情，如果她什么事情都管，就叫多管闲事，可以想象她多管闲事的后果了，会搅得鸡犬不宁。同样，类也是，类如果多管闲事，那会搅得真个应用不稳定，漏洞百出，还很难修复。所以说定义一个类，要明确这个类的职责。使用面向对象的分析和设计方法，能很好地准确定义一个类的职责范围，通常就要用到封装、继承、多态和抽象等设计方法。</p>
+<h2 id="包结构文件夹">包结构/文件夹</h2>
+<p>分层就是最常用的架构方法之一，分层具体体现在分包和分类，就是分门别类的意思。俗话说，物以类聚，人以群分。</p>
+<p>包结构在单一职责原则上是类的补充，职责范围进一步扩大。如果把一个类叫做一个人，那么包就是一个最小单位的团队，职责就是负责一类特定事情。
+如何分包呢？那就要用到分类学的知识了，要以什么特征来分，可能不仅仅只有一种特征，比如，先用公司域名来做基础包名，这里叫一级包名；然后再用一个特定的有意义的标识作为二级子包名；之后按分层（web,dao,service等等）方法做三级包名，也可以先按照业务再按分层。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">域名：tietang.wang
+</span></span><span class="line"><span class="cl">有个项目叫：social
+</span></span><span class="line"><span class="cl">那么我可以这样分：
+</span></span><span class="line"><span class="cl">wang.tietang
+</span></span><span class="line"><span class="cl">  - social
+</span></span><span class="line"><span class="cl">	  - web
+</span></span><span class="line"><span class="cl">	  - service
+</span></span><span class="line"><span class="cl">	  - dao
+</span></span><span class="line"><span class="cl">	  - commons
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">也可以这样：
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">wang.tietang
+</span></span><span class="line"><span class="cl">  - commons
+</span></span><span class="line"><span class="cl">  - user
+</span></span><span class="line"><span class="cl">	  - web
+</span></span><span class="line"><span class="cl">	  - service
+</span></span><span class="line"><span class="cl">	  - dao
+</span></span><span class="line"><span class="cl">  - relation
+</span></span><span class="line"><span class="cl">	  - web
+</span></span><span class="line"><span class="cl">	  - service
+</span></span><span class="line"><span class="cl">	  - dao	 		
+</span></span><span class="line"><span class="cl">			
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="多工程module">多工程/module</h2>
+<p>通常以多maven module或者gradle 多module形式存在，来保证单一职责。
+当业务量还没有达到服务拆分的火候，又需要规整项目结构，通常在一个app发展的太庞大时或者在工程建设初期采取，从文件系统上隔离，通过module依赖来集成。需要注意的是这样的架构或拆分不是随意的，要以单一职责原则来拆分，更具体一点就是要根据业务，技术框架功能等特性来拆分。</p>
+<p>比如，按技术组件拆分，通常会有一些技术组件，可以把她放到commons module，如果有多种类型的技术组件，就拆分为commons module的子module；也可以直接将这些技术组件拆分为独立的工程，存在于独立的git/svn仓库，独立管理，专人负责；其他哪些module需要就依赖她。那拆分的这些技术组件的每一个应该遵循单一职责原则，例如数据分片的框架，NIO基础网络框架等等。</p>
+<p>比如，按业务拆分，例如有用户，订单，商品，支付，那么就按照这些业务拆分为子module，每一个子module就只负责自己的业务逻辑，也遵循单一职责。</p>
+<p>那每个module的职责范围又比类和包更大，这个时候职责也更模糊，有时候很难把握，对于技术组件可能相对清晰，业务module就要熟悉业务，明确业务边界。</p>
+<p>多module拆分后也是为将来服务化埋下伏笔，同时在物理文件系统比较清晰了，那在依赖管理上也要掌握好保持清晰的依赖逻辑，把握好单一职责原则。</p>
+<h2 id="微服务可部署单元">微服务/可部署单元</h2>
+<p>微服务，从运行时隔离，但业务量发展到一定时候，从单体或者多module工程拆分或演化出来，可独立打包可独立部署并复合单一原则的application，当然了微服务所体现的价值不仅仅是隔离和独立部署，还有很多这里可以参考<a href="http://www.infoq.com/cn/news/2015/04/single-app-micro-service">单体应用与微服务优缺点辨析</a>。单一职责在微服务中的价值是最重要的，包含了app层面和开发app的团队层面，微服务的大部分优点都可以围绕单一职责来张开。</p>
+<h2 id="团队">团队</h2>
+<p>先引用《韩非子·扬权》中的一段文字：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">夫物者有所宜，材者有所施，各处其宜，故上下无为。 
+</span></span><span class="line"><span class="cl">使鸡司夜，令狸执鼠，皆用其能，上乃无事。
+</span></span><span class="line"><span class="cl">上有所长，事乃不方。 
+</span></span><span class="line"><span class="cl">矜而好能，下之所欺：辩惠好生，下因其材。
+</span></span><span class="line"><span class="cl">上下易用，国故不治。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>参考：</strong></p>
+<ul>
+<li>原文：http://www.shici8.com/bookview_3501.html</li>
+<li>译文：http://www.shici8.com/article_8539.html</li>
+</ul>
+<p>各得其所，各司其职。所以，团队也要遵循单一职责原则，这样才能很好地管理团队成员的时间，提高效率。一个人专注做一件事情的效率远高于同时关注多件事情的。同样一个人一直管理和维护同一份代码要比多人同时维护多份代码的效率高很多。每一个人都有自己的个性，他有自己的擅长，让每一个人专注自己擅长的事情，那肯定事半功倍，整个团队绩效肯定也很突出。</p>
+<p>总之，引用古文名句说明了所有：</p>
+<ul>
+<li>物以类聚，人以群分。</li>
+<li>天下之事，分合交替，分久必合，合久必分！</li>
+<li>使鸡司夜，令狸执鼠，皆用其能，上乃无事。</li>
+</ul>
+<h3 id="参考">参考：</h3>
+<p><a href="http://www.jianshu.com/p/f9d15827465d">http://www.jianshu.com/p/f9d15827465d</a></p>
+<p><a href="https://zh.wikipedia.org/wiki/%E5%8D%95%E4%B8%80%E5%8A%9F%E8%83%BD%E5%8E%9F%E5%88%99">https://zh.wikipedia.org/wiki/单一功能原则</a></p>
+
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2016-06-28
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            <div class="post-tags">
+                    <a href="/tags/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/">单一职责</a>
+                    <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/">软件开发</a>
+                    <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+                    </div>
+            <nav class="post-nav">
+                <a class="prev" href="/posts/hystrix/resttemplate%E9%81%87%E4%B8%8Ahystrix/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default">RestTemplate遇上Hystrix</span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/%E6%8A%80%E6%9C%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B9%8B%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2%E7%AE%97%E6%B3%95/">
+                        <span class="next-text nav-default">负载均衡之加权轮询算法</span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2016-06-28 09:06:33 \u002b0000 UTC',
+        title: '软件开发中的单一职责',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2023
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

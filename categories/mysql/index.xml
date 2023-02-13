@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>mysql on 多少光年</title>
+    <link>http://tietang.wang/categories/mysql/</link>
+    <description>Recent content in mysql on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 09 Nov 2016 19:22:47 +0000</lastBuildDate><atom:link href="http://tietang.wang/categories/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Maxwell MySQL binlog订阅和一些坑</title>
+      <link>http://tietang.wang/posts/binlog/maxwell-mysql-binlog%E8%AE%A2%E9%98%85%E5%92%8C%E4%B8%80%E4%BA%9B%E5%9D%91/</link>
+      <pubDate>Wed, 09 Nov 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/binlog/maxwell-mysql-binlog%E8%AE%A2%E9%98%85%E5%92%8C%E4%B8%80%E4%BA%9B%E5%9D%91/</guid>
+      <description>maxwell 相关资源 http://maxwells-daemon.io/ https://github.com/zendesk/maxwell https://github.com/zendesk/open-replicator 配置MySQL master数据源 1 2 3 4 [mysqld] server-id=1 log-bin=master binlog_format=row 注意： MySQL必须开启了binlogs，即log-bin指定了目录 binlog_format必须是row master数据源配置REPLICATION权限： Maxwell需要储存他自己的一些状态数据，启动参数schema_database选型来指定，默认是maxwell. 1 2 GRANT ALL on maxwell.* to &amp;#39;maxwell&amp;#39;@&amp;#39;%&amp;#39; identified by &amp;#39;123456&amp;#39;; GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE on *.* to &amp;#39;maxwell&amp;#39;@&amp;#39;%&amp;#39;; 问题列表 当binlog文件不存在时（被删除、移除、过期） 无法启动maxwell 正在运行的maxwell**可能**会stop 在阿里云RDS下的风险问题 binlog文件清理问题 binlog文件名在切换master主备或者阿里运维维护时会重置 RDS for MySQL 的 Binlog 生成和清理规则： 参考：RDS for MySQL 之 Binlog 日志生成和清理规则 其他问题 阿里RDS的binlog在被复制完成后，会将之前的最后的binlog文件复制到其他地方，如果maxwell挂起时</description>
+    </item>
+    
+  </channel>
+</rss>

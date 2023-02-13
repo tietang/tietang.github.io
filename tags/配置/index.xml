@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>配置 on 多少光年</title>
+    <link>http://tietang.wang/tags/%E9%85%8D%E7%BD%AE/</link>
+    <description>Recent content in 配置 on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 12 Jan 2023 15:22:47 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/%E9%85%8D%E7%BD%AE/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在golang应用中优雅的使用配置文件，并且简单优雅的快速接入分布式配置中心</title>
+      <link>http://tietang.wang/posts/golang/golang%E5%BA%94%E7%94%A8%E4%B8%AD%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%B9%B6%E4%B8%94%E7%AE%80%E5%8D%95%E4%BC%98%E9%9B%85%E7%9A%84%E5%BF%AB%E9%80%9F%E6%8E%A5%E5%85%A5%E5%88%86%E5%B8%83%E5%BC%8F%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/golang/golang%E5%BA%94%E7%94%A8%E4%B8%AD%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%B9%B6%E4%B8%94%E7%AE%80%E5%8D%95%E4%BC%98%E9%9B%85%E7%9A%84%E5%BF%AB%E9%80%9F%E6%8E%A5%E5%85%A5%E5%88%86%E5%B8%83%E5%BC%8F%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/</guid>
+      <description>在golang应用中优雅的使用配置文件，并且简单优雅的快速接入分布式配置中心 配置文件类型有很多种，像常用的properties、yaml、ini、xml、json等，还有不太常见的plist（xml）、toml、 HOCON等，还有很多特别自定义的格式，甚至有些就直接使用脚本语言来替代，像python、js，groovy等，无论是哪种配置文件，基本上都是三种类型： 结构化：yaml，xml，json 非结构化扁平格式：properties 半结构化和扁平结合 那么多的配置文件，如何选择呢？可以尝试给配置文件做个排序，来指导选择；对于常用的配置文件格式中，按照人类理解和方便编写配置来排序： ini &amp;gt; properties &amp;gt; json &amp;gt; xml &amp;gt; yaml &amp;gt; toml 如果按照能配置复杂数据的复杂度来排序： xml &amp;gt; yaml &amp;gt; toml/json/plist &amp;gt; ini &amp;gt; properties 对于这么多格式的配置文件如何选择呢？如果又或者应用了一个三方库，使用了和自己应用不一样的格式的配置文件，就不能统一了，不仅要引用各种格式解</description>
+    </item>
+    
+  </channel>
+</rss>

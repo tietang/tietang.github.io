@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="Stay simple. just do it."/><meta name="keywords"
+          content="微服务, hystrix, 铁汤"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/"/>
+    <link href="http://tietang.wang/index.xml" rel="alternate" type="application/rss+xml" title="多少光年"/>
+    <link href="http://tietang.wang/index.xml" rel="feed" type="application/rss+xml" title="多少光年"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="技术博客" />
+<meta property="og:description" content="Stay simple. just do it." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://tietang.wang/" />
+
+<meta itemprop="name" content="技术博客">
+<meta itemprop="description" content="Stay simple. just do it."><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="技术博客"/>
+<meta name="twitter:description" content="Stay simple. just do it."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          
+    <section id="posts" class="posts">
+        
+        
+        
+        
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/golang/golang%E5%BA%94%E7%94%A8%E4%B8%AD%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%B9%B6%E4%B8%94%E7%AE%80%E5%8D%95%E4%BC%98%E9%9B%85%E7%9A%84%E5%BF%AB%E9%80%9F%E6%8E%A5%E5%85%A5%E5%88%86%E5%B8%83%E5%BC%8F%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/">在golang应用中优雅的使用配置文件，并且简单优雅的快速接入分布式配置中心</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2023-01-12 </span>
+
+            <div class="post-category">
+                <a href="/categories/golang/"> golang </a>
+                
+
+            </div>
+            <span class="more-meta"> 6079 words </span>
+            <span class="more-meta"> 13 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/golang/golang%E5%BA%94%E7%94%A8%E4%B8%AD%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%B9%B6%E4%B8%94%E7%AE%80%E5%8D%95%E4%BC%98%E9%9B%85%E7%9A%84%E5%BF%AB%E9%80%9F%E6%8E%A5%E5%85%A5%E5%88%86%E5%B8%83%E5%BC%8F%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/" class="summary-link"> 在golang应用中优雅的使用配置文件，并且简单优雅的快速接入分布式配置中心 配置文件类型有很多种，像常用的properties、yaml、ini、xml、json等，还有不太常见的plist（xml）、toml、 HOCON等，还有很多特别自定义的格式，甚至有些就直接使用脚本语言来替代，像python、js，groovy等，无论是哪种配置文件，基本上都是三种类型： 结构化：yaml，xml，json 非结构化扁平格式：properties 半结构化和扁平结合 那么多的配置文件，如何选择呢？可以尝试给配置文件做个排序，来指导选择；对于常用的配置文件格式中，按照人类理解和方便编写配置来排序： ini &gt; properties &gt; json &gt; xml &gt; yaml &gt; toml 如果按照能配置复杂数据的复杂度来排序： xml &gt; yaml &gt; toml/json/plist &gt; ini &gt; properties 对于这么多格式的配置文件如何选择呢？如果又或者应用了一个三方库，使用了和自己应用不一样的格式的配置文件，就不能统一了，不仅要引用各种格式解...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/golang/golang%E5%BA%94%E7%94%A8%E4%B8%AD%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%B9%B6%E4%B8%94%E7%AE%80%E5%8D%95%E4%BC%98%E9%9B%85%E7%9A%84%E5%BF%AB%E9%80%9F%E6%8E%A5%E5%85%A5%E5%88%86%E5%B8%83%E5%BC%8F%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/golang/"><span class="badge">golang </span> </a>
+            <a href="/%20tags/props/"><span class="badge">props </span> </a>
+            <a href="/%20tags/conf/"><span class="badge">conf </span> </a>
+            <a href="/%20tags/%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/"><span class="badge">配置中心 </span> </a>
+            <a href="/%20tags/%E5%88%86%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/"><span class="badge">分部署配置中心 </span> </a>
+            <a href="/%20tags/%E9%85%8D%E7%BD%AE/"><span class="badge">配置 </span> </a>
+            <a href="/%20tags/nacos/"><span class="badge">nacos </span> </a>
+            <a href="/%20tags/apollo/"><span class="badge">apollo </span> </a>
+            <a href="/%20tags/yaml/"><span class="badge">yaml </span> </a>
+            <a href="/%20tags/yml/"><span class="badge">yml </span> </a>
+            <a href="/%20tags/yam/"><span class="badge">yam </span> </a>
+            <a href="/%20tags/properties/"><span class="badge">properties </span> </a>
+            <a href="/%20tags/ini/"><span class="badge">ini </span> </a>
+            <a href="/%20tags/zookeeper/"><span class="badge">zookeeper </span> </a>
+            <a href="/%20tags/consul/"><span class="badge">consul </span> </a>
+            <a href="/%20tags/etcd/"><span class="badge">etcd </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/ai/paddlerspeech/">安装PaddleSpeech Centos 出现CXXABI_1.3.8&#39; not found错误</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2022-12-12 </span>
+
+            <div class="post-category">
+                <a href="/categories/ai/"> AI </a>
+                
+
+            </div>
+            <span class="more-meta"> 268 words </span>
+            <span class="more-meta"> 1 min read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/ai/paddlerspeech/" class="summary-link"> Centos 出现CXXABI_1.3.8&rsquo; not found错误： 1 wget http://www.vuln.cn/wp-content/uploads/2019/08/libstdc.so_.6.0.26.zip http://mirror.ghettoforge.org/distributions/gf/el/7/gf/x86_64/gcc10-libstdc++-10.2.1-7.gf.el7.x86_64.rpm Download latest gf-release rpm from 1 http://mirror.ghettoforge.org/distributions/gf/el/7/gf/x86_64/ Install gf-release rpm: 1 # rpm -Uvh gf-release*rpm Install gcc10-libstdc++ rpm package: 1 # yum --enablerepo=gf install gcc10-libstdc++ 安装centos-release-scl 1 sudo yum install centos-release-scl 2、安装devtoolset，注意，如果想安装7.版本的，就改成devtoolset-7-gcc，以此类推 1 sudo yum install devtoolset-8-gcc* 3、激活对应的devtoolset，所以你可以一次安装多个版本的devtoolset，需要的时候用下面这条命令切换到对应的版本 1 scl enable devtoolset-8 bash 大功告成，查看一下gcc版本 1 gcc -v 显示为 gcc version 8.3.1 20190311 (Red Hat 8.3.1-3) (GCC) 1 2 3 4 5 6 7 8 9 10 11 mv /usr/bin/gcc /usr/bin/gcc-4.8.5 ln -s /opt/rh/devtoolset-8/root/bin/gcc /usr/bin/gcc mv /usr/bin/g++ /usr/bin/g++-4.8.5 ln -s /opt/rh/devtoolset-8/root/bin/g++ /usr/bin/g++ gcc --version g++ --version...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/ai/paddlerspeech/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/ai/"><span class="badge">AI </span> </a>
+            <a href="/%20tags/cxxabi/"><span class="badge">CXXABI </span> </a>
+            <a href="/%20tags/gcc/"><span class="badge">gcc </span> </a>
+            <a href="/%20tags/paddlespeech/"><span class="badge">PaddleSpeech </span> </a>
+            <a href="/%20tags/ubuntu/"><span class="badge">Ubuntu </span> </a>
+            <a href="/%20tags/python/"><span class="badge">python </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/ai/rasa3.0%E5%AE%89%E8%A3%85/">MacOS&#43;Ubuntu【mutipass】安装Rasa3.0</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2022-10-12 </span>
+
+            <div class="post-category">
+                <a href="/categories/ai/"> AI </a>
+                
+
+            </div>
+            <span class="more-meta"> 1768 words </span>
+            <span class="more-meta"> 4 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/ai/rasa3.0%E5%AE%89%E8%A3%85/" class="summary-link"> MacOS+Ubuntu【mutipass】安装Rasa3.0 MacOS准备Ubuntu： 其他平台参考官网https://multipass.run，也可以使用docker或虚拟机。 macOS安装multipass： https://multipass.run/install 下载安装包 或者 brew install &ndash;cask multipass 下载和启动ubutun, 建议使用20.04版本，默认python3为3.8，并命名为rubuntu： snapcraft:core20 20.04 20.04 focal multipass launch focal &ndash;cpus 4 &ndash;disk 20G &ndash;mem 8G &ndash;name rubuntu multipass launch &ndash;cpus 4 &ndash;disk 20G &ndash;mem 8G &ndash;name rubuntu 进入命名为rubuntu的ubuntu shell : multipass shell rubuntu Python3.8及环境安装： 3.10安装rasa3.0有依赖和编译问题，其他版本未知，使用3.8来安装rasa3.0。 更新软件包列表并安装必备组件: sudo apt update sudo apt -y install software-properties-common sudo apt update #需要注意software-properties-common 有可能会重新安装python3.10，如果重新安装可以再次卸载。 将Deadsnakes PPA添加到系统的来源列表中(一定要在卸载...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/ai/rasa3.0%E5%AE%89%E8%A3%85/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/ai/"><span class="badge">AI </span> </a>
+            <a href="/%20tags/rasa/"><span class="badge">Rasa </span> </a>
+            <a href="/%20tags/rasa3.0/"><span class="badge">Rasa3.0 </span> </a>
+            <a href="/%20tags/mutipass/"><span class="badge">mutipass </span> </a>
+            <a href="/%20tags/ubuntu/"><span class="badge">Ubuntu </span> </a>
+            <a href="/%20tags/python/"><span class="badge">python </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/nginx/njs-5%E5%88%86%E9%92%9F%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">njs 5分钟快速入门</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2020-06-02 </span>
+
+            <div class="post-category">
+                <a href="/categories/nginx/"> nginx </a>
+                
+
+            </div>
+            <span class="more-meta"> 1150 words </span>
+            <span class="more-meta"> 3 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/nginx/njs-5%E5%88%86%E9%92%9F%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" class="summary-link"> njs 5分钟快速入门 njs是作为nginx的module，可以通过2种方式安装： add-module 编译源码 add-dynamic-module 本文采用add-module编译源码的方式。add-dynamic-module的方法自行百度。 下载 njs-0.4.1 官网提供的源码下载，需要通过hg来获取。hg是 Mercurial 分布式版本控制软件的客户端，国内使用较少，可以通过官网下载 Mercurial 客户端，通过如下命令下载njs源码： hg clone http://hg.nginx.org/njs njs源码仓库参考：http://hg.nginx.org/njs?_ga=2.60091629.1926145332.1591076203-902755521.1590558489 也可以使用git到github上下载njs的代码镜像或者release压缩包。最新的镜像直接下载master分支代码即可： git clone https://github.com/nginx/njs.git 也可以直接下载最新的release压缩包：https://github.com/nginx/njs/releases wget https://github.com/nginx/njs/archive/0.4.1.tar.gz or curl -o https://github.com/nginx/njs/archive/0.4.1.tar.gz njs在github上...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/nginx/njs-5%E5%88%86%E9%92%9F%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/nginx/"><span class="badge">nginx </span> </a>
+            <a href="/%20tags/njs/"><span class="badge">njs </span> </a>
+            <a href="/%20tags/gateway/"><span class="badge">gateway </span> </a>
+            <a href="/%20tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BD%91%E5%85%B3/"><span class="badge">微服务网关 </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E6%9E%B6%E6%9E%84/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/">代码架构</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2019-11-17 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%9E%B6%E6%9E%84/"> 架构 </a>
+                
+
+            </div>
+            <span class="more-meta"> 2718 words </span>
+            <span class="more-meta"> 6 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E6%9E%B6%E6%9E%84/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/" class="summary-link"> 代码架构 在软件开发生命周期中，代码架构很少被提到，但是实际上每一个开发者都在做代码架构。代码架构在软件开发中有着重要的作用，那么我们就来聊聊在软件开发领域中代码架构，从Why、What、How几个方面来讲讲： Why：为什么要做代码架构？ What：代码架构要做些什么事情？ How：怎样来设计代码架构？ Why：为什么要做代码架构？ 软件开发的生命周期，大致都是一样的流程： 需求分析：产出概念模型，需求定义 概要设计：包括系统边界设计、内部架构设计、设计决策 详细设计，包括代码架构，业务逻辑实现 开发代码 单元测试、连通测试 部署上线 系统运维 代码架构属于详细设计部分的内容，代码架构在整个软件开发生命周期中承上启下： 向上要表达设计意图，要把软件产品概念模型、边界交互、数据流设计、数据库设计、系统内部架构设计等表达清楚，来说明业务逻辑和业务领域模型 代码架构本身也是来保证代码有更好的可读性和可维护性、可扩展性，决定了...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E6%9E%B6%E6%9E%84/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/"><span class="badge">代码架构 </span> </a>
+            <a href="/%20tags/ddd/"><span class="badge">DDD </span> </a>
+            <a href="/%20tags/%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/"><span class="badge">分层架构 </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E5%A4%AE%E8%A7%86%E6%9B%9D%E5%85%89-%E8%B6%855%E6%88%90%E6%96%87%E5%85%B7%E6%A3%80%E5%87%BA%E8%87%B4%E7%99%8C%E7%89%A9-%E8%BF%996%E7%A7%8D%E6%AF%92%E6%96%87%E5%85%B7%E5%8D%83%E4%B8%87%E5%88%AB%E8%AE%A9%E5%AD%A9%E5%AD%90%E7%94%A8/">央视曝光！超5成文具检出致癌物！这6种毒文具，千万别让孩子用！神兽终于要归笼了！</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2019-10-18 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E7%8C%BF%E5%81%A5%E5%BA%B7/"> 猿健康 </a>
+                
+
+            </div>
+            <span class="more-meta"> 2924 words </span>
+            <span class="more-meta"> 6 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E5%A4%AE%E8%A7%86%E6%9B%9D%E5%85%89-%E8%B6%855%E6%88%90%E6%96%87%E5%85%B7%E6%A3%80%E5%87%BA%E8%87%B4%E7%99%8C%E7%89%A9-%E8%BF%996%E7%A7%8D%E6%AF%92%E6%96%87%E5%85%B7%E5%8D%83%E4%B8%87%E5%88%AB%E8%AE%A9%E5%AD%A9%E5%AD%90%E7%94%A8/" class="summary-link"> 央视曝光！超5成文具检出致癌物！这6种毒文具，千万别让孩子用！神兽终于要归笼了！ 开学日期近在眼前，孩子的作业费尽九牛二虎之力也终于补完。 老母亲喜滋滋地前往超市购买食材，想着给孩子做上一顿美餐，给这个暑假画上一个完美句点。 结果刚到超市，我人就傻眼了。 文具区人山人海的父母们，瞬间让我的灵魂一颤：糟了！还没给家里的神兽准备新学期的文具！ 回过神来，我也跟随着人流奔向文具区，结果却被这琳琅满目的高颜值文具看花了眼：卡通形象的卷笔刀、五颜六色的荧光笔、形式各异的涂改液、还有书皮、笔袋、文具袋&hellip;&hellip; 差点顶不住诱惑的老母亲，想想经不起挥霍的钱包，瞬间冷静了下来。算了，还是先撤为妙，回家征求下孩子的意见，备下一份文具清单，我们从头再战。 只不过，回家研究一番后，我才发现，原来小小的文具，也有大大的学问。 尤其是这些常见的毒文具，真的伤孩子太深！ 1 毒文具防不胜防，你家孩子有在用吗？ 孩子的...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E5%A4%AE%E8%A7%86%E6%9B%9D%E5%85%89-%E8%B6%855%E6%88%90%E6%96%87%E5%85%B7%E6%A3%80%E5%87%BA%E8%87%B4%E7%99%8C%E7%89%A9-%E8%BF%996%E7%A7%8D%E6%AF%92%E6%96%87%E5%85%B7%E5%8D%83%E4%B8%87%E5%88%AB%E8%AE%A9%E5%AD%A9%E5%AD%90%E7%94%A8/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/%E7%99%BD%E8%A1%80%E7%97%85/"><span class="badge">白血病 </span> </a>
+            <a href="/%20tags/%E7%99%8C%E7%97%87/"><span class="badge">癌症 </span> </a>
+            <a href="/%20tags/%E6%96%87%E5%85%B7/"><span class="badge">文具 </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E8%BF%994%E7%B1%BB%E6%96%87%E5%85%B7%E5%AE%B9%E6%98%93%E5%BC%95%E8%B5%B7%E4%B8%AD%E6%AF%92%E6%88%96%E7%99%BD%E8%A1%80%E7%97%85/">触目惊心：这4类文具容易引起中毒或白血病，千万不能让孩子用</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2019-10-17 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E7%8C%BF%E5%81%A5%E5%BA%B7/"> 猿健康 </a>
+                
+
+            </div>
+            <span class="more-meta"> 1453 words </span>
+            <span class="more-meta"> 3 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E8%BF%994%E7%B1%BB%E6%96%87%E5%85%B7%E5%AE%B9%E6%98%93%E5%BC%95%E8%B5%B7%E4%B8%AD%E6%AF%92%E6%88%96%E7%99%BD%E8%A1%80%E7%97%85/" class="summary-link"> 触目惊心：这4类文具容易引起中毒或白血病，千万不能让孩子用 国家自2008年就对学生用品有了明确的规定，并实施了第一部强制性国家标准《学生用品的安全通用要求》，该标准严格规定甲醛、苯、铅、汞、砷等有害物质的最大限量。但是仍然有不少商家表示，不知道已经实施了《学生用品的安全通用要求》，更不知道文具里面的有害物质会对孩子造成多大的影响。 然而不少学生买了不符合规定的文具，从而导致慢性中毒的情况发生，甚至极易引发白血病！ 期末考试即将临近，刘女士看孩子最近学习特别用功，还特意带着孩子新买了几只圆珠笔，好让孩子多做练习。在挑选圆珠笔时，儿子选中了几只有香味的，当时刘女士并没觉得有什么问题，心想孩子嘛，都喜欢好看好闻的。之后的一段时间，孩子经常说恶心，连饭量也减少了，刘女士以为孩子是肠胃不舒服，就给孩子吃了些胃肠药，症状缓和一些后，就没再放在心上了。不久，儿子在家写作业时突然晕倒，送到医院后，刘女士被告知...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E8%BF%994%E7%B1%BB%E6%96%87%E5%85%B7%E5%AE%B9%E6%98%93%E5%BC%95%E8%B5%B7%E4%B8%AD%E6%AF%92%E6%88%96%E7%99%BD%E8%A1%80%E7%97%85/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/%E7%99%BD%E8%A1%80%E7%97%85/"><span class="badge">白血病 </span> </a>
+            <a href="/%20tags/%E7%99%8C%E7%97%87/"><span class="badge">癌症 </span> </a>
+            <a href="/%20tags/%E6%96%87%E5%85%B7/"><span class="badge">文具 </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%99%BD%E8%A1%80%E7%97%85-%E5%B0%91%E7%BB%99%E5%AD%A9%E5%AD%90%E4%B9%B0%E8%BF%993%E7%B1%BB%E6%96%87%E5%85%B7/">现在多数孩子染上白血病，医生：少给孩子买这3类文具？</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2019-10-17 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E7%8C%BF%E5%81%A5%E5%BA%B7/"> 猿健康 </a>
+                
+
+            </div>
+            <span class="more-meta"> 911 words </span>
+            <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%99%BD%E8%A1%80%E7%97%85-%E5%B0%91%E7%BB%99%E5%AD%A9%E5%AD%90%E4%B9%B0%E8%BF%993%E7%B1%BB%E6%96%87%E5%85%B7/" class="summary-link"> 现在多数孩子染上白血病，医生：少给孩子买这3类文具 对于孩子的一个安全问题，那么一直也是备受家长重视的，但是还有一些家长因为无知而让孩子面临着比较危险的情况。 在最近的几年，那么有一些数据就会显示儿童发生意外事故的情况真的是非常的严重，儿童患病率也是在不断的增大，看到这里那么各位父母是不是应该要反思自己呢？是否真正地对孩子尽到了应有的责任，真正的保护了孩子免受 染上了白血病的儿童也是非常多的，那么医生根据这些孩子总体生活中环境来进行分析，最终得到了这样的一个结论，就是孩子正在使用的文具，可能就是引起白血病的一个根源，所以说这三类问题尽量少给孩子们。 可能引发儿童白血病的文具 1.塑料书皮 有的孩子常用的塑料书皮也就可能会使孩子的健康出现问题，这一种树皮含有大量的，增塑剂和多环芳烃孩子长时间使用也就会引起疾病，导致孩子畸形。 其实不仅是书皮，还有一些孩子常用的塑料文具都含有这两种物质，家长应该要尽量让孩子...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%99%BD%E8%A1%80%E7%97%85-%E5%B0%91%E7%BB%99%E5%AD%A9%E5%AD%90%E4%B9%B0%E8%BF%993%E7%B1%BB%E6%96%87%E5%85%B7/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/%E7%99%BD%E8%A1%80%E7%97%85/"><span class="badge">白血病 </span> </a>
+            <a href="/%20tags/%E7%99%8C%E7%97%87/"><span class="badge">癌症 </span> </a>
+            <a href="/%20tags/%E6%96%87%E5%85%B7/"><span class="badge">文具 </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%94%B2%E9%86%9B%E6%98%AF%E4%BB%80%E4%B9%88%E9%AC%BC-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8D%B1%E5%AE%B3/">甲醛是什么鬼有什么危害？</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2019-09-23 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E7%8C%BF%E5%81%A5%E5%BA%B7/"> 猿健康 </a>
+                
+
+            </div>
+            <span class="more-meta"> 2710 words </span>
+            <span class="more-meta"> 6 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%94%B2%E9%86%9B%E6%98%AF%E4%BB%80%E4%B9%88%E9%AC%BC-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8D%B1%E5%AE%B3/" class="summary-link"> 关键内容： 来源： 甲醛是最常见的室内空气污染毒物，约有三千多种不同建筑材料均含有甲醛[来源请求]，主要来源为纤维板、三夹板、隔音板、保丽龙等装潢材料。 甲醛树脂被用于各种[建筑材料]，包括胶合板、毛毯、隔热材料、木制产品、地板、烟草、装修和装饰材料，且因为甲醛树脂会缓慢持续放出甲醛，因此甲醛成为常见的室内空气污染来源之一。 危害： 长期接触低剂量甲醛可引起慢性呼吸道疾病，引起鼻咽癌、结肠癌、脑瘤、细胞核基因突变等。 接触过甲醛的皮肤可能出现过敏现象，严重者甚至会导致[肝炎 、[肺炎]及[肾脏]损害。 对婴幼儿的孕妇危害更加严重，可导致怀孕期间胎儿停止生长发育，心脑发育不全，严重可导致胎儿畸形和流产等严重后果。 以下摘自维基百科 甲醛（英语：Formaldehyde），化学式HCHO，质量30.03，又称蚁醛，天然存在的有机化合物。无色的刺激性气体，对人眼、鼻等有刺激作用。体积百分比40%的甲醛水溶液称100...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%94%B2%E9%86%9B%E6%98%AF%E4%BB%80%E4%B9%88%E9%AC%BC-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8D%B1%E5%AE%B3/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/%E7%99%BD%E8%A1%80%E7%97%85/"><span class="badge">白血病 </span> </a>
+            <a href="/%20tags/%E7%99%8C%E7%97%87/"><span class="badge">癌症 </span> </a>
+            <a href="/%20tags/%E7%94%B2%E9%86%9B/"><span class="badge">甲醛 </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E5%A6%82%E4%BD%95%E9%A2%84%E9%98%B2%E7%99%BD%E8%A1%80%E7%97%85/">如何预防白血病？</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2019-09-23 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E7%8C%BF%E5%81%A5%E5%BA%B7/"> 猿健康 </a>
+                
+
+            </div>
+            <span class="more-meta"> 738 words </span>
+            <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E5%A6%82%E4%BD%95%E9%A2%84%E9%98%B2%E7%99%BD%E8%A1%80%E7%97%85/" class="summary-link"> 第一要素：远离诱因 远离辐射、化学（甲醛、苯类等） 避免劳累 第二要素：维持健康体重 规律性进行身体活动: ➤ 避免不动：每天进行一般身体活动（如走楼梯）、散步等。 ➤ 每周坚持至少150分钟的中度或75分钟的高强度运动，在一周中分散进行。 备注: ➤ 低强度运动：运动时呼吸节奏无明显变化，如轻度家务、慢走、太极拳； ➤ 中强度运动：运动时仍可以说话，如快走、骑车； ➤ 高强度运动：运动时仅可说出少数词语，如爬山、跑步。 注意： 运动量因人而异，不要过度锻炼和高强度运动，过度锻炼就会劳累，就会适得其反。根据自己的体质，以出汗为主，偶尔强度大一点。运动选择空气质量好的天气进行。 第三要素：健康饮食 维持富含水果、蔬菜、全谷物、低红肉、低加工肉类、低糖、低脂的健康饮食。不推荐通过日常服用膳食补充剂来实现癌症控制。 推荐的饮食成分 三分之二（或更多）的蔬菜，水果，全谷物或大豆 三分之一（或更少）的动物蛋白 宜食食物 ➤ 适当补充高热量食物，如巧...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E5%A6%82%E4%BD%95%E9%A2%84%E9%98%B2%E7%99%BD%E8%A1%80%E7%97%85/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/%E7%99%BD%E8%A1%80%E7%97%85/"><span class="badge">白血病 </span> </a>
+            <a href="/%20tags/%E7%99%8C%E7%97%87/"><span class="badge">癌症 </span> </a>
+            <a href="/%20tags/%E7%99%BD%E8%A1%80%E7%97%85%E7%97%85%E5%9B%A0/"><span class="badge">白血病病因 </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%99%BD%E8%A1%80%E7%97%85%E6%9C%89%E5%93%AA%E4%BA%9B%E7%97%87%E7%8A%B6/">白血病有哪些症状？</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2019-09-22 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E7%8C%BF%E5%81%A5%E5%BA%B7/"> 猿健康 </a>
+                
+
+            </div>
+            <span class="more-meta"> 573 words </span>
+            <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%99%BD%E8%A1%80%E7%97%85%E6%9C%89%E5%93%AA%E4%BA%9B%E7%97%87%E7%8A%B6/" class="summary-link"> 尽管并非所有的白血病患者都会出现以下症状，但白血病最常见的表征有： 发烧（Fever） 无法解释的体重或食欲骤降（Unexplained weight or appetite loss） 虚弱或疲累（Weakness or fatigue） 肋骨下方有疼痛或饱腹感（Pain or fullness below the ribs） 呼吸短促（Shortness of breath） 容易淤青（Easy bruising） 夜间盗汗（Night sweats） 以上症状也可能是其它程度较轻疾病的症状，但如果您出现以上任何表征，请立即就医。医生会为您开具两种最常见的白血病检测：全血计数检测（complete blood count test）或骨髓穿刺活检（bone marrow aspiration biopsy）。 白血病易侵袭“一老一小” 白血病是常见的恶性肿瘤，根据年龄发病率可发现，5岁以下和15~20岁间有两个小高峰;40岁以后，随年龄增长发病率逐渐升高，60岁以后属发病高峰年龄。 白血病一般分为急性和慢性两大类。其中，急性白血病常表现为突然高烧、...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%99%BD%E8%A1%80%E7%97%85%E6%9C%89%E5%93%AA%E4%BA%9B%E7%97%87%E7%8A%B6/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/%E7%99%BD%E8%A1%80%E7%97%85/"><span class="badge">白血病 </span> </a>
+            <a href="/%20tags/%E7%99%8C%E7%97%87/"><span class="badge">癌症 </span> </a>
+            <a href="/%20tags/%E7%99%BD%E8%A1%80%E7%97%85%E7%97%85%E5%9B%A0/"><span class="badge">白血病病因 </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%99%BD%E8%A1%80%E7%97%85%E6%9C%80%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AF%B1%E5%9B%A0/">白血病诱因</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2019-09-21 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E7%8C%BF%E5%81%A5%E5%BA%B7/"> 猿健康 </a>
+                
+
+            </div>
+            <span class="more-meta"> 1939 words </span>
+            <span class="more-meta"> 4 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%99%BD%E8%A1%80%E7%97%85%E6%9C%80%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AF%B1%E5%9B%A0/" class="summary-link"> 远离辐射、化学（甲醛、苯类等） 避免劳累。 白血病最常见的也是最容易接触或发生的诱因就是化学因素和劳累。 在化学物质中「苯」是医学界公认的诱发白血病物质，而甲醛、苯乙烯则被国际卫生组织确认为高危致癌物。 白血病更多的是诱因的综合，不是单一的诱因，具备2个以上诱因条件就要注意了。 化学因素诱因最大之一 在我们日常生活中，家庭装修污染、染发、穿衣、家用杀虫剂、汽油等均可能导致血液异常。已经证实甲醛可以导致人发生鼻咽癌。如长期生活在有污染物质的室内，大量吸入有毒物质，将可能诱发血液异常。使用染发剂不当对健康不利，染发剂中的苯二胺等有毒物质，可以在染发时经过皮肤吸收在体内蓄积，引起DNA损伤和细胞突变。临床上见一些白血病等血液疾病患者有多年染发的既往史。有染发史的妇女患淋巴瘤的可能性增加70%，发生白血病的可能比不染发的妇女高3.8倍，以致有人提出“染发型白血病”观点。虽然，染发剂引起白血病的问题仍有争论，也...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%99%BD%E8%A1%80%E7%97%85%E6%9C%80%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AF%B1%E5%9B%A0/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/%E7%99%BD%E8%A1%80%E7%97%85/"><span class="badge">白血病 </span> </a>
+            <a href="/%20tags/%E7%99%8C%E7%97%87/"><span class="badge">癌症 </span> </a>
+            <a href="/%20tags/%E7%99%BD%E8%A1%80%E7%97%85%E7%97%85%E5%9B%A0/"><span class="badge">白血病病因 </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%99%BD%E8%A1%80%E7%97%85%E7%9A%84%E7%97%85%E5%9B%A0/">白血病病因？</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2019-09-21 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E7%8C%BF%E5%81%A5%E5%BA%B7/"> 猿健康 </a>
+                
+
+            </div>
+            <span class="more-meta"> 1027 words </span>
+            <span class="more-meta"> 3 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%99%BD%E8%A1%80%E7%97%85%E7%9A%84%E7%97%85%E5%9B%A0/" class="summary-link"> 远离辐射、化学（甲醛、苯类等），避免劳累 白血病更多的是诱因的综合，不是单一的诱因，具备2个以上诱因条件就要注意了。 【摘自白血病原因】 白血病多数类型病因不清。辐射暴露、某些化疗或一些化学物质（诸如苯）可以增加某些类型白血病的风险，但受累人群中仅有极少数会出现白血病。某些遗传性疾病，诸如唐氏综合征和范科尼贫血，也增加其风险。有些人患白血病是由染色体异常引起。人类 T 淋巴细胞病毒 1 (human T lymphotropic virus 1, HTLV-1) 与导致艾滋病的病毒类似，它被高度怀疑是一种少见类型的淋巴细胞白血病——T 细胞白血病的病因。埃-巴二氏病毒感染（也可引起单核细胞增多症）与一种侵袭性淋巴细胞白血病——Burkitt 白血病相关。 【摘自来自知乎】 作者：清灵 链接：https://www.zhihu.com/question/26102980/answer/32568940 来源：知乎 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。 白...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E7%8C%BF%E5%81%A5%E5%BA%B7/%E7%99%BD%E8%A1%80%E7%97%85%E7%9A%84%E7%97%85%E5%9B%A0/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/%E7%99%BD%E8%A1%80%E7%97%85/"><span class="badge">白血病 </span> </a>
+            <a href="/%20tags/%E7%99%8C%E7%97%87/"><span class="badge">癌症 </span> </a>
+            <a href="/%20tags/%E7%99%BD%E8%A1%80%E7%97%85%E7%97%85%E5%9B%A0/"><span class="badge">白血病病因 </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+    </section>
+    
+    <nav class="pagination">
+        
+        
+            <a class="next" href="/page/2/">
+                <span class="next-text">Next</span>
+                <i class="iconfont icon-right"></i>
+            </a>
+        
+    </nav>
+
+        </div>
+        
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2023
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

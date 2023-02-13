@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>领域模型 on 多少光年</title>
+    <link>http://tietang.wang/categories/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B/</link>
+    <description>Recent content in 领域模型 on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 21 Feb 2016 20:20:42 +0000</lastBuildDate><atom:link href="http://tietang.wang/categories/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>领域模型的价值</title>
+      <link>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BB%B7%E5%80%BC/</link>
+      <pubDate>Sun, 21 Feb 2016 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BB%B7%E5%80%BC/</guid>
+      <description>价值 提供什么服务： 什么来体现服务：运行方式，运行过程和业务逻辑 提供的质量：如何服务，要做的事情 传统数据库为中心 业务逻辑在数据库上，结合系统代码来保证业务逻辑的实现。 以数据库为中心的开发如何的OO﹐如何多的设计模式﹐架构体系如何优美﹐它始终离不开数据库。 OO|面向对象 表现点则是直接在对象本身上﹐在于对象之间真正的交互过程﹐结果也是保留在对象的属性和对象与对象的关系中 逻辑直接存在于对象上﹐这与现实情况是吻合的。 领域模型是一种思维﹐是一种方法,是在系统分析阶段使用﹐而不是在代码中进行纯设计时的工具。不是为了OO而领域﹐不是为了最终要新增数据库而领域。在没有理解领域模型本质时，任何编码都得不到收益。 在分析或架构一个系统时，要得出系统的服务和服务场景，即user case。 领域模型的特点 领域模型是对具有某个边界的领域的一个抽象，反映了领域内用户业务需求的本质；领域模型是有边界的，只反应了我们在领域内所</description>
+    </item>
+    
+  </channel>
+</rss>

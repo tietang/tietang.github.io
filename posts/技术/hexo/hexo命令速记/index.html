@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Hexo命令速记 - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="简写 1 2 3 4 5 hexo n &amp;#34;我的博客&amp;#34; == hexo new &amp;#34;我的博客&amp;#34; #新建文章 hexo p == hexo publish hexo g == hexo generate#生成 hexo s == hexo server #启动服务预览 hexo d == hexo deploy#部署 服务器 1 2 3 4 5 6 7 8 9 hexo server #Hexo 会监视文件变动并自动更新，您无须重启服务器。 hexo server -s #静态模式 hexo server -p 5000 #更改端口 hexo server -i 192.168.1.1 #自定义 IP hexo clean #清除缓存 网页正常情况下可以忽略此条命令 hexo g #生成静态网页 hexo d #开始部署 hexo d -g #部署前先生成今天网页 监视文件变动 1 2 hexo generate #使用 Hexo 生成静态文件快速而且简单 hexo generate --watch #监视文件变动 完成后部署 1 2 3 4 5 两个命令的作用是相同的 hexo generate --deploy hexo deploy --generate hexo deploy -g hexo server -g 模版 1 2 3 4 5 6 7 8 9 hexo new &amp;#34;postName&amp;#34; #新建文章 hexo new page &amp;#34;pageName&amp;#34; #新建页面 hexo generate #生成静态页面至public目录 hexo server #开启预览访问端口（默认端口4000，&amp;#39;ctrl &#43; c&amp;#39;关闭server） hexo deploy #将.deploy目录部署到GitHub hexo new [layout] &amp;lt;title&amp;gt; hexo new photo &amp;#34;My Gallery&amp;#34; hexo new &amp;#34;Hello"/><meta name="keywords"
+          content="微服务, hystrix, 铁汤"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/hexo/hexo%E5%91%BD%E4%BB%A4%E9%80%9F%E8%AE%B0/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Hexo命令速记" />
+<meta property="og:description" content="简写 1 2 3 4 5 hexo n &#34;我的博客&#34; == hexo new &#34;我的博客&#34; #新建文章 hexo p == hexo publish hexo g == hexo generate#生成 hexo s == hexo server #启动服务预览 hexo d == hexo deploy#部署 服务器 1 2 3 4 5 6 7 8 9 hexo server #Hexo 会监视文件变动并自动更新，您无须重启服务器。 hexo server -s #静态模式 hexo server -p 5000 #更改端口 hexo server -i 192.168.1.1 #自定义 IP hexo clean #清除缓存 网页正常情况下可以忽略此条命令 hexo g #生成静态网页 hexo d #开始部署 hexo d -g #部署前先生成今天网页 监视文件变动 1 2 hexo generate #使用 Hexo 生成静态文件快速而且简单 hexo generate --watch #监视文件变动 完成后部署 1 2 3 4 5 两个命令的作用是相同的 hexo generate --deploy hexo deploy --generate hexo deploy -g hexo server -g 模版 1 2 3 4 5 6 7 8 9 hexo new &#34;postName&#34; #新建文章 hexo new page &#34;pageName&#34; #新建页面 hexo generate #生成静态页面至public目录 hexo server #开启预览访问端口（默认端口4000，&#39;ctrl &#43; c&#39;关闭server） hexo deploy #将.deploy目录部署到GitHub hexo new [layout] &lt;title&gt; hexo new photo &#34;My Gallery&#34; hexo new &#34;Hello" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/hexo/hexo%E5%91%BD%E4%BB%A4%E9%80%9F%E8%AE%B0/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2016-02-21T22:31:12+00:00" />
+<meta property="article:modified_time" content="2016-02-21T22:31:12+00:00" />
+
+<meta itemprop="name" content="Hexo命令速记">
+<meta itemprop="description" content="简写 1 2 3 4 5 hexo n &#34;我的博客&#34; == hexo new &#34;我的博客&#34; #新建文章 hexo p == hexo publish hexo g == hexo generate#生成 hexo s == hexo server #启动服务预览 hexo d == hexo deploy#部署 服务器 1 2 3 4 5 6 7 8 9 hexo server #Hexo 会监视文件变动并自动更新，您无须重启服务器。 hexo server -s #静态模式 hexo server -p 5000 #更改端口 hexo server -i 192.168.1.1 #自定义 IP hexo clean #清除缓存 网页正常情况下可以忽略此条命令 hexo g #生成静态网页 hexo d #开始部署 hexo d -g #部署前先生成今天网页 监视文件变动 1 2 hexo generate #使用 Hexo 生成静态文件快速而且简单 hexo generate --watch #监视文件变动 完成后部署 1 2 3 4 5 两个命令的作用是相同的 hexo generate --deploy hexo deploy --generate hexo deploy -g hexo server -g 模版 1 2 3 4 5 6 7 8 9 hexo new &#34;postName&#34; #新建文章 hexo new page &#34;pageName&#34; #新建页面 hexo generate #生成静态页面至public目录 hexo server #开启预览访问端口（默认端口4000，&#39;ctrl &#43; c&#39;关闭server） hexo deploy #将.deploy目录部署到GitHub hexo new [layout] &lt;title&gt; hexo new photo &#34;My Gallery&#34; hexo new &#34;Hello"><meta itemprop="datePublished" content="2016-02-21T22:31:12+00:00" />
+<meta itemprop="dateModified" content="2016-02-21T22:31:12+00:00" />
+<meta itemprop="wordCount" content="1101">
+<meta itemprop="keywords" content="Hexo," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hexo命令速记"/>
+<meta name="twitter:description" content="简写 1 2 3 4 5 hexo n &#34;我的博客&#34; == hexo new &#34;我的博客&#34; #新建文章 hexo p == hexo publish hexo g == hexo generate#生成 hexo s == hexo server #启动服务预览 hexo d == hexo deploy#部署 服务器 1 2 3 4 5 6 7 8 9 hexo server #Hexo 会监视文件变动并自动更新，您无须重启服务器。 hexo server -s #静态模式 hexo server -p 5000 #更改端口 hexo server -i 192.168.1.1 #自定义 IP hexo clean #清除缓存 网页正常情况下可以忽略此条命令 hexo g #生成静态网页 hexo d #开始部署 hexo d -g #部署前先生成今天网页 监视文件变动 1 2 hexo generate #使用 Hexo 生成静态文件快速而且简单 hexo generate --watch #监视文件变动 完成后部署 1 2 3 4 5 两个命令的作用是相同的 hexo generate --deploy hexo deploy --generate hexo deploy -g hexo server -g 模版 1 2 3 4 5 6 7 8 9 hexo new &#34;postName&#34; #新建文章 hexo new page &#34;pageName&#34; #新建页面 hexo generate #生成静态页面至public目录 hexo server #开启预览访问端口（默认端口4000，&#39;ctrl &#43; c&#39;关闭server） hexo deploy #将.deploy目录部署到GitHub hexo new [layout] &lt;title&gt; hexo new photo &#34;My Gallery&#34; hexo new &#34;Hello"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title">Hexo命令速记</h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 2016-02-21 </span>
+
+                <div class="post-category">
+                    <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                        <a href="/categories/hexo/"> Hexo </a>
+                        
+                    <a href="/tags/hexo/">
+                                <span class="badge">Hexo </span>
+                            </a>
+                        
+                </div>
+                    <span class="more-meta"> 1101 words </span>
+                    <span class="more-meta"> 3 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#简写">简写</a></li>
+    <li><a href="#服务器">服务器</a></li>
+    <li><a href="#监视文件变动">监视文件变动</a></li>
+    <li><a href="#完成后部署">完成后部署</a></li>
+    <li><a href="#模版">模版</a></li>
+    <li><a href="#常用指令">常用指令</a></li>
+    <li><a href="#安装升级">安装升级</a></li>
+    <li><a href="#init">init</a></li>
+    <li><a href="#new">new</a></li>
+    <li><a href="#generate">generate</a></li>
+    <li><a href="#publish">publish</a></li>
+    <li><a href="#server">server</a></li>
+    <li><a href="#deploy">deploy</a></li>
+    <li><a href="#render">render</a></li>
+    <li><a href="#migrate">migrate</a></li>
+    <li><a href="#clean">clean</a></li>
+    <li><a href="#list">list</a></li>
+    <li><a href="#version">version</a></li>
+    <li><a href="#选项">选项</a>
+      <ul>
+        <li><a href="#安全模式">安全模式</a></li>
+        <li><a href="#调试模式">调试模式</a></li>
+        <li><a href="#简洁模式">简洁模式</a></li>
+        <li><a href="#自定义配置文件的路径">自定义配置文件的路径</a></li>
+        <li><a href="#显示草稿">显示草稿</a></li>
+        <li><a href="#自定义-cwd">自定义 CWD</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+            <div>
+                <img src="http://tietang.wang//imgs/DPP_0004.JPG">
+            </div>
+        
+        
+        <div class="post-content">
+            <h2 id="简写">简写</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">hexo n &#34;我的博客&#34; == hexo new &#34;我的博客&#34; #新建文章
+</span></span><span class="line"><span class="cl">hexo p == hexo publish
+</span></span><span class="line"><span class="cl">hexo g == hexo generate#生成
+</span></span><span class="line"><span class="cl">hexo s == hexo server #启动服务预览
+</span></span><span class="line"><span class="cl">hexo d == hexo deploy#部署
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="服务器">服务器</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">hexo server #Hexo 会监视文件变动并自动更新，您无须重启服务器。
+</span></span><span class="line"><span class="cl">hexo server -s #静态模式
+</span></span><span class="line"><span class="cl">hexo server -p 5000 #更改端口
+</span></span><span class="line"><span class="cl">hexo server -i 192.168.1.1 #自定义 IP
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">hexo clean #清除缓存 网页正常情况下可以忽略此条命令
+</span></span><span class="line"><span class="cl">hexo g #生成静态网页
+</span></span><span class="line"><span class="cl">hexo d #开始部署
+</span></span><span class="line"><span class="cl">hexo d -g #部署前先生成今天网页
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="监视文件变动">监视文件变动</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">hexo generate #使用 Hexo 生成静态文件快速而且简单
+</span></span><span class="line"><span class="cl">hexo generate --watch #监视文件变动
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="完成后部署">完成后部署</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">两个命令的作用是相同的
+</span></span><span class="line"><span class="cl">hexo generate --deploy
+</span></span><span class="line"><span class="cl">hexo deploy --generate
+</span></span><span class="line"><span class="cl">hexo deploy -g
+</span></span><span class="line"><span class="cl">hexo server -g
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="模版">模版</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">hexo new &#34;postName&#34; #新建文章
+</span></span><span class="line"><span class="cl">hexo new page &#34;pageName&#34; #新建页面
+</span></span><span class="line"><span class="cl">hexo generate #生成静态页面至public目录
+</span></span><span class="line"><span class="cl">hexo server #开启预览访问端口（默认端口4000，&#39;ctrl + c&#39;关闭server）
+</span></span><span class="line"><span class="cl">hexo deploy #将.deploy目录部署到GitHub
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">hexo new [layout] &lt;title&gt;
+</span></span><span class="line"><span class="cl">hexo new photo &#34;My Gallery&#34;
+</span></span><span class="line"><span class="cl">hexo new &#34;Hello World&#34; --lang tw
+</span></span></code></pre></td></tr></table>
+</div>
+</div><table>
+<thead>
+<tr>
+<th>变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>layout</td>
+<td>布局</td>
+</tr>
+<tr>
+<td>title</td>
+<td>标题</td>
+</tr>
+<tr>
+<td>date</td>
+<td>文件建立日期</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">layout: post
+</span></span><span class="line"><span class="cl">date: 2014-03-03 19:07:43
+</span></span><span class="line"><span class="cl">comments: true
+</span></span><span class="line"><span class="cl">categories: Blog
+</span></span><span class="line"><span class="cl">tags: [Hexo]
+</span></span><span class="line"><span class="cl">keywords: Hexo, Blog
+</span></span><span class="line"><span class="cl">description: 生命在于折腾，又把博客折腾到Hexo了。给Hexo点赞。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="常用指令">常用指令</h2>
+<h2 id="安装升级">安装升级</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">npm install hexo -g #安装  
+</span></span><span class="line"><span class="cl">npm update hexo -g #升级  
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="init">init</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo init <span class="o">[</span>folder<span class="o">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>新建一个网站。如果没有设置 <code>folder</code> ，Hexo 默认在目前的文件夹建立网站。</p>
+<h2 id="new">new</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo new <span class="o">[</span>layout<span class="o">]</span> &lt;title&gt;
+</span></span><span class="line"><span class="cl">$ hexo n <span class="o">[</span>layout<span class="o">]</span> &lt;title&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>新建一篇文章。如果没有设置 <code>layout</code> 的话，默认使用 <a href="configuration.html">_config.yml</a> 中的 <code>default_layout</code> 参数代替。如果标题包含空格的话，请使用引号括起来。</p>
+<h2 id="generate">generate</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo generate
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>生成静态文件。</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-d</code>, <code>--deploy</code></td>
+<td>文件生成后立即部署网站</td>
+</tr>
+<tr>
+<td><code>-w</code>, <code>--watch</code></td>
+<td>监视文件变动</td>
+</tr>
+</tbody>
+</table>
+<h2 id="publish">publish</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo publish <span class="o">[</span>layout<span class="o">]</span> &lt;filename&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>发表草稿。</p>
+<h2 id="server">server</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo server
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>启动服务器。默认情况下，访问网址为： <code>http://localhost:4000/</code>。</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-p</code>, <code>--port</code></td>
+<td>重设端口</td>
+</tr>
+<tr>
+<td><code>-s</code>, <code>--static</code></td>
+<td>只使用静态文件</td>
+</tr>
+<tr>
+<td><code>-l</code>, <code>--log</code></td>
+<td>启动日记记录，使用覆盖记录格式</td>
+</tr>
+</tbody>
+</table>
+<h2 id="deploy">deploy</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo deploy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>部署网站。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-g</code>, <code>--generate</code></td>
+<td>部署之前预先生成静态文件</td>
+</tr>
+</tbody>
+</table>
+<h2 id="render">render</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo render &lt;file1&gt; <span class="o">[</span>file2<span class="o">]</span> ...
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>渲染文件。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-o</code>, <code>--output</code></td>
+<td>设置输出路径</td>
+</tr>
+</tbody>
+</table>
+<h2 id="migrate">migrate</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo migrate &lt;type&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>从其他博客系统 <a href="migration.html">迁移内容</a>。</p>
+<h2 id="clean">clean</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo clean
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>清除缓存文件 (<code>db.json</code>) 和已生成的静态文件 (<code>public</code>)。</p>
+<h2 id="list">list</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo list &lt;type&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>列出网站资料。</p>
+<h2 id="version">version</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo version
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>显示 Hexo 版本。</p>
+<h2 id="选项">选项</h2>
+<h3 id="安全模式">安全模式</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo --safe
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在安全模式下，不会载入插件和脚本。当您在安装新插件遭遇问题时，可以尝试以安全模式重新执行。</p>
+<h3 id="调试模式">调试模式</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo --debug
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在终端中显示调试信息并记录到 <code>debug.log</code>。当您碰到问题时，可以尝试用调试模式重新执行一次，并 <a href="https://github.com/hexojs/hexo/issues/new">提交调试信息到 GitHub</a>。</p>
+<h3 id="简洁模式">简洁模式</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo --silent
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>隐藏终端信息。</p>
+<h3 id="自定义配置文件的路径">自定义配置文件的路径</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo --config custom.yml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>自定义配置文件的路径，执行后将不再使用 <code>_config.yml</code>。</p>
+<h3 id="显示草稿">显示草稿</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo --draft
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>显示 <code>source/_drafts</code> 文件夹中的草稿文章。</p>
+<h3 id="自定义-cwd">自定义 CWD</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hexo --cwd /path/to/cwd
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>自定义当前工作目录（Current working directory）的路径。</p>
+
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2016-02-21
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            <div class="post-tags">
+                    <a href="/tags/hexo/">Hexo</a>
+                    </div>
+            <nav class="post-nav">
+                <a class="prev" href="/posts/%E8%BD%AC%E8%BD%BD/http2.0/%E8%A3%85%E8%BD%BDhttp2-0%E7%9A%84%E5%A5%87%E5%A6%99%E6%97%A5%E5%B8%B8/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default">装载：HTTP2.0的奇妙日常</span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/%E6%8A%80%E6%9C%AF/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BB%B7%E5%80%BC/">
+                        <span class="next-text nav-default">领域模型的价值</span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2016-02-21 22:31:12 \u002b0000 UTC',
+        title: 'Hexo命令速记',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2023
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

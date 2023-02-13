@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>负载均衡之加权轮询算法 - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="负载均衡之加权轮询算法 算法举例说明 服务实例 权重 127.0.0.1:8001 1 127.0.0.1:8002 2 127.0.0.1:8003 3 共有三个实例，总权重为6，那么实现效果应该为每调用6次： 每个实例应该被调用权重次数 权重数大的优先被调用 根据以上说明，那么进行排列组合： 先按照权重大小排序 把权重数做为调用次数排列 排列的结果是这样的： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8003 3 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8002 2 6 127.0.0.1:8001 1 貌似没问题，但每个实例调用不是交替的，分布不够均匀，改进一下重新排列组合： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8003 3 6 127.0.0.1:8001 1 或者 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8001 1 5 127.0.0.1:8003 3 6 127.0.0.1:8002 2 2个权重变量：weight，current_weight weight 配置的固定不变的权重 current_weight 会动态调整的权重，初始化为0，运行时动态调整。 选取开始时，先重新调整current_weight= current_weight&#43;weight，然后通过current_weight值从大到小排序，选择current_weight值最大"/><meta name="keywords"
+          content="负载均衡,加权轮询,算法"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B9%8B%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2%E7%AE%97%E6%B3%95/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="负载均衡之加权轮询算法" />
+<meta property="og:description" content="负载均衡之加权轮询算法 算法举例说明 服务实例 权重 127.0.0.1:8001 1 127.0.0.1:8002 2 127.0.0.1:8003 3 共有三个实例，总权重为6，那么实现效果应该为每调用6次： 每个实例应该被调用权重次数 权重数大的优先被调用 根据以上说明，那么进行排列组合： 先按照权重大小排序 把权重数做为调用次数排列 排列的结果是这样的： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8003 3 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8002 2 6 127.0.0.1:8001 1 貌似没问题，但每个实例调用不是交替的，分布不够均匀，改进一下重新排列组合： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8003 3 6 127.0.0.1:8001 1 或者 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8001 1 5 127.0.0.1:8003 3 6 127.0.0.1:8002 2 2个权重变量：weight，current_weight weight 配置的固定不变的权重 current_weight 会动态调整的权重，初始化为0，运行时动态调整。 选取开始时，先重新调整current_weight= current_weight&#43;weight，然后通过current_weight值从大到小排序，选择current_weight值最大" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B9%8B%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2%E7%AE%97%E6%B3%95/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2016-06-16T09:06:33+00:00" />
+<meta property="article:modified_time" content="2016-06-16T09:06:33+00:00" />
+
+<meta itemprop="name" content="负载均衡之加权轮询算法">
+<meta itemprop="description" content="负载均衡之加权轮询算法 算法举例说明 服务实例 权重 127.0.0.1:8001 1 127.0.0.1:8002 2 127.0.0.1:8003 3 共有三个实例，总权重为6，那么实现效果应该为每调用6次： 每个实例应该被调用权重次数 权重数大的优先被调用 根据以上说明，那么进行排列组合： 先按照权重大小排序 把权重数做为调用次数排列 排列的结果是这样的： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8003 3 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8002 2 6 127.0.0.1:8001 1 貌似没问题，但每个实例调用不是交替的，分布不够均匀，改进一下重新排列组合： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8003 3 6 127.0.0.1:8001 1 或者 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8001 1 5 127.0.0.1:8003 3 6 127.0.0.1:8002 2 2个权重变量：weight，current_weight weight 配置的固定不变的权重 current_weight 会动态调整的权重，初始化为0，运行时动态调整。 选取开始时，先重新调整current_weight= current_weight&#43;weight，然后通过current_weight值从大到小排序，选择current_weight值最大"><meta itemprop="datePublished" content="2016-06-16T09:06:33+00:00" />
+<meta itemprop="dateModified" content="2016-06-16T09:06:33+00:00" />
+<meta itemprop="wordCount" content="536">
+<meta itemprop="keywords" content="负载均衡,加权轮询,轮询,算法," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="负载均衡之加权轮询算法"/>
+<meta name="twitter:description" content="负载均衡之加权轮询算法 算法举例说明 服务实例 权重 127.0.0.1:8001 1 127.0.0.1:8002 2 127.0.0.1:8003 3 共有三个实例，总权重为6，那么实现效果应该为每调用6次： 每个实例应该被调用权重次数 权重数大的优先被调用 根据以上说明，那么进行排列组合： 先按照权重大小排序 把权重数做为调用次数排列 排列的结果是这样的： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8003 3 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8002 2 6 127.0.0.1:8001 1 貌似没问题，但每个实例调用不是交替的，分布不够均匀，改进一下重新排列组合： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8003 3 6 127.0.0.1:8001 1 或者 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8001 1 5 127.0.0.1:8003 3 6 127.0.0.1:8002 2 2个权重变量：weight，current_weight weight 配置的固定不变的权重 current_weight 会动态调整的权重，初始化为0，运行时动态调整。 选取开始时，先重新调整current_weight= current_weight&#43;weight，然后通过current_weight值从大到小排序，选择current_weight值最大"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title">负载均衡之加权轮询算法</h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 2016-06-16 </span>
+
+                <div class="post-category">
+                    <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                        <a href="/categories/%E7%AE%97%E6%B3%95/"> 算法 </a>
+                        
+                    <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
+                                <span class="badge">负载均衡 </span>
+                            </a>
+                        <a href="/tags/%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2/">
+                                <span class="badge">加权轮询 </span>
+                            </a>
+                        <a href="/tags/%E8%BD%AE%E8%AF%A2/">
+                                <span class="badge">轮询 </span>
+                            </a>
+                        <a href="/tags/%E7%AE%97%E6%B3%95/">
+                                <span class="badge">算法 </span>
+                            </a>
+                        
+                </div>
+                    <span class="more-meta"> 536 words </span>
+                    <span class="more-meta"> 2 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#算法举例说明">算法举例说明</a>
+      <ul>
+        <li><a href="#共有三个实例总权重为6那么实现效果应该为每调用6次">共有三个实例，总权重为6，那么实现效果应该为每调用6次：</a></li>
+        <li><a href="#根据以上说明那么进行排列组合">根据以上说明，那么进行排列组合：</a></li>
+        <li><a href="#weight">weight</a></li>
+        <li><a href="#current_weight">current_weight</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+            <div>
+                <img src="http://tietang.wang//imgs/my-pic-P60606-172810.jpg?imageView2/1/w/800/h/600/q/75%7cwatermark/2/text/Qnkg6ZOB5rGk/font/5a6L5L2T/fontsize/500/fill/I0VGRUZFRg==/dissolve/100/gravity/SouthEast/dx/30/dy/30">
+            </div>
+        
+        
+        <div class="post-content">
+            <h1 id="负载均衡之加权轮询算法">负载均衡之加权轮询算法</h1>
+<h2 id="算法举例说明">算法举例说明</h2>
+<table>
+<thead>
+<tr>
+<th>服务实例</th>
+<th>权重</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>127.0.0.1:8001</td>
+<td>1</td>
+</tr>
+<tr>
+<td>127.0.0.1:8002</td>
+<td>2</td>
+</tr>
+<tr>
+<td>127.0.0.1:8003</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<h3 id="共有三个实例总权重为6那么实现效果应该为每调用6次">共有三个实例，总权重为6，那么实现效果应该为每调用6次：</h3>
+<ul>
+<li>每个实例应该被调用权重次数</li>
+<li>权重数大的优先被调用</li>
+</ul>
+<h3 id="根据以上说明那么进行排列组合">根据以上说明，那么进行排列组合：</h3>
+<ul>
+<li>先按照权重大小排序</li>
+<li>把权重数做为调用次数排列</li>
+</ul>
+<p><strong>排列的结果是这样的：</strong></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>服务实例</th>
+<th>权重</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>127.0.0.1:8003</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>127.0.0.1:8003</td>
+<td>3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>127.0.0.1:8003</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>127.0.0.1:8002</td>
+<td>2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>127.0.0.1:8002</td>
+<td>2</td>
+</tr>
+<tr>
+<td>6</td>
+<td>127.0.0.1:8001</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>貌似没问题，但每个实例调用不是交替的，分布不够均匀，改进一下重新排列组合：</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>服务实例</th>
+<th>权重</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>127.0.0.1:8003</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>127.0.0.1:8002</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>127.0.0.1:8003</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>127.0.0.1:8002</td>
+<td>2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>127.0.0.1:8003</td>
+<td>3</td>
+</tr>
+<tr>
+<td>6</td>
+<td>127.0.0.1:8001</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>或者</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>服务实例</th>
+<th>权重</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>127.0.0.1:8003</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>127.0.0.1:8002</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>127.0.0.1:8003</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>127.0.0.1:8001</td>
+<td>1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>127.0.0.1:8003</td>
+<td>3</td>
+</tr>
+<tr>
+<td>6</td>
+<td>127.0.0.1:8002</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>2个权重变量：weight，current_weight</p>
+<h3 id="weight">weight</h3>
+<p>配置的固定不变的权重</p>
+<h3 id="current_weight">current_weight</h3>
+<p>会动态调整的权重，初始化为0，运行时动态调整。
+选取开始时，先重新调整current_weight= current_weight+weight，然后通过current_weight值从大到小排序，选择current_weight值最大的（实际编程中不一定要排序，可以直接取最大的）；
+然后重新计算被选择的current_weight值= current_weight-总weight。</p>
+<p>下面是用Lua脚本实现的该算法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">function</span> <span class="nc">_M</span><span class="p">:</span><span class="nf">next</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">   <span class="kd">local</span> <span class="n">servers</span><span class="o">=</span><span class="n">self.servers</span>
+</span></span><span class="line"><span class="cl">	<span class="kd">local</span> <span class="n">totalWeight</span> <span class="o">=</span> <span class="n">totalWeight</span><span class="p">(</span><span class="n">servers</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="kr">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="kr">in</span> <span class="n">pairs</span><span class="p">(</span><span class="n">servers</span><span class="p">)</span> <span class="kr">do</span>
+</span></span><span class="line"><span class="cl">   	<span class="n">v.cweight</span><span class="o">=</span><span class="n">v.weight</span><span class="o">+</span><span class="n">v.cweight</span>
+</span></span><span class="line"><span class="cl">   <span class="kr">end</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="n">table.sort</span><span class="p">(</span> <span class="n">servers</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">   	<span class="kr">function</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">   		<span class="kr">return</span> <span class="n">a.cweight</span><span class="o">&gt;</span><span class="n">b.cweight</span>
+</span></span><span class="line"><span class="cl">   	<span class="kr">end</span> 
+</span></span><span class="line"><span class="cl">   <span class="p">)</span>
+</span></span><span class="line"><span class="cl">   <span class="n">selected</span><span class="o">=</span><span class="n">servers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">   <span class="n">selected.cweight</span><span class="o">=</span><span class="n">selected.cweight</span><span class="o">-</span><span class="n">totalWeight</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="kr">return</span> <span class="n">selected</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">end</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2016-06-16
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            <div class="post-tags">
+                    <a href="/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">负载均衡</a>
+                    <a href="/tags/%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2/">加权轮询</a>
+                    <a href="/tags/%E8%BD%AE%E8%AF%A2/">轮询</a>
+                    <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+                    </div>
+            <nav class="post-nav">
+                <a class="prev" href="/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default">软件开发中的单一职责</span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/hystrix/hystrix%E7%AE%80%E4%BB%8B/">
+                        <span class="next-text nav-default">Hystrix简介</span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2016-06-16 09:06:33 \u002b0000 UTC',
+        title: '负载均衡之加权轮询算法',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2023
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

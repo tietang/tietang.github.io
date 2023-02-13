@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="Stay simple. just do it."/><meta name="keywords"
+          content="微服务, hystrix, 铁汤"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/"/>
+    <link href="http://tietang.wang/index.xml" rel="alternate" type="application/rss+xml" title="多少光年"/>
+    <link href="http://tietang.wang/index.xml" rel="feed" type="application/rss+xml" title="多少光年"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="技术博客" />
+<meta property="og:description" content="Stay simple. just do it." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://tietang.wang/" />
+
+<meta itemprop="name" content="技术博客">
+<meta itemprop="description" content="Stay simple. just do it."><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="技术博客"/>
+<meta name="twitter:description" content="Stay simple. just do it."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          
+    <section id="posts" class="posts">
+        
+        
+        
+        
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/nginx/%E5%AE%89%E8%A3%85nginxlua%E6%A8%A1%E5%9D%97/">安装Nginx Lua环境</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-11-27 </span>
+
+            <div class="post-category">
+                <a href="/categories/nginx/"> nginx </a>
+                
+
+            </div>
+            <span class="more-meta"> 583 words </span>
+            <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/nginx/%E5%AE%89%E8%A3%85nginxlua%E6%A8%A1%E5%9D%97/" class="summary-link"> 安装Nginx Lua模块 环境准备： $ yum -y install pcre-devel $ yum -y install openssl openssl-devel 下载所需文件 亦可参考官方安装指南：lua-nginx-module Installation 这是我总结的安装，供参考： 需要最新版的Nginx，LuaJIT，ngx_devel_kit，lua-nginx-module等安装文件: Nginx LuaJIT Lua或者LuaJIT都是可以的，但是出于性能的考虑，推荐安装LuaJIT ngx_devel_kit lua-nginx-module 参考命令下载： $ curl -O http://nginx.org/download/nginx-1.10.1.tar.gz $ curl -O http://luajit.org/download/LuaJIT-2.1.0-beta2.tar.gz $ curl -L -O https://github.com/simpl/ngx_devel_kit/archive/v0.2.19.tar.gz $ curl -L -O https://github.com/openresty/lua-nginx-module/archive/v0.10.5.tar.gz 安装LuaJIT $ wget http://luajit.org/download/LuaJIT-.tar.gz $ tar zxvf LuaJIT-.tar.gz $ cd LuaJIT- $ make $ sudo make install 编译安装lua-nginx-module 1 2 3 4 5 6 7 8 export LUAJIT_LIB=/usr/local/lib export LUAJIT_INC=/usr/local/include/luajit-2.1 cd nginx-1.10.1 ./configure --prefix=/opt/nginx --with-ld-opt=&#34;-Wl,-rpath,/usr/local/lib&#34; --add-module=/path/to/ngx_devel_kit-0.3.0 --add-module=/path/to/nginx/lua-nginx-module-0.10.5 make make install 动态module方式 Nginx 1.9.11 开始可以编译module为一个动态module，在执行./configure命令时用&ndash;add-dynamic-module=PATH替换&ndash;add-module=PATH。编译后可以在nginx.conf配置中使用 load_module 来动态加载这个...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/nginx/%E5%AE%89%E8%A3%85nginxlua%E6%A8%A1%E5%9D%97/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/nginx/"><span class="badge">nginx </span> </a>
+            <a href="/%20tags/lua/"><span class="badge">lua </span> </a>
+            <a href="/%20tags/openresty/"><span class="badge">openresty </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/js/tagcloud/">标签</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-11-24 </span>
+
+            <div class="post-category">
+                
+
+            </div>
+            <span class="more-meta"> 0 words </span>
+            <span class="more-meta"> 0 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/js/tagcloud/" class="summary-link"> ...</a>
+        </div>
+        <div class="read-more">
+            <a href="/js/tagcloud/" class="read-more-link">Read More...</a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/hystrix/hystrix-semaphore%E5%92%8Cthread%E9%9A%94%E7%A6%BB%E7%9A%84%E5%8C%BA%E5%88%AB/">Hystrix semaphore和thread隔离策略的区别及配置参考</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-11-18 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                <a href="/categories/hystrix/"> Hystrix </a>
+                
+
+            </div>
+            <span class="more-meta"> 1004 words </span>
+            <span class="more-meta"> 3 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/hystrix/hystrix-semaphore%E5%92%8Cthread%E9%9A%94%E7%A6%BB%E7%9A%84%E5%8C%BA%E5%88%AB/" class="summary-link"> Hystrix semaphore和thread隔离策略的区别及配置参考 通用设置说明 Hystrix所有的配置都是hystrix.command.[HystrixCommandKey]开头,其中[HystrixCommandKey]是可变的，默认是default,即hystrix.command.default；另外Hystrix内置了默认参数，如果没有配置Hystrix属性，默认参数就会被设置，其优先级： hystrix.command.[HystrixCommandKey].XXX hystrix.command.default.XXX Hystrix代码内置属性参数值 Hystrix隔离策略相关的参数 策略参数设置 execution.isolation.strategy= THREAD|SEMAPHORE execution.isolation.thread.timeoutInMilliseconds hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds 用来设置thread和semaphore两种隔离策略的超时时间，默认值是1000。 建议设置这个参数，在Hystrix 1.4.0之前，semaphore-isolated隔离策略是不能超时的，从1.4.0开始semaphore-isolated也支持超时时间了。 建议通过CommandKey设置不同微服务的超时时间,对于...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/hystrix/hystrix-semaphore%E5%92%8Cthread%E9%9A%94%E7%A6%BB%E7%9A%84%E5%8C%BA%E5%88%AB/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/spring-cloud/"><span class="badge">spring cloud </span> </a>
+            <a href="/%20tags/hystrix/"><span class="badge">Hystrix </span> </a>
+            <a href="/%20tags/semaphore/"><span class="badge">semaphore </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/hystrix/zuu%E5%8F%82%E6%95%B0l%E4%BC%98%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE/">zuul 参数调优</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-11-17 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                <a href="/categories/hystrix/"> Hystrix </a>
+                
+
+            </div>
+            <span class="more-meta"> 2404 words </span>
+            <span class="more-meta"> 5 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/hystrix/zuu%E5%8F%82%E6%95%B0l%E4%BC%98%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE/" class="summary-link"> zuul 参数调优 适用版本： spring-boot: 1.4.x.RELEASE spring-cloud：Camden.SR3 Hystrix: 1.5.6 spring-boot-tomcat 优化参数： 主要只有2个，最大和最小worker线程： 1 2 server.tomcat.max-threads=128 # Maximum amount of worker threads. server.tomcat.min-spare-threads=64 # Minimum amount of worker threads. spring-boot-undertow 优化参数： ioThreads 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接,默认取CPU核心数量,最小值为2。 Math.max(Runtime.getRuntime().availableProcessors(), 2); spring-boot 参数：server.undertow.io-threads= worker-threads 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载，默认值为io-threads*8。 spring-boot 参数：server.undertow.worker-threads= buffer buffer-size: 每块buffer的空间大小,越小的空间被利用越充分。 **buffers-per-region: ** 每个区分配的buffer数量 , 所以pool的大小是buffer-size * buffers-per-region。 directBuffers 是否分配的直接内存。 获取JVM最大可用内存maxMemory=...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/hystrix/zuu%E5%8F%82%E6%95%B0l%E4%BC%98%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/spring-cloud/"><span class="badge">spring cloud </span> </a>
+            <a href="/%20tags/hystrix/"><span class="badge">Hystrix </span> </a>
+            <a href="/%20tags/zuul/"><span class="badge">zuul </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/binlog/maxwell-mysql-binlog%E8%AE%A2%E9%98%85%E5%92%8C%E4%B8%80%E4%BA%9B%E5%9D%91/">Maxwell MySQL binlog订阅和一些坑</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-11-09 </span>
+
+            <div class="post-category">
+                <a href="/categories/mysql/"> mysql </a>
+                
+
+            </div>
+            <span class="more-meta"> 657 words </span>
+            <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/binlog/maxwell-mysql-binlog%E8%AE%A2%E9%98%85%E5%92%8C%E4%B8%80%E4%BA%9B%E5%9D%91/" class="summary-link"> maxwell 相关资源 http://maxwells-daemon.io/ https://github.com/zendesk/maxwell https://github.com/zendesk/open-replicator 配置MySQL master数据源 1 2 3 4 [mysqld] server-id=1 log-bin=master binlog_format=row 注意： MySQL必须开启了binlogs，即log-bin指定了目录 binlog_format必须是row master数据源配置REPLICATION权限： Maxwell需要储存他自己的一些状态数据，启动参数schema_database选型来指定，默认是maxwell. 1 2 GRANT ALL on maxwell.* to &#39;maxwell&#39;@&#39;%&#39; identified by &#39;123456&#39;; GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE on *.* to &#39;maxwell&#39;@&#39;%&#39;; 问题列表 当binlog文件不存在时（被删除、移除、过期） 无法启动maxwell 正在运行的maxwell**可能**会stop 在阿里云RDS下的风险问题 binlog文件清理问题 binlog文件名在切换master主备或者阿里运维维护时会重置 RDS for MySQL 的 Binlog 生成和清理规则： 参考：RDS for MySQL 之 Binlog 日志生成和清理规则 其他问题 阿里RDS的binlog在被复制完成后，会将之前的最后的binlog文件复制到其他地方，如果maxwell挂起时...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/binlog/maxwell-mysql-binlog%E8%AE%A2%E9%98%85%E5%92%8C%E4%B8%80%E4%BA%9B%E5%9D%91/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/maxwell/"><span class="badge">Maxwell </span> </a>
+            <a href="/%20tags/binlog/"><span class="badge">binlog </span> </a>
+            <a href="/%20tags/mysql/"><span class="badge">mysql </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/hystrix/resttemplate%E9%81%87%E4%B8%8Ahystrix/">RestTemplate遇上Hystrix</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-09-02 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                <a href="/categories/hystrix/"> Hystrix </a>
+                
+
+            </div>
+            <span class="more-meta"> 747 words </span>
+            <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/hystrix/resttemplate%E9%81%87%E4%B8%8Ahystrix/" class="summary-link"> RestTemplate遇上Hystrix RestTemplate集成Hystrix和Robbin 查看RestTemplate源代码，可以看到RestTemplate继承了InterceptingHttpAccessor类，InterceptingHttpAccessor类通过ClientHttpRequestInterceptor接口提供了扩展功能。 实现intercept方法，在该方法中封装HystrixCommand和Ribbon逻辑即可。 下面的代码是集成了HystrixCommand的例子： 1 2 3 4 5 6 7 8 9 10 11 12 13 @Override public ClientHttpResponse intercept( final HttpRequest request, final byte[] body, final ClientHttpRequestExecution execution) throws IOException { final URI originalUri = request.getURI(); String serviceName = mapCommandKey(originalUri); log.info(&#34;{} :{} {} &#34;, serviceName, request.getMethod().name(), originalUri.toString()); return new RestTemplateHystrixCommnad(serviceName, () -&gt; { return execution.execute(request, body); }, hystrixFallback).execute(); } 下面是集成了HystrixCommand和Ribbon的例子 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 @Override public ClientHttpResponse intercept( final HttpRequest request, final byte[] body, final ClientHttpRequestExecution execution) throws IOException { final URI originalUri = request.getURI(); String serviceName = mapCommandKey(originalUri); log.info(&#34;{} :{} {} &#34;, serviceName, request.getMethod().name(), originalUri.toString()); return new RestTemplateHystrixCommnad(serviceName, () -&gt; { return this.loadBalancer.execute(serviceName, instance -&gt; { HttpRequest...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/hystrix/resttemplate%E9%81%87%E4%B8%8Ahystrix/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/hystrix/"><span class="badge">hystrix </span> </a>
+            <a href="/%20tags/circuit-breaker/"><span class="badge">Circuit Breaker </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/">软件开发中的单一职责</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-06-28 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                <a href="/categories/%E6%9D%82%E8%B0%88/"> 杂谈 </a>
+                
+
+            </div>
+            <span class="more-meta"> 3063 words </span>
+            <span class="more-meta"> 7 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/" class="summary-link"> 软件开发中的单一职责 最近在实践微服务化过程中，对其“单一职责”原则深有体会。 那么只有微服务化才可以单一职责，才可以解耦吗？答案是否定的。 单一职责原则是这样定义的：单一的功能，并且完全封装起来。 我们做后端Java开发的，应该最熟悉的就是标准的3层架构了，尤其是使用Spring.io体系的：Controller，Service，Dao/Repository。为什么要分层？就是为了保证单一职责，数据模型的事情交给Controller，业务逻辑的事情交给Service，和数据打交道的事情就交给Dao/Repository。有时候或者有些人会分层分的更多，4层，5层，我自己也这样干过，说白了也是为了保证单一职责，3层不能满足单一职责了，耦合度高了，就分。 我们都知道一个webapp在经过一定时间的开发后，就惨不忍睹，即便是有标准的分层，页面或模板文件一大堆，最初的很清晰的3层标准架构也变味了，Cont...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/"><span class="badge">单一职责 </span> </a>
+            <a href="/%20tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/"><span class="badge">软件开发 </span> </a>
+            <a href="/%20tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="badge">微服务 </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E6%8A%80%E6%9C%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B9%8B%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2%E7%AE%97%E6%B3%95/">负载均衡之加权轮询算法</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-06-16 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                <a href="/categories/%E7%AE%97%E6%B3%95/"> 算法 </a>
+                
+
+            </div>
+            <span class="more-meta"> 536 words </span>
+            <span class="more-meta"> 2 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E6%8A%80%E6%9C%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B9%8B%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2%E7%AE%97%E6%B3%95/" class="summary-link"> 负载均衡之加权轮询算法 算法举例说明 服务实例 权重 127.0.0.1:8001 1 127.0.0.1:8002 2 127.0.0.1:8003 3 共有三个实例，总权重为6，那么实现效果应该为每调用6次： 每个实例应该被调用权重次数 权重数大的优先被调用 根据以上说明，那么进行排列组合： 先按照权重大小排序 把权重数做为调用次数排列 排列的结果是这样的： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8003 3 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8002 2 6 127.0.0.1:8001 1 貌似没问题，但每个实例调用不是交替的，分布不够均匀，改进一下重新排列组合： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8003 3 6 127.0.0.1:8001 1 或者 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8001 1 5 127.0.0.1:8003 3 6 127.0.0.1:8002 2 2个权重变量：weight，current_weight weight 配置的固定不变的权重 current_weight 会动态调整的权重，初始化为0，运行时动态调整。 选取开始时，先重新调整current_weight= current_weight+weight，然后通过current_weight值从大到小排序，选择current_weight值最大...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E6%8A%80%E6%9C%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B9%8B%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2%E7%AE%97%E6%B3%95/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"><span class="badge">负载均衡 </span> </a>
+            <a href="/%20tags/%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2/"><span class="badge">加权轮询 </span> </a>
+            <a href="/%20tags/%E8%BD%AE%E8%AF%A2/"><span class="badge">轮询 </span> </a>
+            <a href="/%20tags/%E7%AE%97%E6%B3%95/"><span class="badge">算法 </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/hystrix/hystrix%E9%99%8D%E7%BA%A7%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/">Hystrix降级模式总结</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-03-09 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                <a href="/categories/hystrix/"> Hystrix </a>
+                
+
+            </div>
+            <span class="more-meta"> 293 words </span>
+            <span class="more-meta"> 1 min read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/hystrix/hystrix%E9%99%8D%E7%BA%A7%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/" class="summary-link"> 失败回退降级模式 失败回退需要实现HystrixCommand.getFallback方法或者HystrixObservableCommand. HystrixObservableCommand()方法。 快速失败Fail Fast 如果业务异常，就抛出一个异常 静默失败Fail Silent 失败时返回一个空response或者移除业务功能，例如返回null，空字符串，空map，空list等 Fallback: Static 失败时，返回默认值来替代引起失败的原因 Fallback: Stubbed 返回替代值，还没理解 Fallback: Cache via Network 当后端服务失败时，从网络缓存获取返回值 Primary + Secondary with Fallback 故障转移，当主服务失败时，调用从服务。当从服务也失败时结合其他模式 Client Doesn’t Perform Network Access * Get-Set-Get with Request Cache Invalidation...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/hystrix/hystrix%E9%99%8D%E7%BA%A7%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/hystrix/"><span class="badge">hystrix </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/hystrix/hystrix%E7%AE%80%E4%BB%8B/">Hystrix简介</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-03-09 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                <a href="/categories/hystrix/"> Hystrix </a>
+                
+
+            </div>
+            <span class="more-meta"> 2104 words </span>
+            <span class="more-meta"> 5 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/hystrix/hystrix%E7%AE%80%E4%BB%8B/" class="summary-link"> What Is Hystrix? What Is Hystrix For? What Problem Does Hystrix Solve? What Design Principles Underlie Hystrix? How Does Hystrix Accomplish Its Goals? 在分布式环境中，不可避免的有许多服务依赖，而且有时候一些服务会失败。Hystrix library通过添加延迟容忍和容错逻辑来控制分布式服务之间的相互影响。Hystrix通过服务之间访问的隔离点阻止连锁故障，并提供了失败回退机制（fallback），来改进系统服务的弹性。 Hystrix的历史 Hystrix是在2011年由Netflix API 团队的弹性工程演变而来。在2012年，Hystrix日益完善和成熟，在Netflix的许多团队也开始采用。现在，在Netflix，每天有成千上万的线程隔离和数百亿的信号隔离被调用执行。这已经在可用性和弹性上产生了很大的改进。 下面的链接提供了围绕Hystrix和挑战，试图解决： “Making Netflix API More Resilient” “Fault Tolerance in a High Volume, Distributed System” “Performance and Fault Tolerance for the Netflix API” “Applicati...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/hystrix/hystrix%E7%AE%80%E4%BB%8B/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/hystrix/"><span class="badge">hystrix </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/wrk%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/">wrk基准测试工具安装使用</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-03-04 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                <a href="/categories/%E5%B7%A5%E5%85%B7/"> 工具 </a>
+                
+
+            </div>
+            <span class="more-meta"> 213 words </span>
+            <span class="more-meta"> 1 min read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/wrk%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" class="summary-link"> git https://github.com/wg/wrk git clone https://github.com/wg/wrk.git 安装 在makefile中33行 LDIR = deps/luajit/src LIBS := -lluajit $(LIBS) CFLAGS += -I$(LDIR) LDFLAGS += -L$(LDIR) 下面添加： LDFLAGS += -L/usr/local/opt/openssl/lib CFLAGS += -I/usr/local/opt/openssl/include make 基本使用 Basic Usage wrk -t12 -c400 -d30s http://127.0.0.1:8080/index.html This runs a benchmark for 30 seconds, using 12 threads, and keeping 400 HTTP connections open. Output: 1 2 3 4 5 6 7 8 Running 30s test @ http://127.0.0.1:8080/index.html 12 threads and 400 connections Thread Stats Avg Stdev Max +/- Stdev Latency 635.91us 0.89ms 12.92ms 93.69% Req/Sec 56.20k 8.07k 62.00k 86.54% 22464657 requests in 30.00s, 17.76GB read Requests/sec: 748868.53 Transfer/sec: 606.33MB 参数说明 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 $ wrk Usage: wrk &lt;options&gt; &lt;url&gt; Options: -c, --connections &lt;N&gt; Connections to keep open -d, --duration &lt;T&gt; Duration of test -t, --threads &lt;N&gt; Number of threads to use -s, --script &lt;S&gt; Load Lua script file -H, --header &lt;H&gt; Add header to request --latency Print latency statistics --timeout &lt;T&gt; Socket/request timeout -v, --version Print version details Numeric arguments may include a SI unit (1k, 1M, 1G) Time arguments may include a time unit (2s, 2m, 2h)...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/%E6%8A%80%E6%9C%AF/%E5%B7%A5%E5%85%B7/wrk%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/"><span class="badge">基准测试 </span> </a>
+            <a href="/%20tags/wrk/"><span class="badge">wrk </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/hystrix/hystrix%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/">Hystrix 参数详解</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-02-25 </span>
+
+            <div class="post-category">
+                <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                <a href="/categories/hystrix/"> Hystrix </a>
+                
+
+            </div>
+            <span class="more-meta"> 2477 words </span>
+            <span class="more-meta"> 5 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/hystrix/hystrix%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/" class="summary-link"> hystrix.command.default和hystrix.threadpool.default中的default为默认CommandKey Command Properties Execution相关的属性的配置： hystrix.command.default.execution.isolation.strategy 隔离策略，默认是Thread, 可选Thread｜Semaphore thread 通过线程数量来限制并发请求数，可以提供额外的保护，但有一定的延迟。一般用于网络调用 semaphore 通过semaphore count来限制并发请求数，适用于无网络的高并发请求 hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds 命令执行超时时间，默认1000ms hystrix.command.default.execution.timeout.enabled 执行是否启用超时，默认启用true hystrix.command.default.execution.isolation.thread.interruptOnTimeout 发生超时是是否中断，默认true hystrix.command.default.execution.isolation.semaphore.maxConcurrentRequests 最大并发请求数，默认10，该参数当使用ExecutionIsolationStrategy.SEMAPHORE策略时才有效。如果达到最大并发请求数，请求会被拒绝。理论上选择semaphore size的原则和选择thread size一致，但选用semaphore时每次执行的单元要比...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/hystrix/hystrix%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/" class="read-more-link">Read More...</a>
+            <a href="/%20tags/hystrix/"><span class="badge">hystrix </span> </a>
+            <a href="/%20tags/circuit-breaker/"><span class="badge">Circuit Breaker </span> </a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+            <article class="post ">
+    <header class="post-header">
+        <h1 class="post-title"><a class="post-link" href="/posts/music/matthew-lien-bleeding-wolves/">Matthew Lien-Bleeding Wolves</a></h1>
+        <div class="post-meta">
+            <span class="post-time"> 2016-02-22 </span>
+
+            <div class="post-category">
+                <a href="/categories/music/"> music </a>
+                
+
+            </div>
+            <span class="more-meta"> 0 words </span>
+            <span class="more-meta"> 0 mins read </span>
+        </div>
+    </header>
+    
+    <div class="post-content">
+        <div class="post-summary  ">
+            <a href="/posts/music/matthew-lien-bleeding-wolves/" class="summary-link">  ...</a>
+        </div>
+        <div class="read-more">
+            <a href="/posts/music/matthew-lien-bleeding-wolves/" class="read-more-link">Read More...</a>
+            
+        </div>
+    </div>
+
+
+</article>
+
+        
+    </section>
+    
+    <nav class="pagination">
+        
+            <a class="prev" href="/page/2/">
+                <i class="iconfont icon-left"></i>
+                <span class="prev-text">Prev</span>
+            </a>
+        
+        
+            <a class="next" href="/page/4/">
+                <span class="next-text">Next</span>
+                <i class="iconfont icon-right"></i>
+            </a>
+        
+    </nav>
+
+        </div>
+        
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2023
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

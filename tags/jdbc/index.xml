@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>JDBC on 多少光年</title>
+    <link>http://tietang.wang/tags/jdbc/</link>
+    <description>Recent content in JDBC on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 10 Apr 2017 18:22:47 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/jdbc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>JDBC如何开启事务</title>
+      <link>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/jdbc%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AF%E4%BA%8B%E5%8A%A1/</link>
+      <pubDate>Mon, 10 Apr 2017 18:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/jdbc%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AF%E4%BA%8B%E5%8A%A1/</guid>
+      <description>面试了很多人，每每问到“JDBC如何开启一个事务？”，大部分人的回答是：“通过openTransaction方法”，有的说是通过Connection，有的是说通过Statement，更有的说通过Connection拿到一个Transaction实例，再通过openTransaction方法来开启，那么同样关闭事务就有close方法“closeTransaction”。 想必这些人都是被“hibernate”害了还是“不注重java基础”，一上来就被框架误导呢？ 先看看一个标准的JDBC例子伪代码： 1 2 3 4 5 6 7 8 9 10 11 12 13 Connection conn = DriverManager.getConnection(...); try{ con.setAutoCommit(false); Statement stmt = con.createStatement(); //1 or more queries or updates con.commit(); }catch(Exception e){ con.rollback(); }finally{ con.close(); } 所以，看到上面的例子，开启手动事务的关键是con.setAutoCommit(false)，JDBC事务默认是开启的，并且是自动提交： 关闭自动提交：java.sql.Connection.setAutoCommit(false) s</description>
+    </item>
+    
+  </channel>
+</rss>

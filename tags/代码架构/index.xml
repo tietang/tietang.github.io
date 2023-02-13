@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>代码架构 on 多少光年</title>
+    <link>http://tietang.wang/tags/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/</link>
+    <description>Recent content in 代码架构 on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 17 Nov 2019 20:20:42 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>代码架构</title>
+      <link>http://tietang.wang/posts/%E6%9E%B6%E6%9E%84/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/</link>
+      <pubDate>Sun, 17 Nov 2019 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E6%9E%B6%E6%9E%84/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/</guid>
+      <description>代码架构 在软件开发生命周期中，代码架构很少被提到，但是实际上每一个开发者都在做代码架构。代码架构在软件开发中有着重要的作用，那么我们就来聊聊在软件开发领域中代码架构，从Why、What、How几个方面来讲讲： Why：为什么要做代码架构？ What：代码架构要做些什么事情？ How：怎样来设计代码架构？ Why：为什么要做代码架构？ 软件开发的生命周期，大致都是一样的流程： 需求分析：产出概念模型，需求定义 概要设计：包括系统边界设计、内部架构设计、设计决策 详细设计，包括代码架构，业务逻辑实现 开发代码 单元测试、连通测试 部署上线 系统运维 代码架构属于详细设计部分的内容，代码架构在整个软件开发生命周期中承上启下： 向上要表达设计意图，要把软件产品概念模型、边界交互、数据流设计、数据库设计、系统内部架构设计等表达清楚，来说明业务逻辑和业务领域模型 代码架构本身也是来保证代码有更好的可读性和可维护性、可扩展性，决定了</description>
+    </item>
+    
+  </channel>
+</rss>

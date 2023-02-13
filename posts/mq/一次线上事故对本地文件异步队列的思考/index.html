@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>一次线上事故对“本地文件队列异步使用”的思考 - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="事故描述 事故现象是部分服务http请求无响应。事故从发生到恢复，接近3个小时，事故过程中重启应用服务，只能坚持几分钟到十几分钟，在真正发现问题前通过不断重启服务实例来支撑，庆幸的是核心服务没有出现无响应的事故。 最终分析为AMQ出现故障，现象是MQ客户端sendMessage后等待响应，但一直在等待，AMQ监控端口ok，控制台也可以打开，由于紧急没有具体分析，直接重启AMQ服务，切换master，通过验证服务全部恢复。 这次故障大部分服务都使用了AMQ，但除了一个核心服务没受到明显影响外，其他使用AMQ的服务都不同程度的收到了影响，服务不可用。 此次事故比较严重，就是因为使用了本地文件队列有效隔离故障，使得影响面不大。假设（当然不希望发生了）核心业务没有使用本地文件队列来隔离故障，整个下单、收银服务将不可用，商户无法营业，损失应该在数量级。 此次事故也证明了我当时的这个架构思路的正确性，主要体现在"/><meta name="keywords"
+          content="MQ, 本地文件队列, 隔离, 降级"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/mq/%E4%B8%80%E6%AC%A1%E7%BA%BF%E4%B8%8A%E4%BA%8B%E6%95%85%E5%AF%B9%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%BC%82%E6%AD%A5%E9%98%9F%E5%88%97%E7%9A%84%E6%80%9D%E8%80%83/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="一次线上事故对“本地文件队列异步使用”的思考" />
+<meta property="og:description" content="事故描述 事故现象是部分服务http请求无响应。事故从发生到恢复，接近3个小时，事故过程中重启应用服务，只能坚持几分钟到十几分钟，在真正发现问题前通过不断重启服务实例来支撑，庆幸的是核心服务没有出现无响应的事故。 最终分析为AMQ出现故障，现象是MQ客户端sendMessage后等待响应，但一直在等待，AMQ监控端口ok，控制台也可以打开，由于紧急没有具体分析，直接重启AMQ服务，切换master，通过验证服务全部恢复。 这次故障大部分服务都使用了AMQ，但除了一个核心服务没受到明显影响外，其他使用AMQ的服务都不同程度的收到了影响，服务不可用。 此次事故比较严重，就是因为使用了本地文件队列有效隔离故障，使得影响面不大。假设（当然不希望发生了）核心业务没有使用本地文件队列来隔离故障，整个下单、收银服务将不可用，商户无法营业，损失应该在数量级。 此次事故也证明了我当时的这个架构思路的正确性，主要体现在" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/mq/%E4%B8%80%E6%AC%A1%E7%BA%BF%E4%B8%8A%E4%BA%8B%E6%95%85%E5%AF%B9%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%BC%82%E6%AD%A5%E9%98%9F%E5%88%97%E7%9A%84%E6%80%9D%E8%80%83/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2017-05-10T18:22:47+00:00" />
+<meta property="article:modified_time" content="2017-05-10T18:22:47+00:00" />
+
+<meta itemprop="name" content="一次线上事故对“本地文件队列异步使用”的思考">
+<meta itemprop="description" content="事故描述 事故现象是部分服务http请求无响应。事故从发生到恢复，接近3个小时，事故过程中重启应用服务，只能坚持几分钟到十几分钟，在真正发现问题前通过不断重启服务实例来支撑，庆幸的是核心服务没有出现无响应的事故。 最终分析为AMQ出现故障，现象是MQ客户端sendMessage后等待响应，但一直在等待，AMQ监控端口ok，控制台也可以打开，由于紧急没有具体分析，直接重启AMQ服务，切换master，通过验证服务全部恢复。 这次故障大部分服务都使用了AMQ，但除了一个核心服务没受到明显影响外，其他使用AMQ的服务都不同程度的收到了影响，服务不可用。 此次事故比较严重，就是因为使用了本地文件队列有效隔离故障，使得影响面不大。假设（当然不希望发生了）核心业务没有使用本地文件队列来隔离故障，整个下单、收银服务将不可用，商户无法营业，损失应该在数量级。 此次事故也证明了我当时的这个架构思路的正确性，主要体现在"><meta itemprop="datePublished" content="2017-05-10T18:22:47+00:00" />
+<meta itemprop="dateModified" content="2017-05-10T18:22:47+00:00" />
+<meta itemprop="wordCount" content="1365">
+<meta itemprop="keywords" content="MQ,本地文件队列,隔离,降级," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="一次线上事故对“本地文件队列异步使用”的思考"/>
+<meta name="twitter:description" content="事故描述 事故现象是部分服务http请求无响应。事故从发生到恢复，接近3个小时，事故过程中重启应用服务，只能坚持几分钟到十几分钟，在真正发现问题前通过不断重启服务实例来支撑，庆幸的是核心服务没有出现无响应的事故。 最终分析为AMQ出现故障，现象是MQ客户端sendMessage后等待响应，但一直在等待，AMQ监控端口ok，控制台也可以打开，由于紧急没有具体分析，直接重启AMQ服务，切换master，通过验证服务全部恢复。 这次故障大部分服务都使用了AMQ，但除了一个核心服务没受到明显影响外，其他使用AMQ的服务都不同程度的收到了影响，服务不可用。 此次事故比较严重，就是因为使用了本地文件队列有效隔离故障，使得影响面不大。假设（当然不希望发生了）核心业务没有使用本地文件队列来隔离故障，整个下单、收银服务将不可用，商户无法营业，损失应该在数量级。 此次事故也证明了我当时的这个架构思路的正确性，主要体现在"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title">一次线上事故对“本地文件队列异步使用”的思考</h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 2017-05-10 </span>
+
+                <div class="post-category">
+                    <a href="/categories/mq/"> MQ </a>
+                        
+                    <a href="/tags/mq/">
+                                <span class="badge">MQ </span>
+                            </a>
+                        <a href="/tags/%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E9%98%9F%E5%88%97/">
+                                <span class="badge">本地文件队列 </span>
+                            </a>
+                        <a href="/tags/%E9%9A%94%E7%A6%BB/">
+                                <span class="badge">隔离 </span>
+                            </a>
+                        <a href="/tags/%E9%99%8D%E7%BA%A7/">
+                                <span class="badge">降级 </span>
+                            </a>
+                        
+                </div>
+                    <span class="more-meta"> 1365 words </span>
+                    <span class="more-meta"> 3 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#事故描述">事故描述</a></li>
+    <li><a href="#说说这个核心服务使用本地文件队列">说说这个核心服务使用“本地文件队列”</a></li>
+    <li><a href="#再说说此次事故中服务不可用的原因">再说说此次事故中服务不可用的原因</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+            <div>
+                <img src="http://tietang.wang//imgs/P70430-092839.jpg">
+            </div>
+        
+        
+        <div class="post-content">
+            <h2 id="事故描述">事故描述</h2>
+<p>事故现象是部分服务http请求无响应。事故从发生到恢复，接近3个小时，事故过程中重启应用服务，只能坚持几分钟到十几分钟，在真正发现问题前通过不断重启服务实例来支撑，庆幸的是核心服务没有出现无响应的事故。</p>
+<p>最终分析为AMQ出现故障，现象是MQ客户端sendMessage后等待响应，但一直在等待，AMQ监控端口ok，控制台也可以打开，由于紧急没有具体分析，直接重启AMQ服务，切换master，通过验证服务全部恢复。</p>
+<p>这次故障大部分服务都使用了AMQ，但除了一个核心服务没受到明显影响外，其他使用AMQ的服务都不同程度的收到了影响，服务不可用。</p>
+<!-- raw HTML omitted -->
+<p>此次事故比较严重，就是因为使用了<strong>本地文件队列</strong>有效隔离故障，使得影响面不大。假设（当然不希望发生了）核心业务没有使用<strong>本地文件队列</strong>来隔离故障，整个下单、收银服务将不可用，商户无法营业，损失应该在数量级。
+<!-- raw HTML omitted --></p>
+<p>此次事故也证明了我当时的这个架构思路的正确性，主要体现在隔离和降级。</p>
+<h2 id="说说这个核心服务使用本地文件队列">说说这个核心服务使用“本地文件队列”</h2>
+<p>我开发出来这个组件在这个团队使用一直很稳定效果也很好。</p>
+<p>实际上这个团队使用**“本地文件队列”**的姿势并不是我期望的，本身使用方法并没有明显不妥，只是会延迟消息的消费，但这中方法可以很好的且有效的隔离故障。</p>
+<p>就是在发送AMQ消息的方法上添加了<code>@AsyncExecutable</code>，所以在入AMQ前先入队“本地文件队列”，然后“本地文件队列”消费者再把消息生产到AMQ。</p>
+<p><img src="/imgs/async.png" alt=""></p>
+<p>这里正是利用率“本地文件队列”的优点，比较可靠，只依赖于本地文件系统，不会有网络故障的特性，近似不会被阻塞。</p>
+<p>在事故分析中，实际上AMQ对该核心服务也受到影响，但由于采用了“本地文件队列”作为一级队列，有效的隔离了对AMQ的网络依赖，所以没有放大事故。事故中“本地文件队列”中消息被积累，没有被消费，重启服务后才被消费，原因后面再分析。</p>
+<h2 id="再说说此次事故中服务不可用的原因">再说说此次事故中服务不可用的原因</h2>
+<ol>
+<li>AMQ出现故障，现象是MQ客户端sendMessage后等待响应，但一直在等待。</li>
+<li>AMQ Client消息的生产和Tomcat共用worker线程</li>
+<li>AMQ Client消息的生产没有超时机制</li>
+<li>AMQ Client消息的生产采用同步发送，异步发送有一些问题场景不太合适。</li>
+</ol>
+<p>所以基于以上信息，AMQ消息的生产阻塞了Tomcat worker线程，最终导致worker线程被耗光而服务不可用。</p>
+<p>在事故中通过线程堆栈信息和Tomcat线程使用数统计也确定了线程很快被耗光而请求被阻塞。</p>
+<p>另一个服务中采用了异步线程池来生产AMQ消息，但拒绝策略采用了<code>CallerRunsPolicy</code>, 也是线程池线程很快被耗光而再耗光Tomcat worker线程，最终导致服务不可用。</p>
+<p>事故产生的原因就是代码中没有有效做网路调用的隔离和降级。</p>
+<p>上面提到的核心服务也受到影响，参考《<a href="%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E9%98%9F%E5%88%97-%E5%BC%82%E6%AD%A5%E9%9A%94%E7%A6%BB.md">本地文件队列-异步隔离</a>》，也是因为**“本地文件队列”<strong>拒绝策略采用了<code>CallerRunsPolicy</code>，最终导致线程池线程很快被耗光，而使用</strong>“本地文件队列”<strong>消费调度主线程，消费调度主线程被阻塞而无法消费“本地文件队列”消息并生产到AMQ。但这里和其他服务不同的是，主业务和AMQ的消息生产是隔离的，主业务生产消息到</strong>“本地文件队列”**就返回，并不直接依赖AMQ。</p>
+<p>本文中提到了使用<strong>本地文件队列</strong>的隔离姿势。</p>
+<p>后面再介绍使用<strong>本地文件队列</strong>的降级姿势。</p>
+
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2017-05-10
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            <div class="post-tags">
+                    <a href="/tags/mq/">MQ</a>
+                    <a href="/tags/%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E9%98%9F%E5%88%97/">本地文件队列</a>
+                    <a href="/tags/%E9%9A%94%E7%A6%BB/">隔离</a>
+                    <a href="/tags/%E9%99%8D%E7%BA%A7/">降级</a>
+                    </div>
+            <nav class="post-nav">
+                <a class="prev" href="/posts/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/golang%E5%8A%A9%E5%8A%9B%E5%89%8D%E7%AB%AF%E5%BA%94%E7%94%A8%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E5%92%8C%E9%83%A8%E7%BD%B2/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default">golang助力NodeJS前段应用持续集成和部署</span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/mq/%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E9%98%9F%E5%88%97-%E5%BC%82%E6%AD%A5%E9%9A%94%E7%A6%BB/">
+                        <span class="next-text nav-default">本地文件队列-异步隔离架构</span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    <h4>相关文章：</h4>
+    <ul>
+        
+            <li><a href="/posts/mq/%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E9%98%9F%E5%88%97-%E5%BC%82%E6%AD%A5%E9%9A%94%E7%A6%BB/">本地文件队列-异步隔离架构</a></li>
+        
+    </ul>
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2017-05-10 18:22:47 \u002b0000 UTC',
+        title: '一次线上事故对“本地文件队列异步使用”的思考',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2023
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

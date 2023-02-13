@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MQ on 多少光年</title>
+    <link>http://tietang.wang/categories/mq/</link>
+    <description>Recent content in MQ on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 10 May 2017 18:22:47 +0000</lastBuildDate><atom:link href="http://tietang.wang/categories/mq/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>一次线上事故对“本地文件队列异步使用”的思考</title>
+      <link>http://tietang.wang/posts/mq/%E4%B8%80%E6%AC%A1%E7%BA%BF%E4%B8%8A%E4%BA%8B%E6%95%85%E5%AF%B9%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%BC%82%E6%AD%A5%E9%98%9F%E5%88%97%E7%9A%84%E6%80%9D%E8%80%83/</link>
+      <pubDate>Wed, 10 May 2017 18:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/mq/%E4%B8%80%E6%AC%A1%E7%BA%BF%E4%B8%8A%E4%BA%8B%E6%95%85%E5%AF%B9%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%BC%82%E6%AD%A5%E9%98%9F%E5%88%97%E7%9A%84%E6%80%9D%E8%80%83/</guid>
+      <description>事故描述 事故现象是部分服务http请求无响应。事故从发生到恢复，接近3个小时，事故过程中重启应用服务，只能坚持几分钟到十几分钟，在真正发现问题前通过不断重启服务实例来支撑，庆幸的是核心服务没有出现无响应的事故。 最终分析为AMQ出现故障，现象是MQ客户端sendMessage后等待响应，但一直在等待，AMQ监控端口ok，控制台也可以打开，由于紧急没有具体分析，直接重启AMQ服务，切换master，通过验证服务全部恢复。 这次故障大部分服务都使用了AMQ，但除了一个核心服务没受到明显影响外，其他使用AMQ的服务都不同程度的收到了影响，服务不可用。 此次事故比较严重，就是因为使用了本地文件队列有效隔离故障，使得影响面不大。假设（当然不希望发生了）核心业务没有使用本地文件队列来隔离故障，整个下单、收银服务将不可用，商户无法营业，损失应该在数量级。 此次事故也证明了我当时的这个架构思路的正确性，主要体现在</description>
+    </item>
+    
+    <item>
+      <title>本地文件队列-异步隔离架构</title>
+      <link>http://tietang.wang/posts/mq/%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E9%98%9F%E5%88%97-%E5%BC%82%E6%AD%A5%E9%9A%94%E7%A6%BB/</link>
+      <pubDate>Wed, 10 May 2017 18:00:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/mq/%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E9%98%9F%E5%88%97-%E5%BC%82%E6%AD%A5%E9%9A%94%E7%A6%BB/</guid>
+      <description>常见的异步方式： 创建异步线程 每个新创建一个线程来执行异步任务，任务结束线程也终止。 线程的创建成本比较大，不建议使用。 使用Queue，producer/consumer方式 在内部创建一个Queue，worker线程直接将异步处理的任务放入queue，一个或多个异步线程从queue中消费并执行任务。 线程池 用线程池来替换每次创建线程，减少线程创建的成本，线程被复用，一次创建多处使用。 和使用Queue类似，也是通过BlockingQueue实现,但策略上更复杂，向线程池提交Callable&amp;amp;Runnable任务，由线程池调度执行。 参考：java.util.concurrent.ThreadPoolExecutor#execute spring @Async注解 通过注解来来简化了异步编程，只需要在需要异步的方法上使用@Async注解即可。 其本质也是在线程池功能上扩展的，将异步执行方法封装为一个Callab</description>
+    </item>
+    
+  </channel>
+</rss>

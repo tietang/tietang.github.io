@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>http 2.0 on 多少光年</title>
+    <link>http://tietang.wang/tags/http-2.0/</link>
+    <description>Recent content in http 2.0 on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 22 Feb 2016 09:57:03 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/http-2.0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>装载：HTTP2.0的奇妙日常</title>
+      <link>http://tietang.wang/posts/%E8%BD%AC%E8%BD%BD/http2.0/%E8%A3%85%E8%BD%BDhttp2-0%E7%9A%84%E5%A5%87%E5%A6%99%E6%97%A5%E5%B8%B8/</link>
+      <pubDate>Mon, 22 Feb 2016 09:57:03 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E8%BD%AC%E8%BD%BD/http2.0/%E8%A3%85%E8%BD%BDhttp2-0%E7%9A%84%E5%A5%87%E5%A6%99%E6%97%A5%E5%B8%B8/</guid>
+      <description>转载自AlloyTeam：http://www.alloyteam.com/2015/03/http2-0-di-qi-miao-ri-chang/ “多年没见，你的女神后来什么样了”晨伯总是这么八卦我的女神，而不是我。 “我给你一个表情，你自己体会一下” “你先写个小页面给我看看吧，我指导一下你吧。”晨伯一幅很吊的样子。 但是这样的小case当然难不了我，虽然多年没碰web，但是我当年可以是AlloyTeam的成员啊。很快我就啪啪啪地完成了页面。晨伯看完我写的页面，一幅“我可是有女朋友的男人”的表情，感叹了一句“现在是HTTP2.0的时代啦，给你普及一下知识点”。 HTTP2.0性能增强的核心：二进制分帧 HTTP 2.0最大的特点： 不会改动HTTP 的语义，HTTP 方法、状态码、URI 及首部字段，等等这些核心概念上一如往常，却能致力于突破上一代标准的性能限制，改进传输性能，实现低延迟和高吞吐量。而之所以叫2</description>
+    </item>
+    
+  </channel>
+</rss>

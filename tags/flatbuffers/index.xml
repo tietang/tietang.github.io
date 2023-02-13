@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>FlatBuffers on 多少光年</title>
+    <link>http://tietang.wang/tags/flatbuffers/</link>
+    <description>Recent content in FlatBuffers on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 19 Feb 2016 20:20:42 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/flatbuffers/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>FlatBuffers 使用指南</title>
+      <link>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/flatbuffers/flatbuffers%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</link>
+      <pubDate>Fri, 19 Feb 2016 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/flatbuffers/flatbuffers%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</guid>
+      <description>FlatBuffers 使用指南 FlatBuffers序列化性能是protobuf的2倍，但size也是protobuf的2倍 编译源码 1 2 3 $ git clone https://github.com/google/flatbuffers.git #切换到最新release版本 $ git checkout v1.2.0 安装cmake http://www.cmake.org. 1 2 3 4 for mac osx $ brew install cmake for centOS $ sudo yum install cmake 用cmake构建project 1 2 3 cmake -G &amp;#34;Unix Makefiles&amp;#34; cmake -G &amp;#34;Visual Studio 10&amp;#34; cmake -G &amp;#34;Xcode&amp;#34; 在*nix系统，mac osx系统也建议使用 cmake -G &amp;quot;Unix Makefiles&amp;quot;，生成Makefile,之后make &amp;amp; make install 编译生成flatc并安装到系统。 1 2 3 $ cmake -G &amp;#34;Unix Makefiles&amp;#34; $ make $ make insall 使用schema编译器flatc来生成基础代码 1 2 3 $ cd samples #在目录src中生成java代码 $flatc -j -o src monster.fbs 编程语言参数: &amp;ndash;cpp, -c : Generate a C++ header for all definitions in this file (as filename_generated.h). &amp;ndash;java, -j : Generate Java code. &amp;ndash;csharp, -n : Generate C# code. &amp;ndash;go, -g : Generate Go code. &amp;ndash;python, -p: Generate Python code. &amp;ndash;javascript, -s: Generate JavaScript code. &amp;ndash;php: Generate PHP code. 其他常用选项： -o PATH 指定源码输出目录 -I PATH 有include语句时，指定include目录 完整的参数 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22</description>
+    </item>
+    
+    <item>
+      <title>FlatBuffers简介</title>
+      <link>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/flatbuffers/flatbuffers%E7%AE%80%E4%BB%8B/</link>
+      <pubDate>Fri, 19 Feb 2016 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/flatbuffers/flatbuffers%E7%AE%80%E4%BB%8B/</guid>
+      <description>FlatBuffers简介 代码：https://github.com/google/flatbuffers/ 文档：http://google.github.io/flatbuffers/ FlatBuffers是一个开源的、跨平台的、高效的、提供了C++/Java接口的序列化工具库。它是Google专门为游戏开发或其他性能敏感的应用程序需求而创建。 允许在不解析和解包就可以直接访问序列化数据，而且仍然很好地向上和向下兼容，这意味着序列化对象可以多版本共存。 支持的操作系统 Android Windows MacOS X Linux 目前支持的编程语言 C++ C# Go Java JavaScript PHP Python and many more in progress&amp;hellip; 为什么要用FlatBuffers? 对序列化数据的访问不需要打包和拆包——它将序列化数据存储在缓存中，这些数据既可以存储在文件中，又可以通过网络原样传输，而没有任何解析开销； 内存效率和速度——访问数据时的唯一内存需求就是缓冲区，不需要额外的内存分配。 这里可查看详细的基准测试； 扩展</description>
+    </item>
+    
+  </channel>
+</rss>

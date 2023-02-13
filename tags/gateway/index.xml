@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>gateway on 多少光年</title>
+    <link>http://tietang.wang/tags/gateway/</link>
+    <description>Recent content in gateway on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 02 Jun 2020 20:22:47 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/gateway/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>njs 5分钟快速入门</title>
+      <link>http://tietang.wang/posts/nginx/njs-5%E5%88%86%E9%92%9F%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</link>
+      <pubDate>Tue, 02 Jun 2020 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/nginx/njs-5%E5%88%86%E9%92%9F%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</guid>
+      <description>njs 5分钟快速入门 njs是作为nginx的module，可以通过2种方式安装： add-module 编译源码 add-dynamic-module 本文采用add-module编译源码的方式。add-dynamic-module的方法自行百度。 下载 njs-0.4.1 官网提供的源码下载，需要通过hg来获取。hg是 Mercurial 分布式版本控制软件的客户端，国内使用较少，可以通过官网下载 Mercurial 客户端，通过如下命令下载njs源码： hg clone http://hg.nginx.org/njs njs源码仓库参考：http://hg.nginx.org/njs?_ga=2.60091629.1926145332.1591076203-902755521.1590558489 也可以使用git到github上下载njs的代码镜像或者release压缩包。最新的镜像直接下载master分支代码即可： git clone https://github.com/nginx/njs.git 也可以直接下载最新的release压缩包：https://github.com/nginx/njs/releases wget https://github.com/nginx/njs/archive/0.4.1.tar.gz or curl -o https://github.com/nginx/njs/archive/0.4.1.tar.gz njs在github上</description>
+    </item>
+    
+    <item>
+      <title>基于Nginx&amp;Lua 和Netflix Eureka的微服务网关</title>
+      <link>http://tietang.wang/posts/nginx/%E5%9F%BA%E4%BA%8Enginx-lua%E5%92%8Cnetflix-eureka%E7%9A%84%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BD%91%E5%85%B3%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Sat, 05 Jan 2019 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/nginx/%E5%9F%BA%E4%BA%8Enginx-lua%E5%92%8Cnetflix-eureka%E7%9A%84%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BD%91%E5%85%B3%E4%BB%8B%E7%BB%8D/</guid>
+      <description>依赖：lua-resty-http 基于Nginx&amp;amp;Lua 和Netflix Eureka的微服务网关。 重新架构了内部组件，采用插件模式。 服务发现 Eureka Discovery 抽象discovery，用来支持多种服务发现？规划中&amp;hellip; 动态路由 负载均衡 加权轮询 基于响应时间的动态权重轮询？开发中&amp;hellip; 简单监控 隔离降级 限流 metrics 认证安全？规划中。。。 监控页面？开发中&amp;hellip; 架构图： 使用方法 基于Nginx和Lua module。需要安装Nginx Lua环境或者直接下载openresty编译安装。 下载代码到/path/to/nginx/lua/lib/ git clone http://github.com/tietang/ngx-lua-zuul &amp;ndash;depth=1 例子Eureka 服务 如果没有Eureka环境，也可以编译安装本例子中的EurekaDemo服务，参考编译和运行eureka-demo服务中的相关内容。 部署dicovery例子服务： 下载代码后： cd /path/to/ngx_lua-zuul/demo/java mvn clean install 将下载的代码中的lua文件夹放到部署目录/p</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>算法 on 多少光年</title>
+    <link>http://tietang.wang/categories/%E7%AE%97%E6%B3%95/</link>
+    <description>Recent content in 算法 on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 16 Jun 2016 09:06:33 +0000</lastBuildDate><atom:link href="http://tietang.wang/categories/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>负载均衡之加权轮询算法</title>
+      <link>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B9%8B%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Thu, 16 Jun 2016 09:06:33 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B9%8B%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2%E7%AE%97%E6%B3%95/</guid>
+      <description>负载均衡之加权轮询算法 算法举例说明 服务实例 权重 127.0.0.1:8001 1 127.0.0.1:8002 2 127.0.0.1:8003 3 共有三个实例，总权重为6，那么实现效果应该为每调用6次： 每个实例应该被调用权重次数 权重数大的优先被调用 根据以上说明，那么进行排列组合： 先按照权重大小排序 把权重数做为调用次数排列 排列的结果是这样的： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8003 3 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8002 2 6 127.0.0.1:8001 1 貌似没问题，但每个实例调用不是交替的，分布不够均匀，改进一下重新排列组合： 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8002 2 5 127.0.0.1:8003 3 6 127.0.0.1:8001 1 或者 序号 服务实例 权重 1 127.0.0.1:8003 3 2 127.0.0.1:8002 2 3 127.0.0.1:8003 3 4 127.0.0.1:8001 1 5 127.0.0.1:8003 3 6 127.0.0.1:8002 2 2个权重变量：weight，current_weight weight 配置的固定不变的权重 current_weight 会动态调整的权重，初始化为0，运行时动态调整。 选取开始时，先重新调整current_weight= current_weight+weight，然后通过current_weight值从大到小排序，选择current_weight值最大</description>
+    </item>
+    
+  </channel>
+</rss>

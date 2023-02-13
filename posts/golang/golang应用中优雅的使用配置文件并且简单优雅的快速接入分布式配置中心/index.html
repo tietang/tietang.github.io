@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>在golang应用中优雅的使用配置文件，并且简单优雅的快速接入分布式配置中心 - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="统一的配置工具库，将各种配置源抽象或转换为类似properties格式的key/value，并提供统一的API来访问这些key/value。支持 properties 文件、ini 文件、zookeeper k/v、zookeeper k/props、consul k/v、consul k/props等配置源，并且支持通过 Unmarshal从配置中抽出struct；支持上下文环境变量的eval，${}形式；支持多种配置源组合使用。"/><meta name="keywords"
+          content="props, conf, 配置中心, 分部署配置中心, 配置, nacos, apollo, yaml, yml, yam, properties, ini, zookeeper, consul, etcd, key/value, 环境变量, 配置源, Unmarshal, 变量应用"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/golang/golang%E5%BA%94%E7%94%A8%E4%B8%AD%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%B9%B6%E4%B8%94%E7%AE%80%E5%8D%95%E4%BC%98%E9%9B%85%E7%9A%84%E5%BF%AB%E9%80%9F%E6%8E%A5%E5%85%A5%E5%88%86%E5%B8%83%E5%BC%8F%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="在golang应用中优雅的使用配置文件，并且简单优雅的快速接入分布式配置中心" />
+<meta property="og:description" content="统一的配置工具库，将各种配置源抽象或转换为类似properties格式的key/value，并提供统一的API来访问这些key/value。支持 properties 文件、ini 文件、zookeeper k/v、zookeeper k/props、consul k/v、consul k/props等配置源，并且支持通过 Unmarshal从配置中抽出struct；支持上下文环境变量的eval，${}形式；支持多种配置源组合使用。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/golang/golang%E5%BA%94%E7%94%A8%E4%B8%AD%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%B9%B6%E4%B8%94%E7%AE%80%E5%8D%95%E4%BC%98%E9%9B%85%E7%9A%84%E5%BF%AB%E9%80%9F%E6%8E%A5%E5%85%A5%E5%88%86%E5%B8%83%E5%BC%8F%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-01-12T15:22:47+00:00" />
+<meta property="article:modified_time" content="2023-01-12T15:22:47+00:00" />
+
+<meta itemprop="name" content="在golang应用中优雅的使用配置文件，并且简单优雅的快速接入分布式配置中心">
+<meta itemprop="description" content="统一的配置工具库，将各种配置源抽象或转换为类似properties格式的key/value，并提供统一的API来访问这些key/value。支持 properties 文件、ini 文件、zookeeper k/v、zookeeper k/props、consul k/v、consul k/props等配置源，并且支持通过 Unmarshal从配置中抽出struct；支持上下文环境变量的eval，${}形式；支持多种配置源组合使用。"><meta itemprop="datePublished" content="2023-01-12T15:22:47+00:00" />
+<meta itemprop="dateModified" content="2023-01-12T15:22:47+00:00" />
+<meta itemprop="wordCount" content="6079">
+<meta itemprop="keywords" content="golang,props,conf,配置中心,分部署配置中心,配置,nacos,apollo,yaml,yml,yam,properties,ini,zookeeper,consul,etcd," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="在golang应用中优雅的使用配置文件，并且简单优雅的快速接入分布式配置中心"/>
+<meta name="twitter:description" content="统一的配置工具库，将各种配置源抽象或转换为类似properties格式的key/value，并提供统一的API来访问这些key/value。支持 properties 文件、ini 文件、zookeeper k/v、zookeeper k/props、consul k/v、consul k/props等配置源，并且支持通过 Unmarshal从配置中抽出struct；支持上下文环境变量的eval，${}形式；支持多种配置源组合使用。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title">在golang应用中优雅的使用配置文件，并且简单优雅的快速接入分布式配置中心</h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 2023-01-12 </span>
+
+                <div class="post-category">
+                    <a href="/categories/golang/"> golang </a>
+                        
+                    <a href="/tags/golang/">
+                                <span class="badge">golang </span>
+                            </a>
+                        <a href="/tags/props/">
+                                <span class="badge">props </span>
+                            </a>
+                        <a href="/tags/conf/">
+                                <span class="badge">conf </span>
+                            </a>
+                        <a href="/tags/%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/">
+                                <span class="badge">配置中心 </span>
+                            </a>
+                        <a href="/tags/%E5%88%86%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/">
+                                <span class="badge">分部署配置中心 </span>
+                            </a>
+                        <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                                <span class="badge">配置 </span>
+                            </a>
+                        <a href="/tags/nacos/">
+                                <span class="badge">nacos </span>
+                            </a>
+                        <a href="/tags/apollo/">
+                                <span class="badge">apollo </span>
+                            </a>
+                        <a href="/tags/yaml/">
+                                <span class="badge">yaml </span>
+                            </a>
+                        <a href="/tags/yml/">
+                                <span class="badge">yml </span>
+                            </a>
+                        <a href="/tags/yam/">
+                                <span class="badge">yam </span>
+                            </a>
+                        <a href="/tags/properties/">
+                                <span class="badge">properties </span>
+                            </a>
+                        <a href="/tags/ini/">
+                                <span class="badge">ini </span>
+                            </a>
+                        <a href="/tags/zookeeper/">
+                                <span class="badge">zookeeper </span>
+                            </a>
+                        <a href="/tags/consul/">
+                                <span class="badge">consul </span>
+                            </a>
+                        <a href="/tags/etcd/">
+                                <span class="badge">etcd </span>
+                            </a>
+                        
+                </div>
+                    <span class="more-meta"> 6079 words </span>
+                    <span class="more-meta"> 13 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#props简介">props简介</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#props思路">props思路</a></li>
+    <li><a href="#安装">安装：</a></li>
+    <li><a href="#先睹为快">先睹为快：</a>
+      <ul>
+        <li><a href="#例子1">例子1：</a></li>
+      </ul>
+    </li>
+    <li><a href="#组合多个配置源建议使用">组合多个配置源（建议使用）：</a></li>
+    <li><a href="#props使用多种配置格式文件和分布式配置中心">props使用多种配置格式文件和分布式配置中心</a>
+      <ul>
+        <li><a href="#properties格式文件">properties格式文件</a></li>
+        <li><a href="#ini格式文件">ini格式文件</a></li>
+        <li><a href="#yaml格式文件">yaml格式文件</a></li>
+        <li><a href="#其他配置中心载体zkconsuletcd">其他配置中心载体（zk,consul,etcd）</a></li>
+        <li><a href="#使用apollo作为配置源">使用apollo作为配置源：</a></li>
+        <li><a href="#使用nacos作为配置源">使用nacos作为配置源：</a></li>
+        <li><a href="#关于配置格式定义说明">关于配置格式定义说明</a></li>
+      </ul>
+    </li>
+    <li><a href="#多配置的配置加载的优先级">多配置的配置加载的优先级</a></li>
+    <li><a href="#上下文变量引用xykey">上下文变量引用${x.y.key}</a></li>
+    <li><a href="#unmarshal为自定义结构体">Unmarshal为自定义结构体：</a>
+      <ul>
+        <li><a href="#使用时需要注意">使用时需要注意：</a></li>
+        <li><a href="#支持嵌套结构体对应key使用分割">支持嵌套结构体，对应key使用<code>.</code>分割</a></li>
+        <li><a href="#使用系统环境变量">使用系统环境变量</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+            <div>
+                <img src="http://tietang.wang//pics/WechatIMG252.jpeg">
+            </div>
+        
+        
+        <div class="post-content">
+            <h1 id="在golang应用中优雅的使用配置文件并且简单优雅的快速接入分布式配置中心">在golang应用中优雅的使用配置文件，并且简单优雅的快速接入分布式配置中心</h1>
+<p>配置文件类型有很多种，像常用的properties、yaml、ini、xml、json等，还有不太常见的plist（xml）、toml、
+HOCON等，还有很多特别自定义的格式，甚至有些就直接使用脚本语言来替代，像python、js，groovy等，无论是哪种配置文件，基本上都是三种类型：</p>
+<ul>
+<li>
+<p>结构化：yaml，xml，json</p>
+</li>
+<li>
+<p>非结构化扁平格式：properties</p>
+</li>
+<li>
+<p>半结构化和扁平结合</p>
+</li>
+</ul>
+<p>那么多的配置文件，如何选择呢？可以尝试给配置文件做个排序，来指导选择；对于常用的配置文件格式中，按照人类理解和方便编写配置来排序：</p>
+<blockquote>
+<p>ini &gt; properties &gt; json &gt; xml &gt; yaml &gt; toml</p>
+</blockquote>
+<p>如果按照能配置复杂数据的复杂度来排序：</p>
+<blockquote>
+<p>xml &gt; yaml &gt; toml/json/plist &gt; ini &gt; properties</p>
+</blockquote>
+<p>对于这么多格式的配置文件如何选择呢？如果又或者应用了一个三方库，使用了和自己应用不一样的格式的配置文件，就不能统一了，不仅要引用各种格式解析的文件和获取配置项的三方库，而且各个三方库api又不一样，在程序中使用这些api，既混乱又得不到统一，有些库api支持的特性，另一种lib又不支持。</p>
+<p>那么出现这种情况时，如何优雅的解决这个问题呢？这里今天的主角就要亮场了：<a href="https://github.com/tietang/props">props</a></p>
+<h2 id="props简介">props简介</h2>
+<p>props是一个统一的配置工具库，将各种配置源抽象或转换为类似properties格式的key/value，并提供统一的API来访问这些key/value。支持
+properties 文件、ini 文件、zookeeper k/v、zookeeper k/props、consul k/v、consul k/props等配置源，并且支持通过
+Unmarshal从配置中抽出struct；支持上下文环境变量的eval，${}形式；支持多种配置源组合使用。主要特性如下：</p>
+<h4 id="支持的配置源">支持的配置源：</h4>
+<ul>
+<li>properties格式文件</li>
+<li>ini格式文件</li>
+<li>yaml格式文件</li>
+<li><a href="https://github.com/ctripcorp/apollo">Apollo</a>k/v,k/props,k/ini,k/yaml</li>
+<li><a href="http://nacos.io/">Nacos</a>k/props[properties],k/yaml,k/ini,k/ini_props</li>
+<li>zookeeper k/v</li>
+<li>zookeeper k/props[properties],k/yaml,k/ini,k/ini_props</li>
+<li>consul k/v</li>
+<li>consul k/props[properties],k/yaml,k/ini,k/ini_props</li>
+<li>etcd API V2 k/v</li>
+<li>etcd API V2 k/props</li>
+<li>etcd API V3 k/v</li>
+<li>etcd API V3 k/props</li>
+</ul>
+<h4 id="keyvalue支持的数据类型">key/value支持的数据类型：</h4>
+<ul>
+<li>key只支持string</li>
+<li>value 5种数据类型的支持：
+<ul>
+<li>string</li>
+<li>int</li>
+<li>float64</li>
+<li>bool</li>
+<li>time.Time: 支持常见的格式和毫秒数</li>
+<li>time.Duration：
+<ul>
+<li>比如 &ldquo;300ms&rdquo;, &ldquo;-1.5h&rdquo; or &ldquo;2h45m&rdquo;.</li>
+<li>合法的时间单位： &ldquo;ns&rdquo;, &ldquo;us&rdquo; (or &ldquo;µs&rdquo;), &ldquo;ms&rdquo;, &ldquo;s&rdquo;, &ldquo;m&rdquo;, &ldquo;h&rdquo;.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="其他特性非常有用的特性">其他特性（非常有用的特性）</h4>
+<ul>
+<li>Unmarshal支持, 可以将配置项注入到结构体中</li>
+<li>上下文变量eval支持，<code>${}</code>形式</li>
+<li>支持多配置源组合，包括本地和分布式中心的自由组合</li>
+<li>默认添加了系统环境变量，优先级最低</li>
+</ul>
+<h2 id="props思路">props思路</h2>
+<p>props通过其名称就可以知道，基于properties格式的配置项作为基础，将各种配置源抽象或转换为类似properties格式的key/value，其思路来源于spring的PropertySource和PropertySources。无论哪种配置格式的文件，在读取后都已key/value形式存储在map中，需要读取配置项的地方可以定义的配置key获取配置值。因此不同的配资源，不管是本地文件还是远程配置中心，只要将读取的配置内容转换为key/value即可，那么对于props不支持的配置文件或者格式也可以轻松扩展。由于使用key/value作为基础配置，缺点就是对复杂数据格式支持不够，但换个角度，对于大部分应用来说无需太复杂的配置格式，太复杂了容易出错，另外确实要用到，golang
+api本身就内置了xml和json的解析库，支持Unmarshal，很容易使用。</p>
+<p>在这个key/value基本的基础之上，拓展了Unmarshal、变量引用、配置组合、系统环境变量等功能，更方便的来维护配置。</p>
+<p>在props中统一将配置文件或者分布式配置中心统一抽象为配置源，任何本地或者通过网络能读取到的文本配置并且可以转换为key/value的配置载体，都可以作为props的配置源，扩展也很简单，只要实现kvs.ConfigSource接口即可。</p>
+<p>总之，就是围绕优雅、简洁、易用、可靠几个特点来构建，花里胡哨的功能也无需多加。</p>
+<p>下面就来看看如何使用props。</p>
+<h2 id="安装">安装：</h2>
+<blockquote>
+<p>go get -u github.com/tietang/props/v3</p>
+</blockquote>
+<h2 id="先睹为快">先睹为快：</h2>
+<h3 id="例子1">例子1：</h3>
+<p>main.go</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;fmt&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/tietang/props/v3/ini&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/tietang/props/v3/kvs&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;time&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">conf</span> <span class="o">:=</span> <span class="nx">ini</span><span class="p">.</span><span class="nf">NewIniFileConfigSource</span><span class="p">(</span><span class="s">&#34;config.ini&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;selection1：\n&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetInt</span><span class="p">(</span><span class="s">&#34;selection1.num&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetDuration</span><span class="p">(</span><span class="s">&#34;selection1.duration0&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetDurationDefault</span><span class="p">(</span><span class="s">&#34;selection1.duration1&#34;</span><span class="p">,</span> <span class="mi">9</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">).</span><span class="nf">Milliseconds</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;\nselection1.bool：\n&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetBool</span><span class="p">(</span><span class="s">&#34;selection1.bool.true0&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetBool</span><span class="p">(</span><span class="s">&#34;selection1.bool.true1&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetBool</span><span class="p">(</span><span class="s">&#34;selection1.bool.true2&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetBool</span><span class="p">(</span><span class="s">&#34;selection1.bool.true3&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetBool</span><span class="p">(</span><span class="s">&#34;selection1.bool.true4&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetBool</span><span class="p">(</span><span class="s">&#34;selection1.bool.false0&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetBool</span><span class="p">(</span><span class="s">&#34;selection1.bool.false1&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;\nselection2.sub1：\n&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetTime</span><span class="p">(</span><span class="s">&#34;selection2.sub1.time0&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetTime</span><span class="p">(</span><span class="s">&#34;selection2.sub1.time1&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetTime</span><span class="p">(</span><span class="s">&#34;selection2.sub1.time2&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetInt</span><span class="p">(</span><span class="s">&#34;selection2.sub1.int&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;selection2.sub1.string&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">GetFloat64</span><span class="p">(</span><span class="s">&#34;selection2.sub1.float&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">Ints</span><span class="p">(</span><span class="s">&#34;selection2.sub1.ints&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置文件<code>config.ini</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[selection1]</span>
+</span></span><span class="line"><span class="cl"><span class="na">num : 123</span>
+</span></span><span class="line"><span class="cl"><span class="na">duration0 : 1s</span>
+</span></span><span class="line"><span class="cl"><span class="na">duration1 : 92ms</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[selection1.bool]</span>
+</span></span><span class="line"><span class="cl"><span class="na">true0 : true</span>
+</span></span><span class="line"><span class="cl"><span class="na">true1 : y</span>
+</span></span><span class="line"><span class="cl"><span class="na">true2 : yes</span>
+</span></span><span class="line"><span class="cl"><span class="na">true3 : on</span>
+</span></span><span class="line"><span class="cl"><span class="na">true4 : 1</span>
+</span></span><span class="line"><span class="cl"><span class="na">false0 : f</span>
+</span></span><span class="line"><span class="cl"><span class="na">false1 : no</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[selection2.sub1]</span>
+</span></span><span class="line"><span class="cl"><span class="na">time0 : 2023-01-21 01:01:00</span>
+</span></span><span class="line"><span class="cl"><span class="na">time1 : 1665317881</span>
+</span></span><span class="line"><span class="cl"><span class="na">time2 : 2006-01-02 15:04:05 +0800</span>
+</span></span><span class="line"><span class="cl"><span class="na">int : 123</span>
+</span></span><span class="line"><span class="cl"><span class="na">string : 我是字符串</span>
+</span></span><span class="line"><span class="cl"><span class="na">float : 12.34</span>
+</span></span><span class="line"><span class="cl"><span class="na">ints : 1,2,3,4,5,6</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>运行结果如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="na">selection1：</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="na">123 &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">1s &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">92</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="na">selection1.bool：</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="na">true &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">true &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">true &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">true &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">true &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">false &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">false &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="na">selection2.sub1：</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="na">2023-01-21 01 : 01:00 +0000 UTC &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">2022-10-09 20 : 18:01 +0800 CST &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">2006-01-02 15 : 04:05 +0800 CST &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">123 &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">我是字符串 &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">12.34 &lt;nil&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">[1 2 3 4 5 6]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>从例子中可以看到，只需要一行代码就可以加载配置：</p>
+<blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">conf</span> <span class="o">:=</span> <span class="nx">ini</span><span class="p">.</span><span class="nf">NewIniFileConfigSource</span><span class="p">(</span><span class="s">&#34;config.ini&#34;</span><span class="p">)</span> 
+</span></span></code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>通过<code>kvs.ConfigSource</code>提供的api进行配置项读取：</p>
+<ul>
+<li>Get(key string) (string, error)</li>
+<li>GetDefault(key, defaultValue string) string</li>
+<li>GetInt(key string) (int, error)</li>
+<li>GetIntDefault(key string, defaultValue int) int</li>
+<li>GetDuration(key string) (time.Duration, error)</li>
+<li>GetDurationDefault(key string, defaultValue time.Duration) time.Duration</li>
+<li>GetTime(key string) (time.Time, error)</li>
+<li>GetTimeDefault(key string, defaultValue time.Time) time.Time</li>
+<li>GetBool(key string) (bool, error)</li>
+<li>GetBoolDefault(key string, defaultValue bool) bool</li>
+<li>GetFloat64(key string) (float64, error)</li>
+<li>GetFloat64Default(key string, defaultValue float64) float64</li>
+</ul>
+<p>要读取数组：</p>
+<ul>
+<li>Strings(key string) []string</li>
+<li>Ints(key string) []int</li>
+<li>Float64s(key string) []float64</li>
+<li>Durations(key string) []time.Duration</li>
+</ul>
+<p>要配置数组，可以用：”|“，”,“，” “(空格)，进行分割。</p>
+<h2 id="组合多个配置源建议使用">组合多个配置源（建议使用）：</h2>
+<p>props内置了配置源组合：kvs.CompositeConfigSource， 可以组合任意多个任意形式的kvs.ConfigSource配置源。</p>
+<p>比如，多个Properties文件组合：</p>
+<blockquote>
+<p>NewPropertiesCompositeConfigSource(fileNames &hellip;string)</p>
+</blockquote>
+<p>组合多个kvs.ConfigSource：</p>
+<blockquote>
+<p>NewDefaultCompositeConfigSource(configSources &hellip;ConfigSource)</p>
+</blockquote>
+<p>在已有的 kvs.CompositeConfigSource追加kvs.ConfigSource配置源：</p>
+<blockquote>
+<p>Add(css &hellip;ConfigSource)</p>
+<p>AddAll(css []ConfigSource)</p>
+</blockquote>
+<p>更多功能查看：<a href="https://github.com/tietang/props">https://github.com/tietang/props</a></p>
+<h2 id="props使用多种配置格式文件和分布式配置中心">props使用多种配置格式文件和分布式配置中心</h2>
+<p>在props简介中已经知道，props支持的配置源，使用不同的配置源，只需要使用对应的包名+New函数进行构建即可。</p>
+<h3 id="properties格式文件">properties格式文件</h3>
+<ul>
+<li>空内存Properties：kvs.NewMapProperties()</li>
+<li>单个Properties文件：kvs.NewPropertiesConfigSource(&ldquo;config.props&rdquo;)</li>
+<li>多个Properties文件：kvs.NewPropertiesCompositeConfigSource(files&hellip;)</li>
+</ul>
+<h3 id="ini格式文件">ini格式文件</h3>
+<ul>
+<li>单个ini文件：ini.NewIniFileConfigSource()</li>
+<li>多个ini文件：ini.NewIniFileCompositeConfigSource()</li>
+</ul>
+<h3 id="yaml格式文件">yaml格式文件</h3>
+<ul>
+<li>通过yaml文本：yam.ByYaml()</li>
+<li>单个yaml文件：yam.NewYamlConfigSource()</li>
+<li>多个yaml文件：yam.NewYamlFileCompositeConfigSource()</li>
+</ul>
+<h3 id="其他配置中心载体zkconsuletcd">其他配置中心载体（zk,consul,etcd）</h3>
+<p>以下都类同，具体查看godoc或源码例子：</p>
+<ul>
+<li>zookeeper k/v</li>
+<li>zookeeper k/props[properties],k/yaml,k/ini,k/ini_props</li>
+<li>consul k/v</li>
+<li>consul k/props[properties],k/yaml,k/ini,k/ini_props</li>
+<li>etcd API V2 k/v</li>
+<li>etcd API V2 k/props</li>
+<li>etcd API V3 k/v</li>
+<li>etcd API V3 k/props</li>
+</ul>
+<h3 id="使用apollo作为配置源">使用apollo作为配置源：</h3>
+<p><a href="https://github.com/ctripcorp/apollo">Apollo</a>：支持多种格式k/v,k/props,k/ini,k/yaml</p>
+<ul>
+<li>多namespace：apollo.NewApolloConfigSource()</li>
+<li>多namespace+系统环境变量：apollo.NewApolloCompositeConfigSource()</li>
+</ul>
+<p>只需要执行configService地址、appId,多个namespace即可构建一个kvs.ConfigSource配置源</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">conf</span> <span class="o">:=</span> <span class="nx">apollo</span><span class="p">.</span><span class="nf">NewApolloConfigSource</span><span class="p">(</span><span class="s">&#34;81.68.181.139:8080&#34;</span><span class="p">,</span> <span class="s">&#34;SampleApp&#34;</span><span class="p">,</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="s">&#34;application&#34;</span><span class="p">,</span> <span class="s">&#34;mxf&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="nx">keys</span> <span class="o">:=</span> <span class="nx">conf</span><span class="p">.</span><span class="nf">Keys</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">key</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">keys</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="nx">value</span> <span class="o">:=</span> <span class="nx">conf</span><span class="p">.</span><span class="nf">GetDefault</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="s">&#34;null&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="s">&#34;=&#34;</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果configService暴露在公网且配置了应用访问密钥，可以使用WithSecret来指定访问密钥：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">conf</span> <span class="o">:=</span> <span class="nx">apollo</span><span class="p">.</span><span class="nf">NewApolloConfigSourceWithSecret</span><span class="p">(</span><span class="s">&#34;81.68.181.139:8080&#34;</span><span class="p">,</span> <span class="s">&#34;SampleApp&#34;</span><span class="p">,</span> <span class="s">&#34;ecd6939c4d0d4ac0be3cb2ca81eba3db&#34;</span><span class="p">,</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="s">&#34;application&#34;</span><span class="p">,</span> <span class="s">&#34;mxf&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>默认会监听该conf配置的所有Namespace, 如果不想监听某个namespace的配置更新，可以使用remove方法移除：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nf">RemoveWatchedNamespace</span><span class="p">(</span><span class="nx">namespace</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="使用nacos作为配置源">使用nacos作为配置源：</h3>
+<p>[Nacos：支持多种格式 k/props[properties],k/yaml,k/ini,k/ini_props</p>
+<ul>
+<li>单个dataid：nacos.NewNacosClientConfigSource()</li>
+<li>多dataid：nacos.NewNacosClientCompositeConfigSource()</li>
+<li>单个dataid和kv格式：nacos.NewNacosClientPropsConfigSource()</li>
+<li>多dataid和kv格式：nacos.NewNacosClientPropsCompositeConfigSource()</li>
+</ul>
+<p>指定nacos服务地址、命名空间、1个或多个dataId，多个dataId会合并</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">    <span class="nx">address</span> <span class="o">:=</span> <span class="s">&#34;10.99.71.54:8848&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">namespaceId</span> <span class="o">:=</span> <span class="s">&#34;dzpl&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">dataId</span> <span class="o">:=</span> <span class="s">&#34;monitoring-collector&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">group</span> <span class="o">:=</span> <span class="s">&#34;dev&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">conf</span> <span class="o">:=</span> <span class="nx">nacos</span><span class="p">.</span><span class="nf">NewNacosClientConfigSource</span><span class="p">(</span><span class="nx">address</span><span class="p">,</span> <span class="nx">group</span><span class="p">,</span> <span class="nx">namespaceId</span><span class="p">,</span> <span class="nx">dataId</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;apm.thrift.port&#34;</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果一个应用有多个dataId，可以使用 <code>NewNacosClientCompositeConfigSourcel</code> 来构建：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">conf := nacos.NewNacosClientCompositeConfigSource(address, group, namespaceId, dataIds...)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>默认会自动监听配置的dataId的配置更新，如果不希望某个dataIdId的配置不被热更新，可以调用cancel方法：</p>
+<blockquote>
+<p>NacosClientConfigSource.CancelListening()</p>
+</blockquote>
+<h3 id="关于配置格式定义说明">关于配置格式定义说明</h3>
+<p>配置格式支持：properties/props、yaml/yml/yam、ini 3种格式。</p>
+<p>不同的配置中心对于配置格式的配置方法和获取不一样，apollo的配置格式可以通过namespace来获取，apollo
+namespace命名上默认是Properties格式，非Properties格式都要带上格式扩展名称，因此在props中通过apollo
+namespace扩展名来区分配置格式，默认为Properties，行为和apollo保持一致。对于nacos，虽然nacos控制台UI中支持text、json、xml、yaml、html、properties几种格式的编辑，但是由于nacos
+配置获取的api中无法区分配置格式，仅仅在控制台编辑和展示时用到。另外，像ini格式的配置apollo和nacos都不支持，所以需要用一种方法在配置中标识所配置的内容是什么格式。其他配置中心也有类似的问题。</p>
+<p>下面就目前比较流行的2中配置中心apollo和nacos进行配置格式标识的设计，通过2种方法来标识：</p>
+<ul>
+<li>在关键名称上来标识，nacos中的dataId和apollo中的namespace都可以来标识</li>
+<li>在配置内容文本中通过注释来标识</li>
+</ul>
+<h4 id="在关键名称上来标识">在关键名称上来标识</h4>
+<p>将格式类型作为后缀追加在关键名称上，nacos
+追加在dataId上，apollo可以追加在namespace，一名称的后缀形式来标识，使用<code>.</code>   , <code>-</code>, <code>_ </code> 任意一个分割符分割即可，比如：</p>
+<p>命名为：</p>
+<ul>
+<li><code>test_ini </code></li>
+<li><code>test-ini</code></li>
+<li><code> test.ini</code></li>
+</ul>
+<p>都可以，那么：</p>
+<p>apollo中对应完整namespace名称为：</p>
+<ul>
+<li><code>test_ini.txt</code></li>
+<li><code>test-ini.txt</code></li>
+<li><code>test.ini.txt</code></li>
+</ul>
+<p>naco中对应完整dataId名称为：</p>
+<ul>
+<li><code>test_ini </code></li>
+<li><code>test-ini</code></li>
+<li><code> test.ini</code></li>
+</ul>
+<h4 id="在配置内容文本中通过注释来标识">在配置内容文本中通过注释来标识</h4>
+<p>在配置文件首行通过注释的形式来标识配置格式：</p>
+<blockquote>
+<p>#@, ;@, //@, @，并定义配置内容格式的信息，</p>
+</blockquote>
+<p>比如：;@ini , #@yaml, #@yml等.</p>
+<p><strong>支持的格式标识有：</strong>;@ini，#@yaml, #@yml, #@yam，#@props，#@properties，</p>
+<p>对于yaml和Properties格式，在界面上选择对应的格式或者text即可，对于ini格式选择text，并加标识;@ini即可。</p>
+<p>需要注意不同格式的注释符号。</p>
+<h4 id="ini格式的标识">ini格式的标识：</h4>
+<p>apollo和nacos都不支持ini格式的配置，apollo中有txt，nacos中有text，2种标识方法都可以使用，选择配置格式是选择txt或text即可。</p>
+<h2 id="多配置的配置加载的优先级">多配置的配置加载的优先级</h2>
+<ul>
+<li>
+<p>后加载优先逻辑，也就是说后面加载的覆盖先加载的。注意后加载逻辑不等于配置顺序。</p>
+</li>
+<li>
+<p>仅仅适用于kvs.CompositeConfigSource</p>
+</li>
+</ul>
+<p>对于<code>kvs.CompositeConfigSource</code>
+，加载优先级顺序和配置顺序相同，先配置的优先级最高，后配置的优先级最低，也就是说通过NewDefaultCompositeConfigSource和NewCompositeConfigSource创建实例时，以及Add方法增加kvs.ConfigSource时，优先级是从左往右，从前往后。比如下面的代码中：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">conf0</span> <span class="nx">kvs</span><span class="p">.</span><span class="nx">ConfigSource</span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">conf1</span> <span class="nx">kvs</span><span class="p">.</span><span class="nx">ConfigSource</span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">conf2</span> <span class="nx">kvs</span><span class="p">.</span><span class="nx">ConfigSource</span>
+</span></span><span class="line"><span class="cl"><span class="nx">conf</span> <span class="o">:=</span> <span class="nx">kvs</span><span class="p">.</span><span class="nf">NewDefaultCompositeConfigSource</span><span class="p">(</span><span class="nx">conf0</span><span class="p">,</span> <span class="nx">conf1</span><span class="p">,</span> <span class="nx">conf2</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>conf0优先级最高，conf2优先级最低，优先级依次为：conf0&gt;conf1&gt;conf2。</p>
+<p>如果3个conf中存在同样的key，则以conf0中的为准；如果conf1和conf2中存在同样的key，则以conf1中的为准。</p>
+<h2 id="上下文变量引用xykey">上下文变量引用${x.y.key}</h2>
+<p>在配置中使用变量引用：${x.y.key}。</p>
+<p>props是支持配置上下文变量引用，在引用上下文中不区分优先级，仅仅依赖于配置加载的优先级。</p>
+<p>目前仅仅kvs.CompositeConfigSource支持变量引用，建议使用New***CompositeConfigSource函数进行构建kvs.ConfigSource。</p>
+<p>配置变量引用通过<code>${x.y.key}</code>形式来引用。</p>
+<p>下面是一个变量引用的例子：</p>
+<p>config.ini</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[app]</span>
+</span></span><span class="line"><span class="cl"><span class="na">name</span> <span class="o">=</span> <span class="s">appName</span>
+</span></span><span class="line"><span class="cl"><span class="na">port</span> <span class="o">=</span> <span class="s">8080</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[log]</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;值为appName</span>
+</span></span><span class="line"><span class="cl"><span class="na">file.name</span> <span class="o">=</span> <span class="s">${app.name}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>也支持多个变量组合，在字符串中嵌入变量引用即可:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[app]</span>
+</span></span><span class="line"><span class="cl"><span class="na">name</span> <span class="o">=</span> <span class="s">appName</span>
+</span></span><span class="line"><span class="cl"><span class="na">port</span> <span class="o">=</span> <span class="s">8080</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[log]</span>
+</span></span><span class="line"><span class="cl"><span class="na">file.name</span> <span class="o">=</span> <span class="s">${app.name}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;值为./logs/appName-8080/ </span>
+</span></span><span class="line"><span class="cl"><span class="na">dir</span> <span class="o">=</span> <span class="s">./logs/${app.name}-${app.port}/</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="unmarshal为自定义结构体">Unmarshal为自定义结构体：</h2>
+<p>props支持将配置Unmarshal一个结构体实例。</p>
+<p>先看看下面的例子</p>
+<p>定义结构体：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">App</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Name</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Port</span> <span class="kt">int</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[app]</span>
+</span></span><span class="line"><span class="cl"><span class="na">name</span> <span class="o">=</span> <span class="s">appName</span>
+</span></span><span class="line"><span class="cl"><span class="na">port</span> <span class="o">=</span> <span class="s">8080</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Unmarshal：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">conf</span> <span class="o">:=</span> <span class="nx">ini</span><span class="p">.</span><span class="nf">NewIniFileCompositeConfigSource</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">app</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">App</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">err</span> <span class="o">:=</span> <span class="nx">conf</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">app</span><span class="p">,</span> <span class="s">&#34;app&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//或者：kvs.Unmarshal(conf,app,&#34;app&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="使用时需要注意">使用时需要注意：</h3>
+<ol>
+<li>需要指定一个配置前缀，前缀在Unmarshal时会作为key的匹配和过滤中要使用到。</li>
+<li>过滤掉key前缀后，剩余的key需要和结构体字段名称对应，匹配2种对应格式：
+<ul>
+<li>小写字母开头的驼峰命名方式，比如：Name&gt;name，LogName &gt; logName</li>
+<li>中划线分割的全小写命名方式, 比如：LogName &gt; log-name</li>
+</ul>
+</li>
+</ol>
+<h3 id="支持嵌套结构体对应key使用分割">支持嵌套结构体，对应key使用<code>.</code>分割</h3>
+<p>比如配置文件如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[app]</span>
+</span></span><span class="line"><span class="cl"><span class="na">name</span> <span class="o">=</span> <span class="s">appName</span>
+</span></span><span class="line"><span class="cl"><span class="na">port</span> <span class="o">=</span> <span class="s">8080</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[app.log]</span>
+</span></span><span class="line"><span class="cl"><span class="na">fileName</span> <span class="o">=</span> <span class="s">${app.name}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;或者file-name = ${app.name}</span>
+</span></span><span class="line"><span class="cl"><span class="na">dir</span> <span class="o">=</span> <span class="s">./logs/${app.name}-${app.port}/</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>对应于结构体：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">App</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Name</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Port</span> <span class="kt">int</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Log</span>  <span class="nx">Log</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Log</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="nx">FileName</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Dir</span>      <span class="kt">string</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="使用系统环境变量">使用系统环境变量</h3>
+<p>kvs.CompositeConfigSource构建默认都添加了系统环境变量，可以通过kvs.ConfigSource来读取系统环境变量。</p>
+<p>如果不需要系统环境变量，可以通过：kvs.NewEmptyNoSystemEnvCompositeConfigSource()进行构建实例。</p>
+<p>下面的例子可以查看加载了那些系统环境变量：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">conf</span> <span class="o">:=</span> <span class="nx">kvs</span><span class="p">.</span><span class="nf">NewEmptyCompositeConfigSource</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nf">Keys</span><span class="p">())</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>更多用法和特性查看：<a href="https://github.com/tietang/props">https://github.com/tietang/props</a></p>
+
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2023-01-12
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            <div class="post-tags">
+                    <a href="/tags/golang/">golang</a>
+                    <a href="/tags/props/">props</a>
+                    <a href="/tags/conf/">conf</a>
+                    <a href="/tags/%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/">配置中心</a>
+                    <a href="/tags/%E5%88%86%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/">分部署配置中心</a>
+                    <a href="/tags/%E9%85%8D%E7%BD%AE/">配置</a>
+                    <a href="/tags/nacos/">nacos</a>
+                    <a href="/tags/apollo/">apollo</a>
+                    <a href="/tags/yaml/">yaml</a>
+                    <a href="/tags/yml/">yml</a>
+                    <a href="/tags/yam/">yam</a>
+                    <a href="/tags/properties/">properties</a>
+                    <a href="/tags/ini/">ini</a>
+                    <a href="/tags/zookeeper/">zookeeper</a>
+                    <a href="/tags/consul/">consul</a>
+                    <a href="/tags/etcd/">etcd</a>
+                    </div>
+            <nav class="post-nav">
+                
+                <a class="next" href="/posts/ai/paddlerspeech/">
+                        <span class="next-text nav-default">安装PaddleSpeech Centos 出现CXXABI_1.3.8&#39; not found错误</span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    <h4>相关文章：</h4>
+    <ul>
+        
+            <li><a href="/posts/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/golang%E5%8A%A9%E5%8A%9B%E5%89%8D%E7%AB%AF%E5%BA%94%E7%94%A8%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E5%92%8C%E9%83%A8%E7%BD%B2/">golang助力NodeJS前段应用持续集成和部署</a></li>
+        
+    </ul>
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2023-01-12 15:22:47 \u002b0000 UTC',
+        title: '在golang应用中优雅的使用配置文件，并且简单优雅的快速接入分布式配置中心',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2023
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

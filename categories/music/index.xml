@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>music on 多少光年</title>
+    <link>http://tietang.wang/categories/music/</link>
+    <description>Recent content in music on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 22 Feb 2016 13:22:54 +0000</lastBuildDate><atom:link href="http://tietang.wang/categories/music/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Matthew Lien-Bleeding Wolves</title>
+      <link>http://tietang.wang/posts/music/matthew-lien-bleeding-wolves/</link>
+      <pubDate>Mon, 22 Feb 2016 13:22:54 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/music/matthew-lien-bleeding-wolves/</guid>
+      <description> </description>
+    </item>
+    
+  </channel>
+</rss>

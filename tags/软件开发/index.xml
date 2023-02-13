@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>软件开发 on 多少光年</title>
+    <link>http://tietang.wang/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/</link>
+    <description>Recent content in 软件开发 on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 28 Jun 2016 09:06:33 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>软件开发中的单一职责</title>
+      <link>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/</link>
+      <pubDate>Tue, 28 Jun 2016 09:06:33 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/</guid>
+      <description>软件开发中的单一职责 最近在实践微服务化过程中，对其“单一职责”原则深有体会。 那么只有微服务化才可以单一职责，才可以解耦吗？答案是否定的。 单一职责原则是这样定义的：单一的功能，并且完全封装起来。 我们做后端Java开发的，应该最熟悉的就是标准的3层架构了，尤其是使用Spring.io体系的：Controller，Service，Dao/Repository。为什么要分层？就是为了保证单一职责，数据模型的事情交给Controller，业务逻辑的事情交给Service，和数据打交道的事情就交给Dao/Repository。有时候或者有些人会分层分的更多，4层，5层，我自己也这样干过，说白了也是为了保证单一职责，3层不能满足单一职责了，耦合度高了，就分。 我们都知道一个webapp在经过一定时间的开发后，就惨不忍睹，即便是有标准的分层，页面或模板文件一大堆，最初的很清晰的3层标准架构也变味了，Cont</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Hystrix简介 - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="Hystrix简介"/><meta name="keywords"
+          content="hystrix"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/hystrix/hystrix%E7%AE%80%E4%BB%8B/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Hystrix简介" />
+<meta property="og:description" content="Hystrix简介" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/hystrix/hystrix%E7%AE%80%E4%BB%8B/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2016-03-09T09:22:47+00:00" />
+<meta property="article:modified_time" content="2016-03-09T09:22:47+00:00" />
+
+<meta itemprop="name" content="Hystrix简介">
+<meta itemprop="description" content="Hystrix简介"><meta itemprop="datePublished" content="2016-03-09T09:22:47+00:00" />
+<meta itemprop="dateModified" content="2016-03-09T09:22:47+00:00" />
+<meta itemprop="wordCount" content="2104">
+<meta itemprop="keywords" content="hystrix," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hystrix简介"/>
+<meta name="twitter:description" content="Hystrix简介"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title">Hystrix简介</h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 2016-03-09 </span>
+
+                <div class="post-category">
+                    <a href="/categories/%E6%8A%80%E6%9C%AF/"> 技术 </a>
+                        <a href="/categories/hystrix/"> Hystrix </a>
+                        
+                    <a href="/tags/hystrix/">
+                                <span class="badge">hystrix </span>
+                            </a>
+                        
+                </div>
+                    <span class="more-meta"> 2104 words </span>
+                    <span class="more-meta"> 5 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+            <div>
+                <img src="http://tietang.wang//imgs/hystrix-hystrix-logo-tagline-640.png">
+            </div>
+        
+        
+        <div class="post-content">
+            <p><img src="/imgs/hystrix-hystrix-logo-tagline-640.png" alt=""></p>
+<ol>
+<li><!-- raw HTML omitted -->What Is Hystrix?<!-- raw HTML omitted --></li>
+<li><!-- raw HTML omitted -->What Is Hystrix For?<!-- raw HTML omitted --></li>
+<li><!-- raw HTML omitted -->What Problem Does Hystrix Solve?<!-- raw HTML omitted --></li>
+<li><!-- raw HTML omitted -->What Design Principles Underlie Hystrix?<!-- raw HTML omitted --></li>
+<li><!-- raw HTML omitted -->How Does Hystrix Accomplish Its Goals?<!-- raw HTML omitted --></li>
+</ol>
+<!-- raw HTML omitted -->
+<p>在分布式环境中，不可避免的有许多服务依赖，而且有时候一些服务会失败。Hystrix library通过添加延迟容忍和容错逻辑来控制分布式服务之间的相互影响。Hystrix通过服务之间访问的隔离点阻止连锁故障，并提供了失败回退机制（fallback），来改进系统服务的弹性。</p>
+<h4 id="hystrix的历史">Hystrix的历史</h4>
+<p>Hystrix是在2011年由Netflix API 团队的弹性工程演变而来。在2012年，Hystrix日益完善和成熟，在Netflix的许多团队也开始采用。现在，在Netflix，每天有成千上万的线程隔离和数百亿的信号隔离被调用执行。这已经在可用性和弹性上产生了很大的改进。</p>
+<p>下面的链接提供了围绕Hystrix和挑战，试图解决：</p>
+<ul>
+<li><a href="http://techblog.netflix.com/2011/12/making-netflix-api-more-resilient.html">“Making Netflix API More Resilient”</a></li>
+<li><a href="http://techblog.netflix.com/2012/02/fault-tolerance-in-high-volume.html">“Fault Tolerance in a High Volume, Distributed System”</a></li>
+<li><a href="https://speakerdeck.com/benjchristensen/performance-and-fault-tolerance-for-the-netflix-api-august-2012">“Performance and Fault Tolerance for the Netflix API”</a></li>
+<li><a href="http://programming.oreilly.com/2013/06/application-resilience-in-a-service-oriented-architecture.html">“Application Resilience in a Service-oriented Architecture”</a></li>
+<li>[“Application Resilience Engineering &amp; Operations at Netflix”] (<a href="https://speakerdeck.com/benjchristensen/application-resilience-engineering-and-operations-at-netflix">https://speakerdeck.com/benjchristensen/application-resilience-engineering-and-operations-at-netflix</a>)</li>
+</ul>
+<!-- raw HTML omitted -->
+<p>Hystrix被设计为：</p>
+<ul>
+<li>保护通过第三方客户端库服务依赖访问（通常通过网络），控制其延迟和故障</li>
+<li>在复杂的分布式系统中阻止连锁故障反应</li>
+<li>快速失败和快速恢复</li>
+<li>Fallback降级和在可能的情况下优雅地降级</li>
+<li>启用近实时监测，报警和操作控制</li>
+</ul>
+<!-- raw HTML omitted -->
+<p>复杂分布式架构的应用程序有许多依赖，其中每一个在某些时候都会不可避免的发生失败。如果这个主应用没有从那些外部失败隔离，那么就会有被拖垮的风险。</p>
+<p>例如，1个应用依赖30个服务，每个服务有99.99%可用，那么预期：</p>
+<blockquote>
+<p>99.99<!-- raw HTML omitted -->30<!-- raw HTML omitted -->  =  99.7% uptime<br>
+10亿请求中的0.3%  = 3,000,000 次失败<br>
+即使所有依赖的服务都能达到 99.99% 的可用率，每月大约有2+小时不可用
+随着服务依赖数量的变多，服务不稳定的概率会成指数性提高.</p>
+</blockquote>
+<p><strong>现实通常会更残酷。</strong></p>
+<p><strong>如果你没有针对整个系统做快速恢复</strong>，即使所有依赖只有 0.01% 的不可用率，累积起来每个月给系统带来的不可用时间也有数小时之多。</p>
+<hr>
+<p>当一切都ok的请求流看起来是这样的：</p>
+<p><img src="/imgs/hystrix-soa-1-1280.png" alt=""></p>
+<p>当许多后端系统中的一个成为潜在故障时，可能会阻塞所有用户请求：</p>
+<p><img src="/imgs/hystrix-soa-2-1280.png" alt=""></p>
+<p>一个高并发后端依赖成为潜在危险时，它会在几秒钟中导致所有服务器上的所有的资源耗尽。
+在网络中或者客户端库中运行的每一个app都有可能会导致成为潜在的故障源。比失败更坏的是，这个问题app也可能会导致服务之间的延迟增加，从而备份队列，线程，和其他系统资源，导致更多系统的级联故障。</p>
+<p><img src="/imgs/hystrix-soa-3-1280.png" alt=""></p>
+<p>当通过第三方客户端网络访问时，这些问题会加剧，这个第三方客户端就是一个黑盒，其实现细节是不清楚的，它能随时改变行为，每个客户端库的网络和资源配置是不同的，通常难以监控和修改。
+如果这些网络请求通过第三方客户端发出，问题会变得更加严重，因为这些第三方客户端对于应用来说相当于『黑盒』——无法了解其实现细节，随时可能发生变更，网络/资源配置随客户端的不同而不同，同时又难以监控和修改。同时，应用依赖链中的服务可能非常耗时，或者这些可能导致问题的网络请求根本没有被我们的应用显式地调用！</p>
+<p>网络连接可能失败或者降级。服务或者服务器可能失效或者变慢。新依赖的库或者部署的服务可能改变行为或性能，亦或是依赖的客户端库本身有bug。
+所有以上这些所描述的失败和延迟都需要被隔离和管理，才不至于因为单个服务失败而导致整个应用活系统垮掉。</p>
+<!-- raw HTML omitted -->
+<p>Hystrix works by:</p>
+<ul>
+<li>防止任何单一依赖耗尽容器（如Tomcat）内的所有用户线程</li>
+<li>隔离和减低负载，对无法及时处理时快速失败，而不是排队</li>
+<li>提供失败回退（fallback）降级，无论何时都尽可能保护使用者免受破坏。</li>
+<li>采用隔离技术（如隔离壁，泳道，和熔断器模式）来限制任何一个依赖性的影响。</li>
+<li>通过最近实时metrics、监控和警告来优化以满足近实时性的要求</li>
+<li>在 Hystrix许多方面都需要只是配置属性的动态修改并能低延迟传播，提供优化以满足快速恢复的要求</li>
+<li>能保护应用不受依赖服务的整个执行过程中失败的影响，而不仅仅是网络请求</li>
+</ul>
+<!-- raw HTML omitted -->
+<p>Hystrix does this by:</p>
+<ul>
+<li>
+<p>使用<code>HystrixCommand</code>或者<code>HystrixObservableCommand</code>包装所有的外部系统（或者依赖服务）调用，每个<code>HystrixCommand</code>或者<code>HystrixObservableCommand</code>在隔离的线程中/信号下执行（参考这个例子<a href="http://en.wikipedia.org/wiki/Command_pattern">command pattern</a>）</p>
+</li>
+<li>
+<p>超时机制，调用时间比定义的超时阀值大时超时。除了默认值，通过设置“properties”给每个依赖服务定义超时阀值,超时时间一般设为比99.5%平均时间略高即可.当调用超时时，直接返回或执行fallback逻辑。</p>
+</li>
+<li>
+<p>为每个依赖维护一个小的线程池（或信号），如果线程池已满调用将被立即拒绝来代替排队方式。</p>
+</li>
+<li>
+<p>测量成功，失败（抛出异常），超时和线程拒绝。</p>
+</li>
+<li>
+<p>如果错误比率达到设定的阀值，通过手动或者自动方式平稳的停止一个时间周期调用所有请求。</p>
+</li>
+<li>
+<p>当请求失败、拒绝，超时或者发生短路时，执行失败回退（fallback）逻辑。</p>
+</li>
+<li>
+<p>近实时监控度量，动态配置修改</p>
+</li>
+</ul>
+<p>当使用 Hystrix 包装了你的所有依赖服务的请求后，下面图中所示的系统拓扑将会变成如下形式，每个依赖服务都被隔离开来，Hystrix 会严格控制其在延迟发生时对资源的占用，并在任何失效发生时，执行失败回退逻辑。</p>
+<p><img src="/imgs/hystrix-soa-4-isolation-1280.png" alt=""></p>
+
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2016-03-09
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            <div class="post-tags">
+                    <a href="/tags/hystrix/">hystrix</a>
+                    </div>
+            <nav class="post-nav">
+                <a class="prev" href="/posts/%E6%8A%80%E6%9C%AF/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B9%8B%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2%E7%AE%97%E6%B3%95/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default">负载均衡之加权轮询算法</span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/hystrix/hystrix%E9%99%8D%E7%BA%A7%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/">
+                        <span class="next-text nav-default">Hystrix降级模式总结</span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    <h4>相关文章：</h4>
+    <ul>
+        
+            <li><a href="/posts/hystrix/hystrix%E9%99%8D%E7%BA%A7%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/">Hystrix降级模式总结</a></li>
+        
+            <li><a href="/posts/hystrix/hystrix%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/">Hystrix 参数详解</a></li>
+        
+    </ul>
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2016-03-09 09:22:47 \u002b0000 UTC',
+        title: 'Hystrix简介',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2023
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

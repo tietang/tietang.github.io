@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rasa on 多少光年</title>
+    <link>http://tietang.wang/tags/rasa/</link>
+    <description>Recent content in Rasa on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 12 Oct 2022 20:22:47 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/rasa/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MacOS&#43;Ubuntu【mutipass】安装Rasa3.0</title>
+      <link>http://tietang.wang/posts/ai/rasa3.0%E5%AE%89%E8%A3%85/</link>
+      <pubDate>Wed, 12 Oct 2022 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/ai/rasa3.0%E5%AE%89%E8%A3%85/</guid>
+      <description>MacOS+Ubuntu【mutipass】安装Rasa3.0 MacOS准备Ubuntu： 其他平台参考官网https://multipass.run，也可以使用docker或虚拟机。 macOS安装multipass： https://multipass.run/install 下载安装包 或者 brew install &amp;ndash;cask multipass 下载和启动ubutun, 建议使用20.04版本，默认python3为3.8，并命名为rubuntu： snapcraft:core20 20.04 20.04 focal multipass launch focal &amp;ndash;cpus 4 &amp;ndash;disk 20G &amp;ndash;mem 8G &amp;ndash;name rubuntu multipass launch &amp;ndash;cpus 4 &amp;ndash;disk 20G &amp;ndash;mem 8G &amp;ndash;name rubuntu 进入命名为rubuntu的ubuntu shell : multipass shell rubuntu Python3.8及环境安装： 3.10安装rasa3.0有依赖和编译问题，其他版本未知，使用3.8来安装rasa3.0。 更新软件包列表并安装必备组件: sudo apt update sudo apt -y install software-properties-common sudo apt update #需要注意software-properties-common 有可能会重新安装python3.10，如果重新安装可以再次卸载。 将Deadsnakes PPA添加到系统的来源列表中(一定要在卸载</description>
+    </item>
+    
+  </channel>
+</rss>

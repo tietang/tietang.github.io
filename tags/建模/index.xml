@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>建模 on 多少光年</title>
+    <link>http://tietang.wang/tags/%E5%BB%BA%E6%A8%A1/</link>
+    <description>Recent content in 建模 on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 17 Sep 2019 20:20:42 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/%E5%BB%BA%E6%A8%A1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>四色建模法-红包业务运用</title>
+      <link>http://tietang.wang/posts/%E6%9E%B6%E6%9E%84/%E5%BB%BA%E6%A8%A1/%E7%BA%A2%E5%8C%85%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%9B%9B%E8%89%B2%E5%BB%BA%E6%A8%A1%E6%B3%95%E7%94%A8%E4%BE%8B%E5%88%86%E6%9E%90/</link>
+      <pubDate>Tue, 17 Sep 2019 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E6%9E%B6%E6%9E%84/%E5%BB%BA%E6%A8%A1/%E7%BA%A2%E5%8C%85%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%9B%9B%E8%89%B2%E5%BB%BA%E6%A8%A1%E6%B3%95%E7%94%A8%E4%BE%8B%E5%88%86%E6%9E%90/</guid>
+      <description>红包场景概述 红包业务场景主要用例就2个：发红包和收红包。 红包指的是具备固定数量固定总金额的大红包，每个大红包由固定数量的小红包组成，每个小红包金额一样或者不一样，但所有小红包的金额之和和大红包总金额必须保持一致，红包实际上是一个具备虚拟资金特征的特殊商品。 发红包和收红包实际上是金融商品的交易过程，红包是一种虚拟资金商品，会涉及到用户资金资产，资金资产指的是用户的钱包账户。 发红包过程是，红包发放者从系统虚拟资金中间商那里购买虚拟资金商品也就是红包，并支付红包总金额给系统虚拟资金中间商，然后将购买的红包赠送给目标人群，赠送过程相当于商品发布，目标人群可以是某个人，也可以是某一群人，所以发红包过程涉及到下单，支付、赠送。 收红包过程类似商品的秒杀活动，不一样的是用户不需要支付商品价格，用户点击红包链接，进入抢红包流程，如果抢到红包，直接到系统虚拟资金中间商那里兑换红包面值，系统虚拟资金中间商将面值</description>
+    </item>
+    
+    <item>
+      <title>四色建模法-四个概念和五个步骤</title>
+      <link>http://tietang.wang/posts/%E6%9E%B6%E6%9E%84/%E5%BB%BA%E6%A8%A1/%E5%9B%9B%E8%89%B2%E5%BB%BA%E6%A8%A1%E6%B3%95%E7%9A%84%E5%9B%9B%E4%B8%AA%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BA%94%E4%B8%AA%E6%AD%A5%E9%AA%A4/</link>
+      <pubDate>Mon, 16 Sep 2019 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E6%9E%B6%E6%9E%84/%E5%BB%BA%E6%A8%A1/%E5%9B%9B%E8%89%B2%E5%BB%BA%E6%A8%A1%E6%B3%95%E7%9A%84%E5%9B%9B%E4%B8%AA%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BA%94%E4%B8%AA%E6%AD%A5%E9%AA%A4/</guid>
+      <description>四色建模法 四个概念概述： ”四色原型“模式，根据名字我们就可以大概猜出它是基于四个概念来分析我们的业务概念，下面我们来了解一下哪四个概念： 时标性对象：这在四色建模中最重要也是最难分析的图例，时标性对象指的是业务在在某个时间段内的发生和跟踪的事件，最重要的是2部分内容，1是事件，2是事件所留下的痕迹。比如订单是某个客户在某个时间段内购买了某个商品所发生的业务，也是这个过程留下的唯一证据。此概念就是用来跟踪实体发生的所有需要跟踪的事件。通常时标性对象的生命周期比较短，作用范围也以生命周期内有效，事务、日志类对象就是典型的时标类对象，比如订单、支付记录、操作日志等等。时标性对象使用粉红色来标识。 实体：也可以叫做物品，是业务事件发生过程中的参与者，通常是静态的，生命周期贯穿多次同一类业务，创建后就一直生效，配置性是典型的特征，比如：客户、商品。使用绿色来表示实体（参与者）。 角色：是指实体、时刻时段的</description>
+    </item>
+    
+  </channel>
+</rss>

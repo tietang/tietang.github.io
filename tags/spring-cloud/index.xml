@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>spring cloud on 多少光年</title>
+    <link>http://tietang.wang/tags/spring-cloud/</link>
+    <description>Recent content in spring cloud on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 18 Nov 2016 19:22:47 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/spring-cloud/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hystrix semaphore和thread隔离策略的区别及配置参考</title>
+      <link>http://tietang.wang/posts/hystrix/hystrix-semaphore%E5%92%8Cthread%E9%9A%94%E7%A6%BB%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+      <pubDate>Fri, 18 Nov 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/hystrix/hystrix-semaphore%E5%92%8Cthread%E9%9A%94%E7%A6%BB%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+      <description>Hystrix semaphore和thread隔离策略的区别及配置参考 通用设置说明 Hystrix所有的配置都是hystrix.command.[HystrixCommandKey]开头,其中[HystrixCommandKey]是可变的，默认是default,即hystrix.command.default；另外Hystrix内置了默认参数，如果没有配置Hystrix属性，默认参数就会被设置，其优先级： hystrix.command.[HystrixCommandKey].XXX hystrix.command.default.XXX Hystrix代码内置属性参数值 Hystrix隔离策略相关的参数 策略参数设置 execution.isolation.strategy= THREAD|SEMAPHORE execution.isolation.thread.timeoutInMilliseconds hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds 用来设置thread和semaphore两种隔离策略的超时时间，默认值是1000。 建议设置这个参数，在Hystrix 1.4.0之前，semaphore-isolated隔离策略是不能超时的，从1.4.0开始semaphore-isolated也支持超时时间了。 建议通过CommandKey设置不同微服务的超时时间,对于</description>
+    </item>
+    
+    <item>
+      <title>zuul 参数调优</title>
+      <link>http://tietang.wang/posts/hystrix/zuu%E5%8F%82%E6%95%B0l%E4%BC%98%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Thu, 17 Nov 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/hystrix/zuu%E5%8F%82%E6%95%B0l%E4%BC%98%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE/</guid>
+      <description>zuul 参数调优 适用版本： spring-boot: 1.4.x.RELEASE spring-cloud：Camden.SR3 Hystrix: 1.5.6 spring-boot-tomcat 优化参数： 主要只有2个，最大和最小worker线程： 1 2 server.tomcat.max-threads=128 # Maximum amount of worker threads. server.tomcat.min-spare-threads=64 # Minimum amount of worker threads. spring-boot-undertow 优化参数： ioThreads 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接,默认取CPU核心数量,最小值为2。 Math.max(Runtime.getRuntime().availableProcessors(), 2); spring-boot 参数：server.undertow.io-threads= worker-threads 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载，默认值为io-threads*8。 spring-boot 参数：server.undertow.worker-threads= buffer buffer-size: 每块buffer的空间大小,越小的空间被利用越充分。 **buffers-per-region: ** 每个区分配的buffer数量 , 所以pool的大小是buffer-size * buffers-per-region。 directBuffers 是否分配的直接内存。 获取JVM最大可用内存maxMemory=</description>
+    </item>
+    
+  </channel>
+</rss>

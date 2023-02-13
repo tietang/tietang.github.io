@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DDD on 多少光年</title>
+    <link>http://tietang.wang/tags/ddd/</link>
+    <description>Recent content in DDD on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 17 Nov 2019 20:20:42 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/ddd/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>代码架构</title>
+      <link>http://tietang.wang/posts/%E6%9E%B6%E6%9E%84/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/</link>
+      <pubDate>Sun, 17 Nov 2019 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E6%9E%B6%E6%9E%84/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/</guid>
+      <description>代码架构 在软件开发生命周期中，代码架构很少被提到，但是实际上每一个开发者都在做代码架构。代码架构在软件开发中有着重要的作用，那么我们就来聊聊在软件开发领域中代码架构，从Why、What、How几个方面来讲讲： Why：为什么要做代码架构？ What：代码架构要做些什么事情？ How：怎样来设计代码架构？ Why：为什么要做代码架构？ 软件开发的生命周期，大致都是一样的流程： 需求分析：产出概念模型，需求定义 概要设计：包括系统边界设计、内部架构设计、设计决策 详细设计，包括代码架构，业务逻辑实现 开发代码 单元测试、连通测试 部署上线 系统运维 代码架构属于详细设计部分的内容，代码架构在整个软件开发生命周期中承上启下： 向上要表达设计意图，要把软件产品概念模型、边界交互、数据流设计、数据库设计、系统内部架构设计等表达清楚，来说明业务逻辑和业务领域模型 代码架构本身也是来保证代码有更好的可读性和可维护性、可扩展性，决定了</description>
+    </item>
+    
+    <item>
+      <title>领域模型的价值</title>
+      <link>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BB%B7%E5%80%BC/</link>
+      <pubDate>Sun, 21 Feb 2016 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/%E6%8A%80%E6%9C%AF/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BB%B7%E5%80%BC/</guid>
+      <description>价值 提供什么服务： 什么来体现服务：运行方式，运行过程和业务逻辑 提供的质量：如何服务，要做的事情 传统数据库为中心 业务逻辑在数据库上，结合系统代码来保证业务逻辑的实现。 以数据库为中心的开发如何的OO﹐如何多的设计模式﹐架构体系如何优美﹐它始终离不开数据库。 OO|面向对象 表现点则是直接在对象本身上﹐在于对象之间真正的交互过程﹐结果也是保留在对象的属性和对象与对象的关系中 逻辑直接存在于对象上﹐这与现实情况是吻合的。 领域模型是一种思维﹐是一种方法,是在系统分析阶段使用﹐而不是在代码中进行纯设计时的工具。不是为了OO而领域﹐不是为了最终要新增数据库而领域。在没有理解领域模型本质时，任何编码都得不到收益。 在分析或架构一个系统时，要得出系统的服务和服务场景，即user case。 领域模型的特点 领域模型是对具有某个边界的领域的一个抽象，反映了领域内用户业务需求的本质；领域模型是有边界的，只反应了我们在领域内所</description>
+    </item>
+    
+  </channel>
+</rss>

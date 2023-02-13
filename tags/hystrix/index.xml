@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hystrix on 多少光年</title>
+    <link>http://tietang.wang/tags/hystrix/</link>
+    <description>Recent content in Hystrix on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 18 Nov 2016 19:22:47 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/hystrix/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hystrix semaphore和thread隔离策略的区别及配置参考</title>
+      <link>http://tietang.wang/posts/hystrix/hystrix-semaphore%E5%92%8Cthread%E9%9A%94%E7%A6%BB%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+      <pubDate>Fri, 18 Nov 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/hystrix/hystrix-semaphore%E5%92%8Cthread%E9%9A%94%E7%A6%BB%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+      <description>Hystrix semaphore和thread隔离策略的区别及配置参考 通用设置说明 Hystrix所有的配置都是hystrix.command.[HystrixCommandKey]开头,其中[HystrixCommandKey]是可变的，默认是default,即hystrix.command.default；另外Hystrix内置了默认参数，如果没有配置Hystrix属性，默认参数就会被设置，其优先级： hystrix.command.[HystrixCommandKey].XXX hystrix.command.default.XXX Hystrix代码内置属性参数值 Hystrix隔离策略相关的参数 策略参数设置 execution.isolation.strategy= THREAD|SEMAPHORE execution.isolation.thread.timeoutInMilliseconds hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds 用来设置thread和semaphore两种隔离策略的超时时间，默认值是1000。 建议设置这个参数，在Hystrix 1.4.0之前，semaphore-isolated隔离策略是不能超时的，从1.4.0开始semaphore-isolated也支持超时时间了。 建议通过CommandKey设置不同微服务的超时时间,对于</description>
+    </item>
+    
+    <item>
+      <title>zuul 参数调优</title>
+      <link>http://tietang.wang/posts/hystrix/zuu%E5%8F%82%E6%95%B0l%E4%BC%98%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Thu, 17 Nov 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/hystrix/zuu%E5%8F%82%E6%95%B0l%E4%BC%98%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE/</guid>
+      <description>zuul 参数调优 适用版本： spring-boot: 1.4.x.RELEASE spring-cloud：Camden.SR3 Hystrix: 1.5.6 spring-boot-tomcat 优化参数： 主要只有2个，最大和最小worker线程： 1 2 server.tomcat.max-threads=128 # Maximum amount of worker threads. server.tomcat.min-spare-threads=64 # Minimum amount of worker threads. spring-boot-undertow 优化参数： ioThreads 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接,默认取CPU核心数量,最小值为2。 Math.max(Runtime.getRuntime().availableProcessors(), 2); spring-boot 参数：server.undertow.io-threads= worker-threads 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载，默认值为io-threads*8。 spring-boot 参数：server.undertow.worker-threads= buffer buffer-size: 每块buffer的空间大小,越小的空间被利用越充分。 **buffers-per-region: ** 每个区分配的buffer数量 , 所以pool的大小是buffer-size * buffers-per-region。 directBuffers 是否分配的直接内存。 获取JVM最大可用内存maxMemory=</description>
+    </item>
+    
+    <item>
+      <title>RestTemplate遇上Hystrix</title>
+      <link>http://tietang.wang/posts/hystrix/resttemplate%E9%81%87%E4%B8%8Ahystrix/</link>
+      <pubDate>Fri, 02 Sep 2016 09:20:00 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/hystrix/resttemplate%E9%81%87%E4%B8%8Ahystrix/</guid>
+      <description>RestTemplate遇上Hystrix RestTemplate集成Hystrix和Robbin 查看RestTemplate源代码，可以看到RestTemplate继承了InterceptingHttpAccessor类，InterceptingHttpAccessor类通过ClientHttpRequestInterceptor接口提供了扩展功能。 实现intercept方法，在该方法中封装HystrixCommand和Ribbon逻辑即可。 下面的代码是集成了HystrixCommand的例子： 1 2 3 4 5 6 7 8 9 10 11 12 13 @Override public ClientHttpResponse intercept( final HttpRequest request, final byte[] body, final ClientHttpRequestExecution execution) throws IOException { final URI originalUri = request.getURI(); String serviceName = mapCommandKey(originalUri); log.info(&amp;#34;{} :{} {} &amp;#34;, serviceName, request.getMethod().name(), originalUri.toString()); return new RestTemplateHystrixCommnad(serviceName, () -&amp;gt; { return execution.execute(request, body); }, hystrixFallback).execute(); } 下面是集成了HystrixCommand和Ribbon的例子 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 @Override public ClientHttpResponse intercept( final HttpRequest request, final byte[] body, final ClientHttpRequestExecution execution) throws IOException { final URI originalUri = request.getURI(); String serviceName = mapCommandKey(originalUri); log.info(&amp;#34;{} :{} {} &amp;#34;, serviceName, request.getMethod().name(), originalUri.toString()); return new RestTemplateHystrixCommnad(serviceName, () -&amp;gt; { return this.loadBalancer.execute(serviceName, instance -&amp;gt; { HttpRequest</description>
+    </item>
+    
+    <item>
+      <title>Hystrix简介</title>
+      <link>http://tietang.wang/posts/hystrix/hystrix%E7%AE%80%E4%BB%8B/</link>
+      <pubDate>Wed, 09 Mar 2016 09:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/hystrix/hystrix%E7%AE%80%E4%BB%8B/</guid>
+      <description>What Is Hystrix? What Is Hystrix For? What Problem Does Hystrix Solve? What Design Principles Underlie Hystrix? How Does Hystrix Accomplish Its Goals? 在分布式环境中，不可避免的有许多服务依赖，而且有时候一些服务会失败。Hystrix library通过添加延迟容忍和容错逻辑来控制分布式服务之间的相互影响。Hystrix通过服务之间访问的隔离点阻止连锁故障，并提供了失败回退机制（fallback），来改进系统服务的弹性。 Hystrix的历史 Hystrix是在2011年由Netflix API 团队的弹性工程演变而来。在2012年，Hystrix日益完善和成熟，在Netflix的许多团队也开始采用。现在，在Netflix，每天有成千上万的线程隔离和数百亿的信号隔离被调用执行。这已经在可用性和弹性上产生了很大的改进。 下面的链接提供了围绕Hystrix和挑战，试图解决： “Making Netflix API More Resilient” “Fault Tolerance in a High Volume, Distributed System” “Performance and Fault Tolerance for the Netflix API” “Applicati</description>
+    </item>
+    
+    <item>
+      <title>Hystrix降级模式总结</title>
+      <link>http://tietang.wang/posts/hystrix/hystrix%E9%99%8D%E7%BA%A7%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Wed, 09 Mar 2016 09:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/hystrix/hystrix%E9%99%8D%E7%BA%A7%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/</guid>
+      <description>失败回退降级模式 失败回退需要实现HystrixCommand.getFallback方法或者HystrixObservableCommand. HystrixObservableCommand()方法。 快速失败Fail Fast 如果业务异常，就抛出一个异常 静默失败Fail Silent 失败时返回一个空response或者移除业务功能，例如返回null，空字符串，空map，空list等 Fallback: Static 失败时，返回默认值来替代引起失败的原因 Fallback: Stubbed 返回替代值，还没理解 Fallback: Cache via Network 当后端服务失败时，从网络缓存获取返回值 Primary + Secondary with Fallback 故障转移，当主服务失败时，调用从服务。当从服务也失败时结合其他模式 Client Doesn’t Perform Network Access * Get-Set-Get with Request Cache Invalidation</description>
+    </item>
+    
+    <item>
+      <title>Hystrix 参数详解</title>
+      <link>http://tietang.wang/posts/hystrix/hystrix%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Thu, 25 Feb 2016 09:20:00 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/hystrix/hystrix%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/</guid>
+      <description>hystrix.command.default和hystrix.threadpool.default中的default为默认CommandKey Command Properties Execution相关的属性的配置： hystrix.command.default.execution.isolation.strategy 隔离策略，默认是Thread, 可选Thread｜Semaphore thread 通过线程数量来限制并发请求数，可以提供额外的保护，但有一定的延迟。一般用于网络调用 semaphore 通过semaphore count来限制并发请求数，适用于无网络的高并发请求 hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds 命令执行超时时间，默认1000ms hystrix.command.default.execution.timeout.enabled 执行是否启用超时，默认启用true hystrix.command.default.execution.isolation.thread.interruptOnTimeout 发生超时是是否中断，默认true hystrix.command.default.execution.isolation.semaphore.maxConcurrentRequests 最大并发请求数，默认10，该参数当使用ExecutionIsolationStrategy.SEMAPHORE策略时才有效。如果达到最大并发请求数，请求会被拒绝。理论上选择semaphore size的原则和选择thread size一致，但选用semaphore时每次执行的单元要比</description>
+    </item>
+    
+  </channel>
+</rss>

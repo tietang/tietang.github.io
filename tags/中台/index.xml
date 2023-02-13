@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>中台 on 多少光年</title>
+    <link>http://tietang.wang/tags/%E4%B8%AD%E5%8F%B0/</link>
+    <description>Recent content in 中台 on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 19 Sep 2019 09:20:42 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/%E4%B8%AD%E5%8F%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>业务中台的思考</title>
+      <link>http://tietang.wang/posts/paas/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%80%9D%E8%80%83/</link>
+      <pubDate>Thu, 19 Sep 2019 09:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/paas/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0%E7%9A%84%E6%80%9D%E8%80%83/</guid>
+      <description>&amp;mdash; &amp;mdash; &amp;mdash; &amp;mdash; 大业务中台 小业务中台 &amp;mdash; 生态中台 原子业务中台 说明 提供全业务中心视图和能力 提供底层抽象通用的业务能力 提供全面的业务和技术解决方案的能力 提供基础业务和技术解决方案的能力 Core Service</description>
+    </item>
+    
+  </channel>
+</rss>

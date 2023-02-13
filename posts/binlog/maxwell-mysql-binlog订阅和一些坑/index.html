@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Maxwell MySQL binlog订阅和一些坑 - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="maxwell 相关资源 http://maxwells-daemon.io/ https://github.com/zendesk/maxwell https://github.com/zendesk/open-replicator 配置MySQL master数据源 1 2 3 4 [mysqld] server-id=1 log-bin=master binlog_format=row 注意： MySQL必须开启了binlogs，即log-bin指定了目录 binlog_format必须是row master数据源配置REPLICATION权限： Maxwell需要储存他自己的一些状态数据，启动参数schema_database选型来指定，默认是maxwell. 1 2 GRANT ALL on maxwell.* to &amp;#39;maxwell&amp;#39;@&amp;#39;%&amp;#39; identified by &amp;#39;123456&amp;#39;; GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE on *.* to &amp;#39;maxwell&amp;#39;@&amp;#39;%&amp;#39;; 问题列表 当binlog文件不存在时（被删除、移除、过期） 无法启动maxwell 正在运行的maxwell**可能**会stop 在阿里云RDS下的风险问题 binlog文件清理问题 binlog文件名在切换master主备或者阿里运维维护时会重置 RDS for MySQL 的 Binlog 生成和清理规则： 参考：RDS for MySQL 之 Binlog 日志生成和清理规则 其他问题 阿里RDS的binlog在被复制完成后，会将之前的最后的binlog文件复制到其他地方，如果maxwell挂起时"/><meta name="keywords"
+          content="Maxwell - Binlog - mysql"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/binlog/maxwell-mysql-binlog%E8%AE%A2%E9%98%85%E5%92%8C%E4%B8%80%E4%BA%9B%E5%9D%91/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Maxwell MySQL binlog订阅和一些坑" />
+<meta property="og:description" content="maxwell 相关资源 http://maxwells-daemon.io/ https://github.com/zendesk/maxwell https://github.com/zendesk/open-replicator 配置MySQL master数据源 1 2 3 4 [mysqld] server-id=1 log-bin=master binlog_format=row 注意： MySQL必须开启了binlogs，即log-bin指定了目录 binlog_format必须是row master数据源配置REPLICATION权限： Maxwell需要储存他自己的一些状态数据，启动参数schema_database选型来指定，默认是maxwell. 1 2 GRANT ALL on maxwell.* to &#39;maxwell&#39;@&#39;%&#39; identified by &#39;123456&#39;; GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE on *.* to &#39;maxwell&#39;@&#39;%&#39;; 问题列表 当binlog文件不存在时（被删除、移除、过期） 无法启动maxwell 正在运行的maxwell**可能**会stop 在阿里云RDS下的风险问题 binlog文件清理问题 binlog文件名在切换master主备或者阿里运维维护时会重置 RDS for MySQL 的 Binlog 生成和清理规则： 参考：RDS for MySQL 之 Binlog 日志生成和清理规则 其他问题 阿里RDS的binlog在被复制完成后，会将之前的最后的binlog文件复制到其他地方，如果maxwell挂起时" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/binlog/maxwell-mysql-binlog%E8%AE%A2%E9%98%85%E5%92%8C%E4%B8%80%E4%BA%9B%E5%9D%91/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2016-11-09T19:22:47+00:00" />
+<meta property="article:modified_time" content="2016-11-09T19:22:47+00:00" />
+
+<meta itemprop="name" content="Maxwell MySQL binlog订阅和一些坑">
+<meta itemprop="description" content="maxwell 相关资源 http://maxwells-daemon.io/ https://github.com/zendesk/maxwell https://github.com/zendesk/open-replicator 配置MySQL master数据源 1 2 3 4 [mysqld] server-id=1 log-bin=master binlog_format=row 注意： MySQL必须开启了binlogs，即log-bin指定了目录 binlog_format必须是row master数据源配置REPLICATION权限： Maxwell需要储存他自己的一些状态数据，启动参数schema_database选型来指定，默认是maxwell. 1 2 GRANT ALL on maxwell.* to &#39;maxwell&#39;@&#39;%&#39; identified by &#39;123456&#39;; GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE on *.* to &#39;maxwell&#39;@&#39;%&#39;; 问题列表 当binlog文件不存在时（被删除、移除、过期） 无法启动maxwell 正在运行的maxwell**可能**会stop 在阿里云RDS下的风险问题 binlog文件清理问题 binlog文件名在切换master主备或者阿里运维维护时会重置 RDS for MySQL 的 Binlog 生成和清理规则： 参考：RDS for MySQL 之 Binlog 日志生成和清理规则 其他问题 阿里RDS的binlog在被复制完成后，会将之前的最后的binlog文件复制到其他地方，如果maxwell挂起时"><meta itemprop="datePublished" content="2016-11-09T19:22:47+00:00" />
+<meta itemprop="dateModified" content="2016-11-09T19:22:47+00:00" />
+<meta itemprop="wordCount" content="657">
+<meta itemprop="keywords" content="Maxwell,binlog,mysql," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Maxwell MySQL binlog订阅和一些坑"/>
+<meta name="twitter:description" content="maxwell 相关资源 http://maxwells-daemon.io/ https://github.com/zendesk/maxwell https://github.com/zendesk/open-replicator 配置MySQL master数据源 1 2 3 4 [mysqld] server-id=1 log-bin=master binlog_format=row 注意： MySQL必须开启了binlogs，即log-bin指定了目录 binlog_format必须是row master数据源配置REPLICATION权限： Maxwell需要储存他自己的一些状态数据，启动参数schema_database选型来指定，默认是maxwell. 1 2 GRANT ALL on maxwell.* to &#39;maxwell&#39;@&#39;%&#39; identified by &#39;123456&#39;; GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE on *.* to &#39;maxwell&#39;@&#39;%&#39;; 问题列表 当binlog文件不存在时（被删除、移除、过期） 无法启动maxwell 正在运行的maxwell**可能**会stop 在阿里云RDS下的风险问题 binlog文件清理问题 binlog文件名在切换master主备或者阿里运维维护时会重置 RDS for MySQL 的 Binlog 生成和清理规则： 参考：RDS for MySQL 之 Binlog 日志生成和清理规则 其他问题 阿里RDS的binlog在被复制完成后，会将之前的最后的binlog文件复制到其他地方，如果maxwell挂起时"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title">Maxwell MySQL binlog订阅和一些坑</h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 2016-11-09 </span>
+
+                <div class="post-category">
+                    <a href="/categories/mysql/"> mysql </a>
+                        
+                    <a href="/tags/maxwell/">
+                                <span class="badge">Maxwell </span>
+                            </a>
+                        <a href="/tags/binlog/">
+                                <span class="badge">binlog </span>
+                            </a>
+                        <a href="/tags/mysql/">
+                                <span class="badge">mysql </span>
+                            </a>
+                        
+                </div>
+                    <span class="more-meta"> 657 words </span>
+                    <span class="more-meta"> 2 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#maxwell-相关资源">maxwell 相关资源</a></li>
+    <li><a href="#配置mysql-master数据源">配置MySQL master数据源</a></li>
+    <li><a href="#master数据源配置replication权限">master数据源配置REPLICATION权限：</a></li>
+    <li><a href="#问题列表">问题列表</a>
+      <ul>
+        <li><a href="#在阿里云rds下的风险问题">在阿里云RDS下的风险问题</a></li>
+        <li><a href="#其他问题">其他问题</a></li>
+        <li><a href="#当master中的binlog文件被删除后无法启动">当master中的binlog文件被删除后，无法启动</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+            <div>
+                <img src="http://tietang.wang//imgs/P60724-115835.jpg">
+            </div>
+        
+        
+        <div class="post-content">
+            <h2 id="maxwell-相关资源">maxwell 相关资源</h2>
+<p><a href="http://maxwells-daemon.io/">http://maxwells-daemon.io/</a>
+<a href="https://github.com/zendesk/maxwell">https://github.com/zendesk/maxwell</a>
+<a href="https://github.com/zendesk/open-replicator">https://github.com/zendesk/open-replicator</a></p>
+<h2 id="配置mysql-master数据源">配置MySQL master数据源</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[mysqld]
+</span></span><span class="line"><span class="cl">server-id=1
+</span></span><span class="line"><span class="cl">log-bin=master
+</span></span><span class="line"><span class="cl">binlog_format=row
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意：</p>
+<ol>
+<li>MySQL必须开启了binlogs，即log-bin指定了目录</li>
+<li>binlog_format必须是row</li>
+</ol>
+<h2 id="master数据源配置replication权限">master数据源配置REPLICATION权限：</h2>
+<p>Maxwell需要储存他自己的一些状态数据，启动参数schema_database选型来指定，默认是<code>maxwell</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">GRANT</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">maxwell</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="s1">&#39;maxwell&#39;</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="n">identified</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;123456&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="n">REPLICATION</span><span class="w"> </span><span class="n">CLIENT</span><span class="p">,</span><span class="w"> </span><span class="n">REPLICATION</span><span class="w"> </span><span class="n">SLAVE</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="s1">&#39;maxwell&#39;</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="问题列表">问题列表</h2>
+<ol>
+<li>当binlog文件不存在时（被删除、移除、过期）</li>
+</ol>
+<ul>
+<li>无法启动maxwell</li>
+<li>正在运行的maxwell**<code>可能</code>**会stop</li>
+</ul>
+<h3 id="在阿里云rds下的风险问题">在阿里云RDS下的风险问题</h3>
+<ol>
+<li>binlog文件清理问题</li>
+<li>binlog文件名在切换master主备或者阿里运维维护时会重置</li>
+</ol>
+<p>RDS for MySQL 的 Binlog 生成和清理规则：</p>
+<p>参考：<a href="https://help.aliyun.com/knowledge_detail/41815.html">RDS for MySQL 之 Binlog 日志生成和清理规则</a></p>
+<h3 id="其他问题">其他问题</h3>
+<ol>
+<li>阿里RDS的binlog在被复制完成后，会将之前的最后的binlog文件复制到其他地方，如果maxwell挂起时间较长，有可能未复制的binlog不能被复制过来。</li>
+</ol>
+<ul>
+<li>在AWS下的相关issue：https://github.com/zendesk/maxwell/issues/282</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Amazon rds peridically deletes binlog files, `bin/maxwell` throws error and stops
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Maxwell loses connection during RDS backups：https://github.com/zendesk/maxwell/issues/326</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">com.google.code.or.net.TransportException: Could not find first log file name in binary log index file
+</span></span><span class="line"><span class="cl">        at com.google.code.or.OpenReplicator.dumpBinlog(OpenReplicator.java:288)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="当master中的binlog文件被删除后无法启动">当master中的binlog文件被删除后，无法启动</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nl">09:</span><span class="n">35</span><span class="o">:</span><span class="n">06</span><span class="o">,</span><span class="n">785</span> <span class="n">ERROR</span> <span class="n">MaxwellReplicator</span> <span class="o">-</span> <span class="n">Missing</span> <span class="n">binlog</span> <span class="err">&#39;</span><span class="n">mysql</span><span class="o">-</span><span class="n">bin</span><span class="o">.</span><span class="na">007213</span><span class="err">&#39;</span> <span class="n">on</span> <span class="n">rdst5ai4d32fe3qd6if46</span><span class="o">.</span><span class="na">mysql</span><span class="o">.</span><span class="na">rds</span><span class="o">.</span><span class="na">aliyuncs</span><span class="o">.</span><span class="na">com</span>
+</span></span><span class="line"><span class="cl"><span class="nl">09:</span><span class="n">35</span><span class="o">:</span><span class="n">06</span><span class="o">,</span><span class="n">785</span> <span class="n">ERROR</span> <span class="n">MaxwellReplicator</span> <span class="o">-</span> <span class="n">Transport</span> <span class="n">exception</span> <span class="err">#</span><span class="n">1236</span>
+</span></span><span class="line"><span class="cl"><span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">or</span><span class="o">.</span><span class="na">net</span><span class="o">.</span><span class="na">TransportException</span><span class="o">:</span> <span class="n">Could</span> <span class="n">not</span> <span class="n">find</span> <span class="n">first</span> <span class="n">log</span> <span class="n">file</span> <span class="n">name</span> <span class="n">in</span> <span class="n">binary</span> <span class="n">log</span> <span class="n">index</span> <span class="n">file</span>
+</span></span><span class="line"><span class="cl">	<span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">or</span><span class="o">.</span><span class="na">OpenReplicator</span><span class="o">.</span><span class="na">dumpBinlog</span><span class="o">(</span><span class="n">OpenReplicator</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="n">343</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="na">google</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">or</span><span class="o">.</span><span class="na">OpenReplicator</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">OpenReplicator</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="n">115</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="na">zendesk</span><span class="o">.</span><span class="na">maxwell</span><span class="o">.</span><span class="na">replication</span><span class="o">.</span><span class="na">MaxwellReplicator</span><span class="o">.</span><span class="na">startReplicator</span><span class="o">(</span><span class="n">MaxwellReplicator</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="n">140</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="na">zendesk</span><span class="o">.</span><span class="na">maxwell</span><span class="o">.</span><span class="na">replication</span><span class="o">.</span><span class="na">MaxwellReplicator</span><span class="o">.</span><span class="na">beforeStart</span><span class="o">(</span><span class="n">MaxwellReplicator</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="n">155</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="na">zendesk</span><span class="o">.</span><span class="na">maxwell</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">RunLoopProcess</span><span class="o">.</span><span class="na">runLoop</span><span class="o">(</span><span class="n">RunLoopProcess</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="n">29</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="na">zendesk</span><span class="o">.</span><span class="na">maxwell</span><span class="o">.</span><span class="na">Maxwell</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">Maxwell</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="n">160</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">	<span class="n">at</span> <span class="n">com</span><span class="o">.</span><span class="na">zendesk</span><span class="o">.</span><span class="na">maxwell</span><span class="o">.</span><span class="na">Maxwell</span><span class="o">.</span><span class="na">main</span><span class="o">(</span><span class="n">Maxwell</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="n">181</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="nl">09:</span><span class="n">35</span><span class="o">:</span><span class="n">06</span><span class="o">,</span><span class="n">786</span> <span class="n">INFO</span>  <span class="n">Maxwell</span> <span class="o">-</span> <span class="n">starting</span> <span class="n">shutdown</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2016-11-09
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            <div class="post-tags">
+                    <a href="/tags/maxwell/">Maxwell</a>
+                    <a href="/tags/binlog/">binlog</a>
+                    <a href="/tags/mysql/">mysql</a>
+                    </div>
+            <nav class="post-nav">
+                <a class="prev" href="/posts/hystrix/zuu%E5%8F%82%E6%95%B0l%E4%BC%98%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default">zuul 参数调优</span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/hystrix/resttemplate%E9%81%87%E4%B8%8Ahystrix/">
+                        <span class="next-text nav-default">RestTemplate遇上Hystrix</span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2016-11-09 19:22:47 \u002b0000 UTC',
+        title: 'Maxwell MySQL binlog订阅和一些坑',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2023
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

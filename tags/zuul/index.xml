@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>zuul on 多少光年</title>
+    <link>http://tietang.wang/tags/zuul/</link>
+    <description>Recent content in zuul on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 17 Nov 2016 19:22:47 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/zuul/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>zuul 参数调优</title>
+      <link>http://tietang.wang/posts/hystrix/zuu%E5%8F%82%E6%95%B0l%E4%BC%98%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Thu, 17 Nov 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/posts/hystrix/zuu%E5%8F%82%E6%95%B0l%E4%BC%98%E5%8C%96%E5%92%8C%E9%85%8D%E7%BD%AE/</guid>
+      <description>zuul 参数调优 适用版本： spring-boot: 1.4.x.RELEASE spring-cloud：Camden.SR3 Hystrix: 1.5.6 spring-boot-tomcat 优化参数： 主要只有2个，最大和最小worker线程： 1 2 server.tomcat.max-threads=128 # Maximum amount of worker threads. server.tomcat.min-spare-threads=64 # Minimum amount of worker threads. spring-boot-undertow 优化参数： ioThreads 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接,默认取CPU核心数量,最小值为2。 Math.max(Runtime.getRuntime().availableProcessors(), 2); spring-boot 参数：server.undertow.io-threads= worker-threads 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载，默认值为io-threads*8。 spring-boot 参数：server.undertow.worker-threads= buffer buffer-size: 每块buffer的空间大小,越小的空间被利用越充分。 **buffers-per-region: ** 每个区分配的buffer数量 , 所以pool的大小是buffer-size * buffers-per-region。 directBuffers 是否分配的直接内存。 获取JVM最大可用内存maxMemory=</description>
+    </item>
+    
+  </channel>
+</rss>

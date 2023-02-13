@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 多少光年</title>
+  <meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<meta name="theme-color" content="#f8f5ec"/>
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author"
+      content="铁汤"/><meta name="description" content="ngx_http_js_module 指令 Directives js_content js_import js_include js_path js_set 简单说，Nginx NJS 就是在 Nginx 的配置文件中 /etc/nginx/nginx.conf 增加几条指令 js_content，执行其中 JS 内容并输出 js_include，指定特定的文件内的 JS 代码处理请求 js_set，设置特定的 JS 变量 上面这是 ngx_http_js_module 的使用方法，然而 ngx_stream_js_module 也是基本一样的，就是多了几个指令而已 js_access，Nginx Access 阶段执行的 JS 内容 js_filter，Nginx 输出的数据过滤阶段执行的 JS 内容 js_include，指定特定的文件内的 JS 代码处理请求 js_preread，Nginx Preread 阶段执行的 JS 内容 js_set，设置特定的 JS 变量 js_content | Syntax: | **js_content** *function* | *module.function*; | | :&amp;mdash;&amp;mdash;- | &amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash; | | Default: | — | | Context: | location, limit_except | Sets an njs function as a location content handler. Since 0.4.0, a module function can be referenced. 作为location 内容处理器（content handler），执行一个njs函数。 | Syntax: | **js_import** *module.js* | *export_name from module.js*; | | :&amp;mdash;&amp;mdash;- | &amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;ndash; | | Default: | — | | Context: | http | This directive appeared in version 0.4.0. Imports a module that implements location and variable handlers in njs. The export_name is used as a namespace to access module functions. If the export_name is not specified, the module name will be"/><meta name="keywords"
+          content="微服务, hystrix, 铁汤"/>
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even"/>
+
+
+<link rel="canonical" href="http://tietang.wang/posts/nginx/ngx_http_js_module%E6%8C%87%E4%BB%A4%E5%8F%82%E8%80%83/"/>
+
+
+
+
+
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="ngx_http_js_module 指令 Directives js_content js_import js_include js_path js_set 简单说，Nginx NJS 就是在 Nginx 的配置文件中 /etc/nginx/nginx.conf 增加几条指令 js_content，执行其中 JS 内容并输出 js_include，指定特定的文件内的 JS 代码处理请求 js_set，设置特定的 JS 变量 上面这是 ngx_http_js_module 的使用方法，然而 ngx_stream_js_module 也是基本一样的，就是多了几个指令而已 js_access，Nginx Access 阶段执行的 JS 内容 js_filter，Nginx 输出的数据过滤阶段执行的 JS 内容 js_include，指定特定的文件内的 JS 代码处理请求 js_preread，Nginx Preread 阶段执行的 JS 内容 js_set，设置特定的 JS 变量 js_content | Syntax: | **js_content** *function* | *module.function*; | | :&mdash;&mdash;- | &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash; | | Default: | — | | Context: | location, limit_except | Sets an njs function as a location content handler. Since 0.4.0, a module function can be referenced. 作为location 内容处理器（content handler），执行一个njs函数。 | Syntax: | **js_import** *module.js* | *export_name from module.js*; | | :&mdash;&mdash;- | &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash; | | Default: | — | | Context: | http | This directive appeared in version 0.4.0. Imports a module that implements location and variable handlers in njs. The export_name is used as a namespace to access module functions. If the export_name is not specified, the module name will be" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://tietang.wang/posts/nginx/ngx_http_js_module%E6%8C%87%E4%BB%A4%E5%8F%82%E8%80%83/" /><meta property="article:section" content="posts" />
+
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="ngx_http_js_module 指令 Directives js_content js_import js_include js_path js_set 简单说，Nginx NJS 就是在 Nginx 的配置文件中 /etc/nginx/nginx.conf 增加几条指令 js_content，执行其中 JS 内容并输出 js_include，指定特定的文件内的 JS 代码处理请求 js_set，设置特定的 JS 变量 上面这是 ngx_http_js_module 的使用方法，然而 ngx_stream_js_module 也是基本一样的，就是多了几个指令而已 js_access，Nginx Access 阶段执行的 JS 内容 js_filter，Nginx 输出的数据过滤阶段执行的 JS 内容 js_include，指定特定的文件内的 JS 代码处理请求 js_preread，Nginx Preread 阶段执行的 JS 内容 js_set，设置特定的 JS 变量 js_content | Syntax: | **js_content** *function* | *module.function*; | | :&mdash;&mdash;- | &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash; | | Default: | — | | Context: | location, limit_except | Sets an njs function as a location content handler. Since 0.4.0, a module function can be referenced. 作为location 内容处理器（content handler），执行一个njs函数。 | Syntax: | **js_import** *module.js* | *export_name from module.js*; | | :&mdash;&mdash;- | &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash; | | Default: | — | | Context: | http | This directive appeared in version 0.4.0. Imports a module that implements location and variable handlers in njs. The export_name is used as a namespace to access module functions. If the export_name is not specified, the module name will be">
+
+<meta itemprop="wordCount" content="556">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="ngx_http_js_module 指令 Directives js_content js_import js_include js_path js_set 简单说，Nginx NJS 就是在 Nginx 的配置文件中 /etc/nginx/nginx.conf 增加几条指令 js_content，执行其中 JS 内容并输出 js_include，指定特定的文件内的 JS 代码处理请求 js_set，设置特定的 JS 变量 上面这是 ngx_http_js_module 的使用方法，然而 ngx_stream_js_module 也是基本一样的，就是多了几个指令而已 js_access，Nginx Access 阶段执行的 JS 内容 js_filter，Nginx 输出的数据过滤阶段执行的 JS 内容 js_include，指定特定的文件内的 JS 代码处理请求 js_preread，Nginx Preread 阶段执行的 JS 内容 js_set，设置特定的 JS 变量 js_content | Syntax: | **js_content** *function* | *module.function*; | | :&mdash;&mdash;- | &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash; | | Default: | — | | Context: | location, limit_except | Sets an njs function as a location content handler. Since 0.4.0, a module function can be referenced. 作为location 内容处理器（content handler），执行一个njs函数。 | Syntax: | **js_import** *module.js* | *export_name from module.js*; | | :&mdash;&mdash;- | &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash; | | Default: | — | | Context: | http | This directive appeared in version 0.4.0. Imports a module that implements location and variable handlers in njs. The export_name is used as a namespace to access module functions. If the export_name is not specified, the module name will be"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<link href="http://tietang.wang/css/app.css" rel="stylesheet">
+<link href="http://tietang.wang/css/syntax.css" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/e4abb27c2f.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">多少光年</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper brand">
+    <a href="/" class="logo-title">多少光年</a>
+    <div class="text-center text-white pb-4">风可以吹走尘土,但吹不走记忆</div>
+</div>
+
+
+
+<nav class="site-navbar">
+    <ul id="menu" class="menu">
+        <li class="menu-item">
+                <a class="menu-item-link " href="/">Home</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/archives/">Archives</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/tags/">Tags</a>
+            </li><li class="menu-item">
+                <a class="menu-item-link " href="/categories/">Categories</a>
+            </li>
+    </ul>
+    <ul class="menu" style="display: block">
+                <li class="menu-item">
+                    <a href="https://500px.com/tietang" title="500px" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-500px fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://gitee.com/tietang" title="git" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-git fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://github.com/tietang" title="github" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://zhihu.com/people/fengfei2012" title="zhihu" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fab fa-zhihu fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="mailto:30461739@qq.com" title="at" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-at fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-book fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://my.fengniao.com/tietang" title="camera" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-camera fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cloud fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-cubes fa-lg"></i>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="https://www.jianshu.com/c/e536938cbd53" title="database" class="menu-item-link tooltip"
+                       target="_blank">
+                        <i class="fas fa-database fa-lg"></i>
+                    </a>
+                </li>
+        <li class="menu-item">
+            <a href="http://tietang.wang/index.xml" type="application/rss+xml" title="rss" target="_blank">
+                    <i class="fas fa-rss fa-lg"></i>
+                </a>
+        </li>
+    </ul>
+</nav>
+
+
+    </header>
+
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+        
+        <header class="post-header">
+            <h1 class="post-title"></h1>
+
+            <div class="post-meta">
+                <span class="post-time"> 0001-01-01 </span>
+
+                <div class="post-category">
+                    
+                    
+                </div>
+                    <span class="more-meta"> 556 words </span>
+                    <span class="more-meta"> 2 mins read </span>
+                    <span id="busuanzi_container_page_pv" class="more-meta"><span id="busuanzi_value_page_pv"></span>次阅读</span>
+                <hr color="#CCC" size="1px">
+
+
+                
+            </div>
+        </header>
+
+        <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#js_content">js_content</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+        
+        <div class="post-content">
+            <h1 id="ngx_http_js_module-指令">ngx_http_js_module 指令</h1>
+<p><a href="http://nginx.org/en/docs/http/ngx_http_js_module.html#directives">Directives</a>
+<a href="http://nginx.org/en/docs/http/ngx_http_js_module.html#js_content">js_content</a>
+<a href="http://nginx.org/en/docs/http/ngx_http_js_module.html#js_import">js_import</a>
+<a href="http://nginx.org/en/docs/http/ngx_http_js_module.html#js_include">js_include</a>
+<a href="http://nginx.org/en/docs/http/ngx_http_js_module.html#js_path">js_path</a>
+<a href="http://nginx.org/en/docs/http/ngx_http_js_module.html#js_set">js_set</a></p>
+<p>简单说，Nginx NJS 就是在 Nginx 的配置文件中 <code>/etc/nginx/nginx.conf</code> 增加几条指令</p>
+<ul>
+<li>js_content，执行其中 JS 内容并输出</li>
+<li>js_include，指定特定的文件内的 JS 代码处理请求</li>
+<li>js_set，设置特定的 JS 变量</li>
+</ul>
+<p>上面这是 <a href="https://nginx.org/en/docs/http/ngx_http_js_module.html">ngx_http_js_module</a> 的使用方法，然而 <a href="https://nginx.org/en/docs/stream/ngx_stream_js_module.html">ngx_stream_js_module</a> 也是基本一样的，就是多了几个指令而已</p>
+<ul>
+<li>js_access，Nginx <a href="https://nginx.org/en/docs/stream/stream_processing.html#access_phase">Access</a> 阶段执行的 JS 内容</li>
+<li>js_filter，Nginx 输出的数据过滤阶段执行的 JS 内容</li>
+<li>js_include，指定特定的文件内的 JS 代码处理请求</li>
+<li>js_preread，Nginx <a href="https://nginx.org/en/docs/stream/stream_processing.html#preread_phase">Preread</a> 阶段执行的 JS 内容</li>
+<li>js_set，设置特定的 JS 变量</li>
+</ul>
+<h2 id="js_content">js_content</h2>
+<p>| Syntax:  | <code>**js_content** *function* | *module.function*;</code> |
+| :&mdash;&mdash;- | &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash; |
+| Default: | —                                                |
+| Context: | <code>location</code>, <code>limit_except</code>                       |</p>
+<p>Sets an njs function as a location content handler. Since <a href="http://nginx.org/en/docs/njs/changes.html#njs0.4.0">0.4.0</a>, a module function can be referenced.</p>
+<p>作为location 内容处理器（content handler），执行一个njs函数。</p>
+<p>| Syntax:  | <code>**js_import** *module.js* | *export_name from module.js*;</code> |
+| :&mdash;&mdash;- | &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash; |
+| Default: | —                                                           |
+| Context: | <code>http</code>                                                      |</p>
+<p>This directive appeared in version 0.4.0.</p>
+<p>Imports a module that implements location and variable handlers in njs. The <code>export_name</code> is used as a namespace to access module functions. If the <code>export_name</code> is not specified, the module name will be used as a namespace.</p>
+<blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">js_import http.js;
+</span></span></code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>Here, the module name <code>http</code> is used as a namespace while accessing exports. If the imported module contains <code>foo()</code>, <code>http.foo</code> is used to refer to it.</p>
+<p>Several <code>js_import</code> directives can be specified.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Syntax:</th>
+<th><code>**js_include** *file*;</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Default:</td>
+<td>—</td>
+</tr>
+<tr>
+<td style="text-align:left">Context:</td>
+<td><code>http</code></td>
+</tr>
+</tbody>
+</table>
+<p>Specifies a file that implements location and variable handlers in njs:</p>
+<blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nginx.conf:
+</span></span><span class="line"><span class="cl">js_include http.js;
+</span></span><span class="line"><span class="cl">location   /version {
+</span></span><span class="line"><span class="cl">    js_content version;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">http.js:
+</span></span><span class="line"><span class="cl">function version(r) {
+</span></span><span class="line"><span class="cl">    r.return(200, njs.version);
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>The directive is deprecated since <a href="http://nginx.org/en/docs/njs/changes.html#njs0.4.0">0.4.0</a>, the <a href="http://nginx.org/en/docs/http/ngx_http_js_module.html#js_import">js_import</a> directive should be used instead.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Syntax:</th>
+<th><code>**js_path** *path*;</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Default:</td>
+<td>—</td>
+</tr>
+<tr>
+<td style="text-align:left">Context:</td>
+<td><code>http</code></td>
+</tr>
+</tbody>
+</table>
+<p>This directive appeared in version 0.3.0.</p>
+<p>Sets an additional path for njs modules.</p>
+<p>| Syntax:  | <code>**js_set** *$variable* *function* | *module.function*;</code> |
+| :&mdash;&mdash;- | &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash; |
+| Default: | —                                                        |
+| Context: | <code>http</code>                                                   |</p>
+<p>Sets an njs function for the specified variable. Since <a href="http://nginx.org/en/docs/njs/changes.html#njs0.4.0">0.4.0</a>, a module function can be referenced.</p>
+
+        </div>
+
+        <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">铁汤</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        0001-01-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">Reward</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechatpay.png">
+        <span>wechat</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>alipay</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+            
+            <nav class="post-nav">
+                <a class="prev" href="/posts/live/opensource/">
+                        <i class="iconfont icon-left"></i>
+                        <span class="prev-text nav-default"></span>
+                        <span class="prev-text nav-mobile">Prev</span>
+                    </a>
+                <a class="next" href="/posts/saas/%E6%9C%AA%E6%9D%A5saas%E6%96%B9%E5%90%91/">
+                        <span class="next-text nav-default"></span>
+                        <span class="next-text nav-mobile">Next</span>
+                        <i class="iconfont icon-right"></i>
+                    </a>
+            </nav>
+        </footer>
+        
+
+
+    </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '0001-01-01 00:00:00 \u002b0000 UTC',
+        title: '',
+        clientID: '8bef4e8b66e06c2fed5e',
+        clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+        repo: 'tietang.github.io',
+        owner: 'tietang',
+        admin: ['tietang'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+        
+<div id="gitalk-container"></div>
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '8bef4e8b66e06c2fed5e',
+  clientSecret: '2b67e9cb1b09981b0c5df3ee4ebec2f7a0e5725d',
+  repo: 'tietang.github.io',
+  owner: 'tietang',
+  admin: [ 'tietang' ],
+  id: location.pathname, 
+  distractionFreeMode: false 
+});
+(function () {
+  if ([ 'localhost', '127.0.0.1' ].indexOf(window.location.hostname) != -1) {
+    document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.'
+    return
+  }
+  gitalk.render('gitalk-container')
+})()
+</script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+            <a href="https://500px.com/tietang" title="500px" target="_blank" class="tooltip">
+                <i class="fab fa-500px fa-2x"></i>
+            </a>
+            <a href="https://gitee.com/tietang" title="git" target="_blank" class="tooltip">
+                <i class="fab fa-git fa-2x"></i>
+            </a>
+            <a href="http://github.com/tietang" title="github" target="_blank" class="tooltip">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="http://zhihu.com/people/fengfei2012" title="zhihu" target="_blank" class="tooltip">
+                <i class="fab fa-zhihu fa-2x"></i>
+            </a>
+            <a href="mailto:30461739@qq.com" title="at" target="_blank" class="tooltip">
+                <i class="fas fa-at fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/users/ae2ad10f3a37/latest_articles" title="book" target="_blank" class="tooltip">
+                <i class="fas fa-book fa-2x"></i>
+            </a>
+            <a href="http://my.fengniao.com/tietang" title="camera" target="_blank" class="tooltip">
+                <i class="fas fa-camera fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/3f476518d832" title="cloud" target="_blank" class="tooltip">
+                <i class="fas fa-cloud fa-2x"></i>
+            </a>
+            <a href="http://www.jianshu.com/collection/6bac5f0a8c84" title="cubes" target="_blank" class="tooltip">
+                <i class="fas fa-cubes fa-2x"></i>
+            </a>
+            <a href="https://www.jianshu.com/c/e536938cbd53" title="database" target="_blank" class="tooltip">
+                <i class="fas fa-database fa-2x"></i>
+            </a>
+    <a href="http://tietang.wang/index.xml" type="application/rss+xml" target="_blank" title="rss">
+            <i class="fas fa-rss fa-2x"></i>
+        </a>
+</div>
+
+<div class="friend-links ">
+    
+        <a href="http://blog.springcloud.cn/" title="spring cloud中国社区博客" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中国社区博客
+        </a>
+    
+        <a href="https://www.springcloud.cc/" title="spring cloud中文网" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring cloud中文网
+        </a>
+    
+        <a href="http://spring4all.com/" title="spring4all" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>spring4all
+        </a>
+    
+        <a href="http://blog.didispace.com/" title="程序员dd" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>程序员dd
+        </a>
+    
+        <a href="http://xujin.org/" title="许进沉思录" target="_blank" class="tooltip social-link">
+            <i class="fas fa-caret-right"></i>许进沉思录
+        </a>
+    
+</div>
+
+<div class="copyright">
+  <span class="copyright-year">
+      <span class="power-by">
+    &copy; 
+    2015 -
+    2023
+      </span>
+      <span class="division">|</span>
+    <span class="author">@铁汤</span>
+      <div class="center">
+        <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+        <span class="division">|</span>
+        <span id="busuanzi_container_site_uv">访客数<span id="busuanzi_value_site_uv"></span>人</span>
+      </div>
+ </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script><script></script><script src="https://cdn.jsdelivr.net/npm/raphael@2.2.7/raphael.min.js" integrity="sha256-67By+NpOtm9ka1R6xpUefeGOY8kWWHHRAKlvaTJ7ONI=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/flowchart.js@1.8.0/release/flowchart.min.js" integrity="sha256-zNGWjubXoY6rb5MnmpBNefO0RgoVYfle9p0tvOQM+6k=" crossorigin="anonymous"></script><script>window.sequenceDiagramsOptions = {theme: 'hand'};</script><script src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js" integrity="sha256-oI+elz+sIm+jpn8F/qEspKoKveTc5uKeFHNNVexe6d8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/underscore@1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.js" integrity="sha384-8748Vn52gHJYJI0XEuPB2QlPVNUkJlJn9tHqKec6J3q2r9l8fvRxrgn/E5ZHV0sP" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bramp/js-sequence-diagrams@2.0.1/dist/sequence-diagram-min.css" integrity="sha384-6QbLKJMz5dS3adWSeINZe74uSydBGFbnzaAYmp+tKyq60S7H2p6V7g1TysM5lAaF" crossorigin="anonymous">
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+<script id="baidu_push">
+  (function(){
+    if (window.location.hostname === 'localhost') return;
+    var bp = document.createElement('script'); bp.async = true;
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+</body>
+</html>

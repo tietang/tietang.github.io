@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>标签 on 多少光年</title>
+    <link>http://tietang.wang/tags/</link>
+    <description>Recent content in 标签 on 多少光年</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 19 Feb 2016 09:20:42 +0000</lastBuildDate><atom:link href="http://tietang.wang/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>apollo</title>
+      <link>http://tietang.wang/tags/apollo/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/apollo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>conf</title>
+      <link>http://tietang.wang/tags/conf/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/conf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>consul</title>
+      <link>http://tietang.wang/tags/consul/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/consul/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>etcd</title>
+      <link>http://tietang.wang/tags/etcd/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/etcd/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>golang</title>
+      <link>http://tietang.wang/tags/golang/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ini</title>
+      <link>http://tietang.wang/tags/ini/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/ini/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nacos</title>
+      <link>http://tietang.wang/tags/nacos/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/nacos/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>properties</title>
+      <link>http://tietang.wang/tags/properties/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/properties/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>props</title>
+      <link>http://tietang.wang/tags/props/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/props/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>yam</title>
+      <link>http://tietang.wang/tags/yam/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/yam/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>yaml</title>
+      <link>http://tietang.wang/tags/yaml/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/yaml/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>yml</title>
+      <link>http://tietang.wang/tags/yml/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/yml/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>zookeeper</title>
+      <link>http://tietang.wang/tags/zookeeper/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/zookeeper/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>分部署配置中心</title>
+      <link>http://tietang.wang/tags/%E5%88%86%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E5%88%86%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>配置</title>
+      <link>http://tietang.wang/tags/%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E9%85%8D%E7%BD%AE/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>配置中心</title>
+      <link>http://tietang.wang/tags/%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/</link>
+      <pubDate>Thu, 12 Jan 2023 15:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>AI</title>
+      <link>http://tietang.wang/tags/ai/</link>
+      <pubDate>Mon, 12 Dec 2022 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/ai/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>CXXABI</title>
+      <link>http://tietang.wang/tags/cxxabi/</link>
+      <pubDate>Mon, 12 Dec 2022 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/cxxabi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gcc</title>
+      <link>http://tietang.wang/tags/gcc/</link>
+      <pubDate>Mon, 12 Dec 2022 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/gcc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PaddleSpeech</title>
+      <link>http://tietang.wang/tags/paddlespeech/</link>
+      <pubDate>Mon, 12 Dec 2022 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/paddlespeech/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>http://tietang.wang/tags/python/</link>
+      <pubDate>Mon, 12 Dec 2022 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ubuntu</title>
+      <link>http://tietang.wang/tags/ubuntu/</link>
+      <pubDate>Mon, 12 Dec 2022 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/ubuntu/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mutipass</title>
+      <link>http://tietang.wang/tags/mutipass/</link>
+      <pubDate>Wed, 12 Oct 2022 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/mutipass/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rasa</title>
+      <link>http://tietang.wang/tags/rasa/</link>
+      <pubDate>Wed, 12 Oct 2022 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/rasa/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rasa3.0</title>
+      <link>http://tietang.wang/tags/rasa3.0/</link>
+      <pubDate>Wed, 12 Oct 2022 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/rasa3.0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gateway</title>
+      <link>http://tietang.wang/tags/gateway/</link>
+      <pubDate>Tue, 02 Jun 2020 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/gateway/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nginx</title>
+      <link>http://tietang.wang/tags/nginx/</link>
+      <pubDate>Tue, 02 Jun 2020 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/nginx/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>njs</title>
+      <link>http://tietang.wang/tags/njs/</link>
+      <pubDate>Tue, 02 Jun 2020 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/njs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>微服务网关</title>
+      <link>http://tietang.wang/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BD%91%E5%85%B3/</link>
+      <pubDate>Tue, 02 Jun 2020 20:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BD%91%E5%85%B3/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>DDD</title>
+      <link>http://tietang.wang/tags/ddd/</link>
+      <pubDate>Sun, 17 Nov 2019 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/ddd/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>代码架构</title>
+      <link>http://tietang.wang/tags/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/</link>
+      <pubDate>Sun, 17 Nov 2019 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>分层架构</title>
+      <link>http://tietang.wang/tags/%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/</link>
+      <pubDate>Sun, 17 Nov 2019 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>文具</title>
+      <link>http://tietang.wang/tags/%E6%96%87%E5%85%B7/</link>
+      <pubDate>Fri, 18 Oct 2019 21:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E6%96%87%E5%85%B7/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>癌症</title>
+      <link>http://tietang.wang/tags/%E7%99%8C%E7%97%87/</link>
+      <pubDate>Fri, 18 Oct 2019 21:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E7%99%8C%E7%97%87/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>白血病</title>
+      <link>http://tietang.wang/tags/%E7%99%BD%E8%A1%80%E7%97%85/</link>
+      <pubDate>Fri, 18 Oct 2019 21:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E7%99%BD%E8%A1%80%E7%97%85/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>甲醛</title>
+      <link>http://tietang.wang/tags/%E7%94%B2%E9%86%9B/</link>
+      <pubDate>Mon, 23 Sep 2019 23:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E7%94%B2%E9%86%9B/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>白血病病因</title>
+      <link>http://tietang.wang/tags/%E7%99%BD%E8%A1%80%E7%97%85%E7%97%85%E5%9B%A0/</link>
+      <pubDate>Mon, 23 Sep 2019 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E7%99%BD%E8%A1%80%E7%97%85%E7%97%85%E5%9B%A0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PaaS</title>
+      <link>http://tietang.wang/tags/paas/</link>
+      <pubDate>Thu, 19 Sep 2019 09:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/paas/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>业务中台</title>
+      <link>http://tietang.wang/tags/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0/</link>
+      <pubDate>Thu, 19 Sep 2019 09:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E4%B8%9A%E5%8A%A1%E4%B8%AD%E5%8F%B0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>中台</title>
+      <link>http://tietang.wang/tags/%E4%B8%AD%E5%8F%B0/</link>
+      <pubDate>Thu, 19 Sep 2019 09:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E4%B8%AD%E5%8F%B0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>四色建模法</title>
+      <link>http://tietang.wang/tags/%E5%9B%9B%E8%89%B2%E5%BB%BA%E6%A8%A1%E6%B3%95/</link>
+      <pubDate>Tue, 17 Sep 2019 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E5%9B%9B%E8%89%B2%E5%BB%BA%E6%A8%A1%E6%B3%95/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>建模</title>
+      <link>http://tietang.wang/tags/%E5%BB%BA%E6%A8%A1/</link>
+      <pubDate>Tue, 17 Sep 2019 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E5%BB%BA%E6%A8%A1/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>JS图形</title>
+      <link>http://tietang.wang/tags/js%E5%9B%BE%E5%BD%A2/</link>
+      <pubDate>Tue, 17 Sep 2019 21:57:50 +0800</pubDate>
+      
+      <guid>http://tietang.wang/tags/js%E5%9B%BE%E5%BD%A2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>流程图</title>
+      <link>http://tietang.wang/tags/%E6%B5%81%E7%A8%8B%E5%9B%BE/</link>
+      <pubDate>Tue, 17 Sep 2019 21:57:50 +0800</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E6%B5%81%E7%A8%8B%E5%9B%BE/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>序列图</title>
+      <link>http://tietang.wang/tags/%E5%BA%8F%E5%88%97%E5%9B%BE/</link>
+      <pubDate>Tue, 17 Sep 2019 21:57:45 +0800</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E5%BA%8F%E5%88%97%E5%9B%BE/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>lua</title>
+      <link>http://tietang.wang/tags/lua/</link>
+      <pubDate>Sat, 05 Jan 2019 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/lua/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>openresty</title>
+      <link>http://tietang.wang/tags/openresty/</link>
+      <pubDate>Sat, 05 Jan 2019 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/openresty/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>APM</title>
+      <link>http://tietang.wang/tags/apm/</link>
+      <pubDate>Fri, 19 Oct 2018 09:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/apm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>应用监控</title>
+      <link>http://tietang.wang/tags/%E5%BA%94%E7%94%A8%E7%9B%91%E6%8E%A7/</link>
+      <pubDate>Fri, 19 Oct 2018 09:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E5%BA%94%E7%94%A8%E7%9B%91%E6%8E%A7/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>微服务</title>
+      <link>http://tietang.wang/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Fri, 19 Oct 2018 09:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>性能监控</title>
+      <link>http://tietang.wang/tags/%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/</link>
+      <pubDate>Fri, 19 Oct 2018 09:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nodejs</title>
+      <link>http://tietang.wang/tags/nodejs/</link>
+      <pubDate>Wed, 19 Sep 2018 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/nodejs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>持续部署</title>
+      <link>http://tietang.wang/tags/%E6%8C%81%E7%BB%AD%E9%83%A8%E7%BD%B2/</link>
+      <pubDate>Wed, 19 Sep 2018 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E6%8C%81%E7%BB%AD%E9%83%A8%E7%BD%B2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>持续集成</title>
+      <link>http://tietang.wang/tags/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/</link>
+      <pubDate>Wed, 19 Sep 2018 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MQ</title>
+      <link>http://tietang.wang/tags/mq/</link>
+      <pubDate>Wed, 10 May 2017 18:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/mq/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>本地文件队列</title>
+      <link>http://tietang.wang/tags/%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E9%98%9F%E5%88%97/</link>
+      <pubDate>Wed, 10 May 2017 18:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E9%98%9F%E5%88%97/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>降级</title>
+      <link>http://tietang.wang/tags/%E9%99%8D%E7%BA%A7/</link>
+      <pubDate>Wed, 10 May 2017 18:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E9%99%8D%E7%BA%A7/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>隔离</title>
+      <link>http://tietang.wang/tags/%E9%9A%94%E7%A6%BB/</link>
+      <pubDate>Wed, 10 May 2017 18:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E9%9A%94%E7%A6%BB/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>JDBC</title>
+      <link>http://tietang.wang/tags/jdbc/</link>
+      <pubDate>Mon, 10 Apr 2017 18:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/jdbc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>事务</title>
+      <link>http://tietang.wang/tags/%E4%BA%8B%E5%8A%A1/</link>
+      <pubDate>Mon, 10 Apr 2017 18:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E4%BA%8B%E5%8A%A1/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hystrix</title>
+      <link>http://tietang.wang/tags/hystrix/</link>
+      <pubDate>Fri, 18 Nov 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/hystrix/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>semaphore</title>
+      <link>http://tietang.wang/tags/semaphore/</link>
+      <pubDate>Fri, 18 Nov 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/semaphore/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>spring cloud</title>
+      <link>http://tietang.wang/tags/spring-cloud/</link>
+      <pubDate>Fri, 18 Nov 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/spring-cloud/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>zuul</title>
+      <link>http://tietang.wang/tags/zuul/</link>
+      <pubDate>Thu, 17 Nov 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/zuul/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>binlog</title>
+      <link>http://tietang.wang/tags/binlog/</link>
+      <pubDate>Wed, 09 Nov 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/binlog/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Maxwell</title>
+      <link>http://tietang.wang/tags/maxwell/</link>
+      <pubDate>Wed, 09 Nov 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/maxwell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mysql</title>
+      <link>http://tietang.wang/tags/mysql/</link>
+      <pubDate>Wed, 09 Nov 2016 19:22:47 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/mysql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Circuit Breaker</title>
+      <link>http://tietang.wang/tags/circuit-breaker/</link>
+      <pubDate>Fri, 02 Sep 2016 09:20:00 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/circuit-breaker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>单一职责</title>
+      <link>http://tietang.wang/tags/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/</link>
+      <pubDate>Tue, 28 Jun 2016 09:06:33 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>软件开发</title>
+      <link>http://tietang.wang/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/</link>
+      <pubDate>Tue, 28 Jun 2016 09:06:33 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>加权轮询</title>
+      <link>http://tietang.wang/tags/%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2/</link>
+      <pubDate>Thu, 16 Jun 2016 09:06:33 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>算法</title>
+      <link>http://tietang.wang/tags/%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Thu, 16 Jun 2016 09:06:33 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E7%AE%97%E6%B3%95/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>负载均衡</title>
+      <link>http://tietang.wang/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</link>
+      <pubDate>Thu, 16 Jun 2016 09:06:33 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>轮询</title>
+      <link>http://tietang.wang/tags/%E8%BD%AE%E8%AF%A2/</link>
+      <pubDate>Thu, 16 Jun 2016 09:06:33 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E8%BD%AE%E8%AF%A2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>wrk</title>
+      <link>http://tietang.wang/tags/wrk/</link>
+      <pubDate>Fri, 04 Mar 2016 09:06:33 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/wrk/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>基准测试</title>
+      <link>http://tietang.wang/tags/%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/</link>
+      <pubDate>Fri, 04 Mar 2016 09:06:33 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>http 2.0</title>
+      <link>http://tietang.wang/tags/http-2.0/</link>
+      <pubDate>Mon, 22 Feb 2016 09:57:03 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/http-2.0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hexo</title>
+      <link>http://tietang.wang/tags/hexo/</link>
+      <pubDate>Sun, 21 Feb 2016 22:31:12 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/hexo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>领域模型</title>
+      <link>http://tietang.wang/tags/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B/</link>
+      <pubDate>Sun, 21 Feb 2016 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>FlatBuffers</title>
+      <link>http://tietang.wang/tags/flatbuffers/</link>
+      <pubDate>Fri, 19 Feb 2016 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/flatbuffers/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>序列化</title>
+      <link>http://tietang.wang/tags/%E5%BA%8F%E5%88%97%E5%8C%96/</link>
+      <pubDate>Fri, 19 Feb 2016 20:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E5%BA%8F%E5%88%97%E5%8C%96/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>春天</title>
+      <link>http://tietang.wang/tags/%E6%98%A5%E5%A4%A9/</link>
+      <pubDate>Fri, 19 Feb 2016 09:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E6%98%A5%E5%A4%A9/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>梅花</title>
+      <link>http://tietang.wang/tags/%E6%A2%85%E8%8A%B1/</link>
+      <pubDate>Fri, 19 Feb 2016 09:20:42 +0000</pubDate>
+      
+      <guid>http://tietang.wang/tags/%E6%A2%85%E8%8A%B1/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
